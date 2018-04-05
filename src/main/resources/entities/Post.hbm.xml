@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="ru.jswap.entities.Post" table="posts" schema="public" catalog="jswapdb">
+        <id name="postPk" column="post_pk">
+            <generator class="increment"/>
+        </id>
+        <property name="commentary" column="commentary"/>
+        <many-to-one name="feed" class="ru.jswap.entities.Feeds" fetch="join" lazy="false">
+            <column name="feed_id" not-null="true"/>
+        </many-to-one>
+        <property name="date" column="date"/>
+        <property name="time" column="time"/>
+        <property name="enabled" column="enabled"/>
+    </class>
+</hibernate-mapping>

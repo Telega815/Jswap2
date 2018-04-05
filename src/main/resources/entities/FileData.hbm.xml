@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="ru.jswap.entities.FileData" table="files" schema="public" catalog="jswapdb">
+        <id name="filePk" column="file_pk">
+            <generator class="increment"/>
+        </id>
+        <property name="filename" column="filename"/>
+        <many-to-one name="post" class="ru.jswap.entities.Post" lazy="false" fetch="join">
+            <column name="postid" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="filepath" class="ru.jswap.entities.FilePath" lazy="false" fetch="join">
+            <column name="filepath" not-null="true"/>
+        </many-to-one>
+    </class>
+</hibernate-mapping>
