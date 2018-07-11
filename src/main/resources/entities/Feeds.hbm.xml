@@ -13,5 +13,7 @@
         </many-to-one>
         <property name="accesstype" column="accesstype"/>
         <property name="feedname" column="feedname"/>
+        <property name="limit" column="sizeLimit"/>
+        <property name="size" column="size"/>
     </class>
 </hibernate-mapping>

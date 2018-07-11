@@ -19,7 +19,7 @@
 				login-processing-url="/service/loginProcessing"
 				login-page='/service/login'
 				default-target-url="/service/goToUserPage"
-			authentication-failure-url="/login?error=true" 
+			authentication-failure-url="/service/login?error=true"
 			username-parameter="username"
 			password-parameter="pwd"/>
 		<csrf disabled="true"/>
@@ -27,6 +27,7 @@
 				logout-url="/service/logout"/>
 
 	</http>
+
 
 
 

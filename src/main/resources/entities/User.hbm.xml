@@ -13,5 +13,7 @@
         <property name="pincode" column="pincode"/>
         <property name="email" column="email"/>
         <property name="phone" column="phone"/>
+        <property name="sizeLimit" column="sizelimit"/>
+        <property name="filesSize" column="filessize"/>
      </class>
 </hibernate-mapping>

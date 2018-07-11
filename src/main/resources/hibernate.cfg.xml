@@ -16,11 +16,5 @@
     <mapping resource="entities/Group.hbm.xml"/>
       <mapping resource="entities/FilePath.hbm.xml"/>
     <mapping resource="entities/Feeds.hbm.xml"/>
-
-      <!-- <property name="connection.username"/> -->
-    <!-- <property name="connection.password"/> -->
-
-    <!-- DB schema will be updated if needed -->
-    <!-- <property name="hbm2ddl.auto">update</property> -->
   </session-factory>
 </hibernate-configuration>

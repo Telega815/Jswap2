@@ -1,0 +1,167 @@
+#searchField {
+	width: 143px;
+	height: 36px;
+}
+* {
+    margin: 0;
+    padding: 0;
+	border: 0;
+	outline: 0;
+}
+
+
+@-webkit-keyframes autofill {
+	to {
+		color: #000000;
+		background-image: url("../media/login/user.png");
+		background-repeat: no-repeat;
+		background-size: 30px 30px;
+		background-position: left;
+	}
+}
+
+input:-webkit-autofill {
+	-webkit-animation-name: autofill;
+	-webkit-animation-fill-mode: both;
+}
+
+.bodyBack {
+	background: linear-gradient(180deg, rgba(141,178,208,1) 0%, rgba(211,229,241,1) 100%);
+	width: 100vw;
+	height: 100vh;
+}
+
+.mainBlock {
+	display: flex;
+	flex-direction: column;
+	justify-content:center;
+	align-items: center;
+	height: calc(100vh - 70px);
+	/*background-color: red;*/
+
+}
+@media only screen and (min-width: 1px) and (max-width: 1024px) {
+	.mainBlock {
+		height: calc(100vh - 70px);
+	}
+}
+
+#entranceBlock {
+	display: flex;
+	flex-direction:column;
+	flex: 0.3 1;
+	justify-content:center;
+	/*background-color: red;*/
+}
+
+#entranceBlock p {
+	font-size: 50px;
+}
+
+#centerBlock {
+	display: flex;
+	flex-direction:column;
+	flex: 1 1;
+	justify-content:flex-start;
+	/*background-color: blue;*/
+}
+
+#inputField {
+	width: 250px;
+	height: 46px;
+	font-size: 15px;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	outline:none;
+	padding-left: 40px;
+	border: 2px solid #545b5f;
+	box-shadow: none;
+	-webkit-appearance: none;
+	margin-top: 10px; 
+	background-image: url("../media/login/user.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: left;
+}
+
+#inputFieldPassword {
+	width: 250px;
+	height: 46px;
+	font-size: 15px;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	outline:none;
+	padding-left: 40px;
+	border: 2px solid #545b5f;
+	box-shadow: none;
+	-webkit-appearance: none;
+	margin-top: 10px; 
+	background-image: url("../media/login/locked.png");
+	background-repeat: no-repeat;
+	background-size: 30px 30px;
+	background-position: left;
+}
+
+#submitFormLogin {
+	width: 100px;
+	height: 40px;
+	border: 2px solid #545b5f;
+	border-radius: 5px;
+	background-color: #738fa7;
+	box-shadow: none;
+	-webkit-appearance: none;
+	font-size: 20px;
+}
+
+#rememberBlock{
+	display: flex;
+	justify-content: space-between;
+	margin-top: 5px; 
+}
+
+#rememberBlock label {
+	cursor: pointer;
+}
+
+#loginBlockLogo {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	margin-top: 30px; 
+	/*background-color: red;*/
+}
+
+#loginBlockLogo a {
+	margin-top: 15px;
+	text-decoration: none;
+	color: black;
+}
+
+#submitFormLogin:hover {
+	background-color: #757fa7;
+	cursor: pointer;
+} 
+
+#ForgotYourPassword a {
+	text-decoration: none;
+	color: black;
+}
+
+#ErrorField {
+	display: flex;
+	flex-direction:row;
+	flex: 0.1 1;
+	align-items: flex-end;
+	/*background-color: red;*/
+}
+
+#ErrorField p {
+	margin-top: 2%;
+	padding: 5px 35px 5px 35px; 
+	/*border: 3px solid;*/
+	background-color: #738fa7;
+	border-radius: 5px;
+	color: #db363a;
+	font-size: 20px;
+}

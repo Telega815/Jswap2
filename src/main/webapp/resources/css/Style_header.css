@@ -1,0 +1,152 @@
+* {
+    margin: 0;
+    padding: 0;
+	border: 0;
+}
+
+.header {
+	display: flex;
+	flex-direction: row;
+	justify-content:center;
+	align-items:flex-start;
+	height: 70px;
+	background-color: #3e4b56;
+	z-index: 10;
+}
+
+#LogoBlockHeader {
+	display: flex;
+	flex: 0.2 1;
+	align-items: center;
+	justify-content:center;
+}
+
+#LogoBlockIMG {
+	max-height: 60px;
+	max-width: 100px;
+}
+
+.header_left {
+	display: flex;
+	flex: 1 1;
+	height: 70px;
+	/*background-color: green;*/
+}
+.header_right {
+	display: flex;
+	flex: 1 1;
+	height: 70px;
+	/*background-color: blue;*/
+}
+
+#languageBlock {
+	display: flex;
+	flex: 0.2 1;
+	align-items: center;
+	justify-content:center;
+	flex-direction: column;
+	/*background-color: blue;*/
+}
+
+#languageBlock a{
+	text-decoration: none;
+	color: white;
+	margin: 5px 0 5px 0;
+}
+
+#languageBlock img{
+	height: 10px;
+	width: 15px;
+	margin-right: 2px;
+}
+
+#helpBlock {
+	display: flex;
+	flex: 0.2 1;
+	align-items: center;
+	justify-content:center;
+	/*background-color: red;*/
+}
+
+#helpBlock a {
+	text-decoration: none;
+	color: white;
+}
+
+
+#searchBlock {
+	display: flex;
+	flex: 0.3333 1;
+	align-items: center;
+	justify-content:center;
+	/*background-color: red;*/
+}
+
+#loginBlock {
+	display: flex;
+	flex: 0.3333 1;
+	align-items: center;
+	justify-content:center;
+	/*background-color: blue;*/
+}
+
+#loginBlock a {
+	text-decoration: none;
+	color: white;
+}
+
+#regBlock {
+	display: flex;
+	flex: 0.3333 1;
+	align-items: center;
+	justify-content:center;
+	/*background-color: red;*/
+}
+
+#regBlock a {
+	text-decoration: none;
+	color: white;
+}
+
+#searchBlock {
+	display: flex;
+	flex: 1 1;
+	justify-content:flex-end;
+	/*min-height: 150px;*/
+	/*background-color: green;*/
+}
+
+#searchField {
+	width: 150px;
+	height: 40px;
+	font-size: 15px;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	outline:none;
+	padding-left: 5px;
+	border: 2px solid #545b5f;
+	border-right: none;
+	border-top-right-radius: 0px;
+	border-bottom-right-radius: 0px;
+	box-shadow: none;
+	-webkit-appearance: none;  /*убирает тени на ios*/
+
+}
+
+#submitSearchForm {
+	width: 40px;
+	height: 40px;
+	border: 2px solid #545b5f;
+	border-radius: 5px;
+	background-color: #f9f9f9;
+	background-image: url("../media/header/lupa.png");
+	background-size:  50% 50%;
+	background-repeat: no-repeat;
+	background-position: center;
+	border-left: none;
+	border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;
+	position: relative;
+	left: -1px;
+	box-shadow: none;
+}

@@ -55,7 +55,7 @@ public class PostsDAOImpl implements PostsDAO {
 
     @Transactional
     @Override
-    public void updeatePost(Post post) {
+    public void updatePost(Post post) {
         sessionFactory.getCurrentSession().update(post);
     }
 }

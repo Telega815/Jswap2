@@ -11,6 +11,7 @@ public class Post {
     private Date date;
     private Time time;
     private boolean enabled;
+    private long size;
 
     public Post() {
     }
@@ -68,16 +69,17 @@ public class Post {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Post post = (Post) o;
-        return postPk == post.postPk &&
+        return Objects.equals(postPk, post.postPk) &&
                 Objects.equals(feed, post.feed) &&
                 Objects.equals(commentary, post.commentary) &&
                 Objects.equals(date, post.date) &&
-                Objects.equals(time, post.time);
+                Objects.equals(time, post.time) &&
+                size == post.size;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postPk, commentary, feed, date, time);
+        return Objects.hash(postPk, commentary, feed, date, time, size);
     }
 
 
@@ -95,5 +97,13 @@ public class Post {
 
     public void setFeed(Feeds feed) {
         this.feed = feed;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

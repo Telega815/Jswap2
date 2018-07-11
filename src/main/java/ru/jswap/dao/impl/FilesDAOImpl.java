@@ -31,6 +31,12 @@ public class FilesDAOImpl implements FilesDAO {
 
     @Transactional
     @Override
+    public FileData getFile(long fileId) {
+        return sessionFactory.getCurrentSession().get(FileData.class, fileId);
+    }
+
+    @Transactional
+    @Override
     public FileData getFile(String filename, Post post) {
         return (FileData) sessionFactory.getCurrentSession().createQuery("from FileData where filename = :filename and post = :post").setString("filename", filename).setParameter("post", post).list().get(0);
     }

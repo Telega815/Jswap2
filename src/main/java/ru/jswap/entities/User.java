@@ -10,6 +10,8 @@ public class User implements Serializable{
     private int pincode;
     private String email;
     private long phone;
+    private long sizeLimit;
+    private long filesSize;
 
     public long getId() {
         return id;
@@ -61,10 +63,14 @@ public class User implements Serializable{
 
 
     public User() {
+        sizeLimit = 5368709120L;
+        filesSize = 0;
     }
 
     public User(String username) {
         this.username = username;
+        sizeLimit = 5368709120L;
+        filesSize = 0;
     }
 
     @Override
@@ -77,12 +83,30 @@ public class User implements Serializable{
                 Objects.equals(pwd, user.pwd) &&
                 Objects.equals(pincode, user.pincode) &&
                 Objects.equals(email, user.email) &&
-                Objects.equals(phone, user.phone);
+                Objects.equals(phone, user.phone) &&
+                Objects.equals(sizeLimit, user.sizeLimit) &&
+                Objects.equals(filesSize, user.filesSize);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, username, pwd, pincode, email, phone);
+        return Objects.hash(id, username, pwd, pincode, email, phone, sizeLimit, filesSize);
+    }
+
+    public long getSizeLimit() {
+        return sizeLimit;
+    }
+
+    public void setSizeLimit(long sizeLimit) {
+        this.sizeLimit = sizeLimit;
+    }
+
+    public long getFilesSize() {
+        return filesSize;
+    }
+
+    public void setFilesSize(long filesSize) {
+        this.filesSize = filesSize;
     }
 }
 

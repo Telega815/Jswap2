@@ -1,18 +1,25 @@
 package ru.jswap.entities;
 
+import java.util.Objects;
+
 public class Feeds {
     private long id;
     private short accessType;
     private String feedname;
     private User user;
+    private long limit;
+    private long size;
 
     public Feeds() {
+        this.size = 0;
     }
 
-    public Feeds(short accessType, String feedname, User user) {
+    public Feeds(short accessType, String feedname, User user, long limit) {
         this.accessType = accessType;
         this.feedname = feedname;
         this.user = user;
+        this.limit = limit;
+        this.size = 0;
     }
 
     public long getId() {
@@ -50,6 +57,8 @@ public class Feeds {
         if (accessType != feeds.accessType) return false;
         if (feedname != null ? !feedname.equals(feeds.feedname) : feeds.feedname != null) return false;
         if (user != feeds.user) return false;
+        if (limit != feeds.limit) return false;
+        if (size != feeds.size) return false;
 
         return true;
     }
@@ -60,6 +69,7 @@ public class Feeds {
         result = 31 * result + (int) accessType;
         result = 31 * result + (feedname != null ? feedname.hashCode() : 0);
         result = 31 * result + (user != null ? user.hashCode() : 0);
+        result = 31 * result + Objects.hash(limit, size);
         return result;
     }
 
@@ -69,5 +79,21 @@ public class Feeds {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public long getLimit() {
+        return limit;
+    }
+
+    public void setLimit(long limit) {
+        this.limit = limit;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

@@ -12,11 +12,13 @@
 <html>
 <head>
     <title>FeedPage</title>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/pinCode.css">
 </head>
 <body>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/feedPageScripts.js"></script>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/PinCode.js"></script>
+<jsp:include page="parts/PinCode.jsp"/>
 <jsp:include page="parts/header.jsp"/>
 
 <h3>page of ${feeds.user.username}</h3>
@@ -29,20 +31,27 @@
     <table>
         <tr>
             <td>Upload File:</td>
-            <td><input type="file" id="files" name="files" multiple/></td>
+            <td><input onchange="sendFilesSeparatly(event)" type="file" id="files" name="files" multiple/></td>
         </tr>
     </table>
 </form:form>
-
-<input type="button" value="upload(BUTTON)" onclick="sendFiles()">
+<input id="uploadButton" type="button" value="upload(BUTTON)" onclick="sendFiles()">
+<input id="enterPinButton" type="button" value="enterPin" onclick="PinInputShow()">
 <br/>
-<progress id="progressbar" value="0" max="100"></progress>
+    <%--<progress id="progressbar" value="0" max="100"></progress>--%>
 <br/>
 <ul id="fileList">
 
 </ul>
+<textarea id="comment" name="comment" rows="3">
+
+</textarea>
 <input type="button" value="save" onclick="saveFiles()">
 
-<a href="${feeds.feedname}/viewFiles">viewFiles</a>
+<a href="${feeds.feedname}/viewFiles" id="viewFilesHref">viewFiles</a>
+<form action="">
+    <div id="dropZone" style="width: 300px; height: 300px; background-color: #545b5f">
+    </div>
+</form>
 </body>
 </html>

@@ -3,25 +3,27 @@ package ru.jswap.entities;
 import java.util.Objects;
 
 public class FileData {
-    private int filePk;
+    private Long filePk;
     private String filename;
     private Post post;
     private FilePath filepath;
+    private long size;
 
     public FileData() {
     }
 
-    public FileData(String filename, Post post, FilePath filepath) {
+    public FileData(String filename, Post post, FilePath filepath, Long size) {
         this.filename = filename;
         this.post = post;
         this.filepath = filepath;
+        this.size = size;
     }
 
-    public int getFilePk() {
+    public Long getFilePk() {
         return filePk;
     }
 
-    public void setFilePk(int filePk) {
+    public void setFilePk(Long filePk) {
         this.filePk = filePk;
     }
 
@@ -49,12 +51,13 @@ public class FileData {
         return filePk == fileData.filePk &&
                 Objects.equals(post,fileData.post) &&
                 Objects.equals(filename, fileData.filename)&&
-                Objects.equals(filepath, fileData.filepath);
+                Objects.equals(filepath, fileData.filepath) &&
+                size == fileData.size;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(filePk,filename,post, filepath);
+        return Objects.hash(filePk,filename,post, filepath, size);
     }
 
     public FilePath getFilepath() {
@@ -63,5 +66,13 @@ public class FileData {
 
     public void setFilepath(FilePath filepath) {
         this.filepath = filepath;
+    }
+
+    public long getSize() {
+        return size;
+    }
+
+    public void setSize(long size) {
+        this.size = size;
     }
 }

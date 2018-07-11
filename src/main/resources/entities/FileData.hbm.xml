@@ -15,5 +15,6 @@
         <many-to-one name="filepath" class="ru.jswap.entities.FilePath" lazy="false" fetch="join">
             <column name="filepath" not-null="true"/>
         </many-to-one>
+        <property name="size" column="size"/>
     </class>
 </hibernate-mapping>

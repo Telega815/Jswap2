@@ -8,6 +8,7 @@ import java.util.List;
 public interface FilesDAO {
 
     List<FileData> getFiles();
+    FileData getFile(long fileId);
     FileData getFile(String filename, Post post);
     FileData getFile(String filename, Integer postid);
     List<FileData> getFiles(Post post);

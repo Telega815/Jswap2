@@ -24,10 +24,11 @@ public class FeedsDAOImpl implements FeedsDAO {
 
     @Transactional
     @Override
-    public Feeds getFeed(String feedname) {
+    public Feeds getFeed(String feedname, User user) {
         return (Feeds) sessionFactory.getCurrentSession()
-                .createQuery("from Feeds where feedname = :feedname")
-                .setParameter("feedname", feedname).list().get(0);
+                .createQuery("from Feeds where feedname = :feedname and user = :user")
+                .setParameter("feedname", feedname)
+                .setParameter("user", user).list().get(0);
     }
 
     @Transactional
@@ -42,5 +43,17 @@ public class FeedsDAOImpl implements FeedsDAO {
     @Override
     public long saveFeed(Feeds feed) {
         return (long)sessionFactory.getCurrentSession().save(feed);
+    }
+
+    @Transactional
+    @Override
+    public void deleteFeed(Feeds feed) {
+        sessionFactory.getCurrentSession().delete(feed);
+    }
+
+    @Transactional
+    @Override
+    public void updateFeed(Feeds feed) {
+        sessionFactory.getCurrentSession().update(feed);
     }
 }

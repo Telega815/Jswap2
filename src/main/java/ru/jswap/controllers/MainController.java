@@ -8,10 +8,12 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.jswap.entities.Feeds;
 import ru.jswap.entities.User;
+import ru.jswap.objects.PinAccess;
 import ru.jswap.services.HtmlService;
 import ru.jswap.services.UserService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -30,6 +32,11 @@ public class MainController {
 	@Autowired
 	private HtmlService htmlService;
 
+	@ModelAttribute
+	public User createUser(){
+		return new User();
+	}
+
 	@GetMapping(value = "/")
 	public ModelAndView mainPage(@RequestParam(value = "error", required = false) String error) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -45,8 +52,7 @@ public class MainController {
 	}
 
 	@GetMapping(value = "/{urlpart}")
-	public ModelAndView main(@PathVariable("urlpart") String urlpart,
-							 @ModelAttribute("user") User user) {
+	public ModelAndView main(@PathVariable("urlpart") String urlpart) {
 		ModelAndView modelAndView = new ModelAndView();
 		String feedsHtml;
 		List<Feeds> feeds;
@@ -55,18 +61,48 @@ public class MainController {
 				break;
 			default:
 				User checkedUser = userService.getUser(urlpart);
+				String posts;
 				if (checkedUser != null) {
 					feeds = userService.getFeeds(checkedUser);
+					boolean authenticatedAsPageOwner = userService.checkUser(checkedUser);
 					if (!feeds.isEmpty()){
-						feedsHtml = htmlService.getFeedsHtml(feeds, false);
+						feeds.sort(
+								(o1, o2) -> {
+                            		if (o1.getId() < o2.getId()) return -1;
+									else return 1;
+								});
+
+						feedsHtml = htmlService.getFeedsHtml(feeds, authenticatedAsPageOwner);
 						modelAndView.addObject("feeds", feedsHtml);
+						posts = htmlService.getAllPostsHtml(feeds.get(0), authenticatedAsPageOwner);
+					}else {
+						posts = null;
+						modelAndView.addObject("haventFeeds", false);
 					}
 
 
+					modelAndView.addObject("posts", posts);
+
+					String feedsAsOptions;
+					List<Feeds> feedsForWrite;
+					if(authenticatedAsPageOwner){
+						feedsAsOptions = htmlService.getFeedsAsOptions(feeds);
+					}else{
+						feedsForWrite = userService.getFeedsForWrite(feeds);
+						feedsAsOptions = htmlService.getFeedsAsOptions(feedsForWrite);
+					}
+					modelAndView.addObject("feedsAsOptions", feedsAsOptions);
+
 					modelAndView.setViewName("/content/userPage");
 					modelAndView.addObject("user", checkedUser);
+					double sizeGB = (double) checkedUser.getFilesSize();
+					double sizeBar = (double) checkedUser.getFilesSize()/(double)checkedUser.getSizeLimit()*100;
+					sizeGB = sizeGB/1024/1024/1024;
+					modelAndView.addObject("sizeGB", String.format("%.1f", sizeGB));
+					modelAndView.addObject("sizeBar", sizeBar);
 					modelAndView.addObject("feed", new Feeds());
-					modelAndView.addObject("accessToPageContent", userService.checkUser(checkedUser));
+					modelAndView.addObject("pinCode", new PinAccess());
+					modelAndView.addObject("accessToPageContent", authenticatedAsPageOwner);
 				}else{
 					modelAndView.setViewName("redirect:/?error=true");
 				}
@@ -102,11 +138,21 @@ public class MainController {
 
 	@PostMapping(value = "/service/createUser")
 	public String createUser(@ModelAttribute("user") User user){
-//		ModelAndView modelAndView = new ModelAndView();
-		userService.createUser(user);
-//		modelAndView.setViewName();
-		return "redirect:/";
+		if (userService.createUser(user))
+			return "redirect:/";
+		else
+			return "error: Couldn't create user";
 	}
+
+	@PostMapping(value = "/service/checkUsername")
+    @ResponseBody
+    public String checkUsername(@RequestBody String username){
+	    User user = userService.getUser(username.substring(0,username.length()-1));
+        if (user == null){
+            return "valid";
+        }
+	    return "This login is already taken";
+    }
 
 
 

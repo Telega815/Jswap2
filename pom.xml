@@ -140,6 +140,7 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- JSON -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
 			<artifactId>jackson-mapper-asl</artifactId>

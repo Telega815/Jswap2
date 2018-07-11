@@ -15,5 +15,6 @@
         <property name="date" column="date"/>
         <property name="time" column="time"/>
         <property name="enabled" column="enabled"/>
+        <property name="size" column="size"/>
     </class>
 </hibernate-mapping>

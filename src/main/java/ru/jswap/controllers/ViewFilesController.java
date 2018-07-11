@@ -2,9 +2,7 @@ package ru.jswap.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ru.jswap.dao.intefaces.PostsDAO;
 import ru.jswap.entities.Feeds;
@@ -33,7 +31,7 @@ public class ViewFilesController {
                                   @PathVariable("username") String username,
                                   @PathVariable("feedname") String feedname){
         if(user == null) user = userService.getUser(username);
-        Feeds feed = userService.getFeed(feedname);
+        Feeds feed = userService.getFeed(feedname, user);
         StringBuilder viewString = new StringBuilder();
         ModelAndView modelAndView = new ModelAndView("/content/viewfiles");
         List<Post> posts = postsDAO.getPosts(feed);
@@ -42,6 +40,16 @@ public class ViewFilesController {
         }
         modelAndView.addObject("viewString", viewString);
         return modelAndView;
+    }
+
+    @PostMapping(value = "/{username}/{feedname}/getPosts")
+    @ResponseBody
+    public String getPosts(@SessionAttribute(value = "user",required = false) User user,
+                            @PathVariable("username") String username,
+                            @PathVariable("feedname") String feedname){
+        if(user == null) user = userService.getUser(username);
+        Feeds feed = userService.getFeed(feedname, user);
+        return htmlService.getAllPostsHtml(feed, userService.checkUser(user));
     }
 
 
