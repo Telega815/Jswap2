@@ -1,5 +1,4 @@
-var j = 0;
-var fileCount = 0;
+
 var filesToDelete = [];
 var enterCounter = 0;
 

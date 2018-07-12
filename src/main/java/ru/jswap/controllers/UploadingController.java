@@ -45,12 +45,12 @@ public class UploadingController {
      */
     @RequestMapping(value = "/restService/uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public int uploadFile(@RequestParam (name="file", required = false)MultipartFile file,
-                       @RequestParam (name="clientId", required = false) Integer clientId,
+    public int uploadFile(@RequestParam (name="file")MultipartFile file,
+                       @RequestParam (name="clientId") Integer clientId,
+                       @RequestParam (name="fileId") Integer fileId,
                        HttpSession session){
-        return fileService.fileUploadProcess(file, clientId, session.getId());
+        return fileService.fileUploadProcess(file, clientId, session.getId(), fileId);
     }
-
 
     /**
      * @return client ID (will be used to distinguish between different tabs)

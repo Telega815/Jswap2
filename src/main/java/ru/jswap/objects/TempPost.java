@@ -9,23 +9,24 @@ import ru.jswap.entities.FilePath;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TempPost implements Runnable{
     private Logger logger = LoggerFactory.getLogger(TempPost.class);
-    private final int MILLS = 180000;
-    private List<FileData> files;
-    private List<FilePath> paths;
+    private final int MILLS = 10000;
+    private Map<Integer, FileData> files;
+    private Map<Integer, FilePath> paths;
     private String FILE_PATH = "C:" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
-
+    private Thread timeoutThread;
 
     public TempPost() {
-        files = new ArrayList<>();
-        paths = new ArrayList<>();
+        files = new HashMap<>();
+        paths = new HashMap<>();
     }
 
-    public int addFile(MultipartFile multipartFile, int clientId, String sessionId){
-        File file = new File(FILE_PATH + sessionId + File.separator + clientId + File.separator + files.size());
+    public int addFile(MultipartFile multipartFile, int clientId, String sessionId, int key){
+        File file = new File(FILE_PATH + sessionId + File.separator + clientId + File.separator + key);
 
         if(!file.exists()){
             if (!file.mkdirs()) {
@@ -37,11 +38,11 @@ public class TempPost implements Runnable{
         FileData fileData = new FileData();
         fileData.setFilename(multipartFile.getOriginalFilename());
         fileData.setSize(multipartFile.getSize());
-        files.add(fileData);
+        files.put(key,fileData);
 
         FilePath filePath = new FilePath();
         filePath.setPath(file.getAbsolutePath());
-        paths.add(filePath);
+        paths.put(key,filePath);
 
         try {
             multipartFile.transferTo(file);
@@ -50,7 +51,17 @@ public class TempPost implements Runnable{
             return -1;
         }
 
-        return files.size()-1;
+        startTimeOut();
+        return key;
+    }
+
+    public void startTimeOut(){
+        if (timeoutThread == null) timeoutThread = new Thread(this);
+
+        if (timeoutThread.isAlive()) timeoutThread.interrupt();
+
+        timeoutThread = new Thread(this);
+        timeoutThread.start();
     }
 
     public FileData getFileName(int key){
@@ -67,7 +78,17 @@ public class TempPost implements Runnable{
             files.remove(key);
             paths.remove(key);
         }
-        files.size();
+    }
+
+    public boolean deleteAllFiles(){
+        boolean res = true;
+        for (FilePath path: paths.values()) {
+            File file = new File(path.getPath());
+            res &= file.delete();
+        }
+        files = new HashMap<>();
+        paths = new HashMap<>();
+        return res;
     }
 
 
@@ -75,12 +96,11 @@ public class TempPost implements Runnable{
     public void run() {
         try {
             Thread.sleep(MILLS);
-            for (int i = 0; i < files.size(); i++){
-                deleteFile(i);
-            }
+            deleteAllFiles();
             logger.info("\n{}: TempPost was deleted - timeout", new java.util.Date(System.currentTimeMillis()).toString());
         } catch (InterruptedException e) {
             logger.info("\n{}: cached exception in 'run' of TempPost: "+e.getMessage(), new java.util.Date(System.currentTimeMillis()).toString());
         }
     }
+
 }

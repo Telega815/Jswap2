@@ -1,5 +1,5 @@
-
-
+var fileCounterForShowFiles = 0;
+var fileCounterForSendFiles = 0;
 $(document).ready(function(){
     initializeDropZone();
 
@@ -53,7 +53,7 @@ function inputAction(event) {
     showFiles(files);
     sendFiles(files);
 }
-
+//show/hideUploadBlock-------------------------------------------------------
 function showUploadBlock() {
     document.getElementById("dropZone").style.display = "none";
     document.getElementById("uploadContainer").style.display = "inline-block";
@@ -66,6 +66,8 @@ function hideUploadBlock() {
     document.getElementById("uploadContainer").style.display = "none";
 }
 
+
+//show files in upload block--------------------------------------------------
 function showFiles(files) {
     var uploadTable = document.getElementById("uploadTable");
 
@@ -75,14 +77,19 @@ function showFiles(files) {
 }
 
 function showFile(file) {
+
+    while(document.getElementById("fileRow_"+fileCounterForShowFiles) !==null){
+        fileCounterForShowFiles++;
+    }
+
     var fileRow = document.createElement("tr");
-    fileRow.id = "fileRow_" + fileCount;
+    fileRow.id = "fileRow_" + fileCounterForShowFiles;
 
     var th1 = document.createElement("th");
     th1.className = "th thOne";
     th1.title = file.name;
     th1.innerText = file.name;
-    th1.id = "file_" + fileCount;
+    th1.id = "file_" + fileCounterForShowFiles;
     sliceTextForUploadContainer(th1);
 
     var th2 = document.createElement("th");
@@ -90,12 +97,12 @@ function showFile(file) {
     th2.className = "th";
 
     var th4 = document.createElement("th");
-    th4.id = "deleteTmp_"+ fileCount;
+    th4.id = "deleteTmp_"+ fileCounterForShowFiles;
     th4.className = "thDelete";
     th4.addEventListener("click", deleteTmpFile);
 
     var img = document.createElement("img");
-    img.id = "deleteTmp_"+ fileCount;
+    img.id = "deleteTmp_"+ fileCounterForShowFiles;
     img.src = "/resources/media/feeds/donloadCancel.png";
     th4.appendChild(img);
 
@@ -103,53 +110,59 @@ function showFile(file) {
     fileRow.appendChild(th2);
     fileRow.appendChild(th4);
 
-    fileCount++;
+    fileCounterForShowFiles++;
     return fileRow;
 }
 
+//send files to server--------------------------------------------------------
 function sendFiles(files) {
     for (var i = 0; i < files.length; i++) {
-        var formData = new FormData();
-        formData.append("file", files[i], files[i].name);
-
-        while (sessionStorage.getItem('clientId')===null){
-            getClientID();
-        }
-        formData.append("clientId", sessionStorage.getItem('clientId'));
-        //formData.append(csrfParameter, csrfToken);
-        $.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
-            enctype: "multipart/form-data",
-            method: 'POST',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            xhr: function () {
-                var req = $.ajaxSettings.xhr();
-                var reqUp = req.upload;
-                reqUp.id = j.toString();
-                reqUp.addEventListener('progress', uploadProgress, false);
-                j++;
-                return req;
-            },
-            success: function (data) {
-
-            },
-            error: function (e) {
-                alert(e.responseText);
-            }
-        });
+        sendFile(files[i]);
     }
 }
+function sendFile(file) {
+    var formData = new FormData();
+    formData.append("file", file, file.name);
 
+    while (sessionStorage.getItem('clientId')===null){
+        getClientID();
+    }
+    formData.append("clientId", sessionStorage.getItem('clientId'));
+    formData.append("fileId", fileCounterForSendFiles);
+
+    $.ajax({
+        url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
+        enctype: "multipart/form-data",
+        method: 'POST',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhr: function () {
+            var req = $.ajaxSettings.xhr();
+            var reqUp = req.upload;
+            reqUp.id = "xhr_"+fileCounterForSendFiles;
+            reqUp.addEventListener('progress', uploadProgress, false);
+            fileCounterForSendFiles++;
+            return req;
+        },
+        success: function (data) {
+
+        },
+        error: function (e) {
+            alert(e.responseText);
+        }
+    });
+}
+//----------------------------------------------------------------------------
 function uploadProgress(event) {
-    var progressStatus = document.getElementById("fileRow_"+event.target.id);
+    var progressStatus = document.getElementById("fileRow_"+event.target.id.split("_")[1]);
     var percent = parseInt(event.loaded / event.total * 100);
     progressStatus.style.background = "linear-gradient(90deg, #18ff00 " + percent + "%, #FFF " + percent +"%)";
 }
 
+//----------------------------------------------------------------------------
 function deleteTmpFile(event) {
     var id = event.target.id.split('_')[1];
     var filename = document.getElementById("file_"+id).title;
@@ -167,6 +180,7 @@ function deleteTmpFile(event) {
     })
 }
 
+//----------------------------------------------------------------------------
 function saveFiles() {
     var comment = document.getElementById('uploadComment');
     var feedname = document.getElementById('selectFeed').value;
