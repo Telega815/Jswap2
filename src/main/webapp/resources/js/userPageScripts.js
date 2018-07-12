@@ -24,6 +24,21 @@ $(document).ready(function(){
     saveButtons = document.getElementsByClassName("SaveButton");
 
     hideEdit();
+    //trueSizeOfPosts
+    var fileSizeNodes = document.getElementsByClassName("FeedtdRight");
+    for(var i=0; i <fileSizeNodes.length; i++) {
+        fileSizeNodes[i].innerText=formatSize(fileSizeNodes[i].innerText);
+    }
+    //trueSizeSpaceOfFeeds
+    var fileSizeFeeds = document.getElementsByClassName("tdRight");
+    for(var i=0; i <fileSizeFeeds.length; i++) {
+        if (fileSizeFeeds[i].innerText!="0.0") {
+            fileSizeFeeds[i].innerText = "Занято " + formatSize(fileSizeFeeds[i].innerText);
+        }
+        else{
+            fileSizeFeeds[i].innerText = "Занято 0 Байт";
+        }
+    }
 
 
 

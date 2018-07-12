@@ -83,11 +83,10 @@ public class HtmlService {
         //tdRight--------------------------------------------------------------------
         HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
         tdRight.addAttribute("class", "tdRight");
-        double sizeMB = feed.getSize() / 1024 / 1024;
-        if (sizeMB/100 < 1)
-            tdRight.setInnerText("Занято " + String.format("%.1f", sizeMB)+" MB");
-        else
-            tdRight.setInnerText("Занято " + String.format("%.1f", sizeMB/1024)+" GB");
+
+        double sizeByte = feed.getSize();
+        //sizeSpaceOfFeeds
+        tdRight.setInnerText(String.valueOf(sizeByte));
 
         tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString());
 
@@ -329,7 +328,7 @@ public class HtmlService {
     }
 
     private String getFileHtml(FileData fileData, boolean showPrivateContent, int fileNumber){
-        double sizeMB = fileData.getSize() / 1024 / 1024;
+        double sizeByte = fileData.getSize();
         HtmlGenerator tr = new HtmlGeneratorImpl("tr");
         tr.addAttribute("id", "postFileRaw_"+ fileData.getFilePk());
         if (fileNumber == 0) {
@@ -352,12 +351,10 @@ public class HtmlService {
 
         HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
         tdRight.addAttribute("class", "FeedtdRight");
-        if(sizeMB /100 < 1)
-            tdRight.setInnerText(String.format("%.1f", sizeMB)+" MB");
-        else{
-            sizeMB /= 1024;
-            tdRight.setInnerText(String.format("%.1f", sizeMB)+" GB");
-        }
+        //SizeFileOfPost
+        tdRight.setInnerText(String.valueOf(sizeByte));
+
+
 
         HtmlGenerator tdFileDownload = new HtmlGeneratorImpl("td");
         tdFileDownload.addAttribute("class", "FeedTdDownload FeedTdDownload_"+fileData.getPost().getPostPk());
