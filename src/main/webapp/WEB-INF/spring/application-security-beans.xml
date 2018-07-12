@@ -10,7 +10,7 @@
             http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <bean name="bcryptEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
-    <!--<bean name="noEncoder" class="org.springframework.security.crypto.password.NoOpPasswordEncoder"/>-->
+
 
     <!--Database beans-->
     <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">

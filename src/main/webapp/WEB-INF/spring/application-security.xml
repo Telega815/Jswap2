@@ -22,7 +22,7 @@
 			authentication-failure-url="/service/login?error=true"
 			username-parameter="username"
 			password-parameter="pwd"/>
-		<csrf disabled="true"/>
+		<csrf disabled="false"/>
 		<logout logout-success-url="/"
 				logout-url="/service/logout"/>
 
@@ -34,10 +34,6 @@
 	<authentication-manager>
 		<authentication-provider user-service-ref="userDetailsServiceImpl">
 			<password-encoder ref="bcryptEncoder"/>
-			<!--<password-encoder ref="noEncoder"/>-->
-			<!--<user-service>-->
-				<!--<user name="user" password="user" authorities="ROLE_USER" />-->
-			<!--</user-service>-->
 		</authentication-provider>
 	</authentication-manager>
 

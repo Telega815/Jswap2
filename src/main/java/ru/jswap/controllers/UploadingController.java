@@ -36,18 +36,26 @@ public class UploadingController {
     private HtmlService htmlService;
 
 
-
     //---------------------------------------------------------------------------
-    @RequestMapping(value = "/restService/upload", method = RequestMethod.POST)
+    /**
+     * @param file uploaded file
+     * @param clientId Used to distinguish between different tabs
+     * @param session current session
+     * @return ID of uploaded file in temp post
+     */
+    @RequestMapping(value = "/restService/uploadFile", method = RequestMethod.POST)
     @ResponseBody
-    public String upld(@RequestParam (name="file", required = false)MultipartFile file,
+    public int uploadFile(@RequestParam (name="file", required = false)MultipartFile file,
                        @RequestParam (name="clientId", required = false) Integer clientId,
                        HttpSession session){
-
-        return "suckass";
+        return fileService.fileUploadProcess(file, clientId, session.getId());
     }
 
-    @GetMapping(value = "/restService/getNewClientId")
+
+    /**
+     * @return client ID (will be used to distinguish between different tabs)
+     */
+    @PostMapping(value = "/restService/getNewClientId")
     @ResponseBody
     public String getNewClientId(){
         return fileService.getAndIncrementMaxId().toString();

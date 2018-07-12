@@ -14,18 +14,30 @@
     <title>UserPage</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_header.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_feeds.css">
+
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
+    <sec:csrfMetaTags />
+    <script type="text/javascript" language="javascript">
+        var headers = {};
+
+        var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
+        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
+        var csrfToken = $("meta[name='_csrf']").attr("content");
+
+        headers[csrfHeader] = csrfToken;
+    </script>
 </head>
 <body >
 <div class="bodyBack" id="bodyBack">
     <header>
         <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/header2.jsp"/>
     </header>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScripts.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/UploadScripts.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/FeedOptions.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/IE.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ScrollStop.js" ></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForRightPanel.js"></script>
 
     <main>
 

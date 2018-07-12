@@ -47,30 +47,37 @@ public class FileService implements Runnable {
     @Autowired
     private FilePathDAO filePathDAO;
 
+
     public Integer getAndIncrementMaxId(){
         maxId++;
         return maxId-1;
     }
 
+
+    /**
+     * @param multipartFile uploaded file
+     * @param clientId received from front end (Used to distinguish between different tabs)
+     * @param sessionId should be passed from controller (User for a temp folder name)
+     * @return ID of file in temp post
+     */
     public int fileUploadProcess(MultipartFile multipartFile, int clientId, String sessionId){
         if(tempPosts == null) tempPosts = new HashMap<>();
         int fileId;
+        TempPost post;
 
         if(tempPosts.containsKey(clientId)){
-            TempPost post = tempPosts.get(clientId);
-            fileId = post.addFile(multipartFile, clientId, sessionId);
-            if(fileId >= 0) {
-                tempPosts.put(clientId, post);
-            }
+            post = tempPosts.get(clientId);
         }else{
-            TempPost post = new TempPost();
-            fileId = post.addFile(multipartFile, clientId, sessionId);
-            if(fileId >= 0) {
-                tempPosts.put(clientId, post);
-            }
+            post = new TempPost();
+        }
+        fileId = post.addFile(multipartFile, clientId, sessionId);
+        if(fileId >= 0) {
+            tempPosts.put(clientId, post);
         }
         return fileId;
     }
+
+
 
 
 
