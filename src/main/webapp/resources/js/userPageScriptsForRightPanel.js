@@ -115,11 +115,10 @@ function sendFiles(files) {
         while (sessionStorage.getItem('clientId')===null){
             getClientID();
         }
-        formData.append("id", sessionStorage.getItem('clientId'));
-        formData.append()
-dsdfsdfsdfsdfsdfsdsdfs
+        formData.append("clientId", sessionStorage.getItem('clientId'));
+        //formData.append(csrfParameter, csrfToken);
         $.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?${_csrf.parameterName}=${_csrf.token}",
+            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
             enctype: "multipart/form-data",
             method: 'POST',
             type: 'POST',

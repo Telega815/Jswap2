@@ -17,15 +17,8 @@
 
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
     <sec:csrfMetaTags />
-    <script type="text/javascript" language="javascript">
-        var headers = {};
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/csrfHeader.js" ></script>
 
-        var csrfParameter = $("meta[name='_csrf_parameter']").attr("content");
-        var csrfHeader = $("meta[name='_csrf_header']").attr("content");
-        var csrfToken = $("meta[name='_csrf']").attr("content");
-
-        headers[csrfHeader] = csrfToken;
-    </script>
 </head>
 <body >
 <div class="bodyBack" id="bodyBack">
@@ -38,6 +31,8 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/IE.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ScrollStop.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForRightPanel.js"></script>
+
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsPostEdit.js" ></script>
 
     <main>
 
