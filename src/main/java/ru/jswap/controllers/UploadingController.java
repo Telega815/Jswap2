@@ -41,6 +41,7 @@ public class UploadingController {
      * @param file uploaded file
      * @param clientId Used to distinguish between different tabs
      * @param session current session
+     * @param fileId used for identifying file between front and back end
      * @return ID of uploaded file in temp post
      */
     @RequestMapping(value = "/restService/uploadFile", method = RequestMethod.POST)
@@ -62,7 +63,17 @@ public class UploadingController {
     }
 
 
-
+    /**
+     * @param clientId Used to distinguish between different tabs
+     * @param fileId used for identifying file between front and back end
+     * @return true if delete was successful
+     */
+    @PostMapping(value = "/restService/deleteFile")
+    @ResponseBody
+    public Boolean deleteFile(@RequestParam (name="clientId") Integer clientId,
+                              @RequestParam (name="fileId") Integer fileId){
+        return fileService.deleteTmpFile(clientId, fileId);
+    }
 
 
 

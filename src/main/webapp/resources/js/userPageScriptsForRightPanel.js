@@ -165,11 +165,17 @@ function uploadProgress(event) {
 //----------------------------------------------------------------------------
 function deleteTmpFile(event) {
     var id = event.target.id.split('_')[1];
-    var filename = document.getElementById("file_"+id).title;
-    var url = document.URL + "/deleteTmpFile/" + filename;
+    var formData = new FormData();
+    formData.append("clientId", sessionStorage.getItem("clientId"));
+    formData.append("fileId", id);
     $.ajax({
-        url: url,
-        method: "GET",
+        url: window.location.protocol +"//"+window.location.host+"/restService/deleteFile?"+csrfParameter+"="+csrfToken,
+        enctype: "multipart/form-data",
+        method: "POST",
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
         success: function (data) {
             alert(data);
             document.getElementById("fileRow_"+ id).style.display = "none";

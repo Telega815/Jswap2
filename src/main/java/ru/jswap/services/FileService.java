@@ -81,7 +81,10 @@ public class FileService implements Runnable {
         return fileId;
     }
 
-
+    public boolean deleteTmpFile(int clientId, int fileId){
+        TempPost post=tempPosts.get(clientId);
+        return post.deleteFile(fileId);
+    }
 
 
 

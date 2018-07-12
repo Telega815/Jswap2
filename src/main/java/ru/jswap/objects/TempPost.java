@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class TempPost implements Runnable{
     private Logger logger = LoggerFactory.getLogger(TempPost.class);
-    private final int MILLS = 10000;
+    private final int MILLS = 180000;
     private Map<Integer, FileData> files;
     private Map<Integer, FilePath> paths;
     private String FILE_PATH = "C:" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
@@ -72,12 +72,13 @@ public class TempPost implements Runnable{
         return paths.get(key);
     }
 
-    public void deleteFile(int key){
+    public boolean deleteFile(int key){
         File file = new File(paths.get(key).getPath());
         if(file.delete()){
             files.remove(key);
             paths.remove(key);
-        }
+            return true;}
+        return false;
     }
 
     public boolean deleteAllFiles(){
