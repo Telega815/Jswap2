@@ -79,19 +79,14 @@ public class MainController {
 								if (o1.getId() < o2.getId()) return -1;
 								else return 1;
 							});
-					feedsHtml = htmlService.getFeedsHtml(feeds, authenticatedAsPageOwner);
+					feedsHtml = htmlService.getFeedsHtml(feeds);
 				}else {
-					feedsHtml = "<p>you dont have any feeds</p>";
+					feedsHtml = "<p>you don't have any feeds</p>";
 				}
 
 				modelAndView.setViewName("/content/userPage");
 				modelAndView.addObject("user", checkedUser);
-				double sizeGB = ((double) checkedUser.getFilesSize())/1024/1024/1024;
-				double sizeBar = (double) checkedUser.getFilesSize()/(double)checkedUser.getSizeLimit()*100;
-
 				modelAndView.addObject("feedsHtml", feedsHtml);
-				modelAndView.addObject("sizeGB", String.format("%.1f", sizeGB));
-				modelAndView.addObject("sizeBar", sizeBar);
 				modelAndView.addObject("pinCode", new PinAccess());
 				modelAndView.addObject("accessToPageContent", authenticatedAsPageOwner);
 				break;

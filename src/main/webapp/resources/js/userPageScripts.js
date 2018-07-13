@@ -31,7 +31,7 @@ $(document).ready(function(){
     }
     //trueSizeSpaceOfFeeds
     var fileSizeFeeds = document.getElementsByClassName("tdRight");
-    for(var i=0; i <fileSizeFeeds.length; i++) {
+    for(i = 0; i <fileSizeFeeds.length; i++) {
         if (fileSizeFeeds[i].innerText!="0.0") {
             fileSizeFeeds[i].innerText = "Занято " + formatSize(fileSizeFeeds[i].innerText);
         }

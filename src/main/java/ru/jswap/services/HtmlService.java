@@ -35,15 +35,15 @@ public class HtmlService {
         return res.toString();
     }
 
-    public String getFeedsHtml(List<Feeds> feeds, boolean showPrivateContent){
+    public String getFeedsHtml(List<Feeds> feeds){
         StringBuilder res = new StringBuilder();
-        for (int i = 0; i < feeds.size(); i++) {
-            res.append(getFeedHtml(feeds.get(i), showPrivateContent, i+1));
+        for (Feeds feed:feeds) {
+            res.append(this.getFeedHtml(feed));
         }
         return res.toString();
     }
 
-    public String getFeedHtml(Feeds feed, boolean showPrivateContent, int id){
+    public String getFeedHtml(Feeds feed){
         HtmlGenerator tr = new HtmlGeneratorImpl("tr");
 
         //tdLeft---------------------------------------------------------------------------------
@@ -56,6 +56,7 @@ public class HtmlService {
         img.addAttribute("src", "../../resources/media/feeds/locked.png");
         tdLeft.setInnerText(img.toString());
 
+
         //tdCenter-------------------------------------------------------------------------------
         HtmlGenerator tdCenter = new HtmlGeneratorImpl("td");
         tdCenter.addAttribute("class", "tdCenter");
@@ -63,16 +64,13 @@ public class HtmlService {
         HtmlGenerator inputHidden = new HtmlGeneratorImpl("input");
         inputHidden.addAttribute("type", "radio");
         inputHidden.addAttribute("name", "emotion");
-        inputHidden.addAttribute("id", "pic_"+id);
-        if (id == 1)
-            inputHidden.addAttribute("checked", "checked");
+        inputHidden.addAttribute("id", "pic_"+feed.getId());
         inputHidden.addAttribute("class", "input-hidden");
 
         HtmlGenerator label = new HtmlGeneratorImpl("label");
-        label.addAttribute("for", "pic_"+id);
+        label.addAttribute("for", "pic_"+feed.getId());
         HtmlGenerator span = new HtmlGeneratorImpl("span");
-        span.addAttribute("id", "feed_"+id);
-        span.addAttribute("onclick", "changeFeed(event)");
+        span.addAttribute("id", "feed_"+feed.getId());
         span.setInnerText(feed.getFeedname());
         label.setInnerText(span.toString());
 
