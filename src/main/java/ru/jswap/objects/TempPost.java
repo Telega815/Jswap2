@@ -17,7 +17,7 @@ public class TempPost implements Runnable{
     private final int MILLS = 180000;
     private Map<Integer, FileData> files;
     private Map<Integer, FilePath> paths;
-    private String FILE_PATH = "C:" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
+    private String FILE_PATH = "\\\\DESKTOP-JJNRSE9"+File.separator+"folder_for_swapy" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
     private Thread timeoutThread;
 
     public TempPost() {

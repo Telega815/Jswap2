@@ -177,7 +177,7 @@ function deleteTmpFile(event) {
         contentType: false,
         processData: false,
         success: function (data) {
-            if (data == "true"){
+            if (data === true){
                 document.getElementById("fileRow_"+ id).style.display = "none";
             }else{
                 alert(data);
