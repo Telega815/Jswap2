@@ -52,60 +52,48 @@ public class MainController {
 	}
 
 	@GetMapping(value = "/{urlpart}")
-	public ModelAndView main(@PathVariable("urlpart") String urlpart) {
+	public ModelAndView main(@PathVariable("urlpart") String urlpart,
+							 @SessionAttribute(value = "user", required = false) User user,
+							 HttpServletRequest request) {
+
 		ModelAndView modelAndView = new ModelAndView();
-		String feedsHtml;
-		List<Feeds> feeds;
+
 		switch (urlpart) {
 			case "favicon":
 				break;
 			default:
 				User checkedUser = userService.getUser(urlpart);
-				String posts;
-				if (checkedUser != null) {
-					feeds = userService.getFeeds(checkedUser);
-					boolean authenticatedAsPageOwner = userService.checkUser(checkedUser);
-					if (!feeds.isEmpty()){
-						feeds.sort(
-								(o1, o2) -> {
-                            		if (o1.getId() < o2.getId()) return -1;
-									else return 1;
-								});
 
-						feedsHtml = htmlService.getFeedsHtml(feeds, authenticatedAsPageOwner);
-						modelAndView.addObject("feeds", feedsHtml);
-						posts = htmlService.getAllPostsHtml(feeds.get(0), authenticatedAsPageOwner);
-					}else {
-						posts = null;
-						modelAndView.addObject("haventFeeds", false);
-					}
-
-
-					modelAndView.addObject("posts", posts);
-
-					String feedsAsOptions;
-					List<Feeds> feedsForWrite;
-					if(authenticatedAsPageOwner){
-						feedsAsOptions = htmlService.getFeedsAsOptions(feeds);
-					}else{
-						feedsForWrite = userService.getFeedsForWrite(feeds);
-						feedsAsOptions = htmlService.getFeedsAsOptions(feedsForWrite);
-					}
-					modelAndView.addObject("feedsAsOptions", feedsAsOptions);
-
-					modelAndView.setViewName("/content/userPage");
-					modelAndView.addObject("user", checkedUser);
-					double sizeGB = (double) checkedUser.getFilesSize();
-					double sizeBar = (double) checkedUser.getFilesSize()/(double)checkedUser.getSizeLimit()*100;
-					sizeGB = sizeGB/1024/1024/1024;
-					modelAndView.addObject("sizeGB", String.format("%.1f", sizeGB));
-					modelAndView.addObject("sizeBar", sizeBar);
-					modelAndView.addObject("feed", new Feeds());
-					modelAndView.addObject("pinCode", new PinAccess());
-					modelAndView.addObject("accessToPageContent", authenticatedAsPageOwner);
-				}else{
+				if (checkedUser == null){
 					modelAndView.setViewName("redirect:/?error=true");
+					return modelAndView;
 				}
+
+				boolean authenticatedAsPageOwner = userService.checkUser(checkedUser);
+
+				List<Feeds> feeds = userService.getFeeds(checkedUser);
+				String feedsHtml;
+				if (!feeds.isEmpty()){
+					feeds.sort(
+							(o1, o2) -> {
+								if (o1.getId() < o2.getId()) return -1;
+								else return 1;
+							});
+					feedsHtml = htmlService.getFeedsHtml(feeds, authenticatedAsPageOwner);
+				}else {
+					feedsHtml = "<p>you dont have any feeds</p>";
+				}
+
+				modelAndView.setViewName("/content/userPage");
+				modelAndView.addObject("user", checkedUser);
+				double sizeGB = ((double) checkedUser.getFilesSize())/1024/1024/1024;
+				double sizeBar = (double) checkedUser.getFilesSize()/(double)checkedUser.getSizeLimit()*100;
+
+				modelAndView.addObject("feedsHtml", feedsHtml);
+				modelAndView.addObject("sizeGB", String.format("%.1f", sizeGB));
+				modelAndView.addObject("sizeBar", sizeBar);
+				modelAndView.addObject("pinCode", new PinAccess());
+				modelAndView.addObject("accessToPageContent", authenticatedAsPageOwner);
 				break;
 		}
 		return modelAndView;
@@ -140,7 +128,7 @@ public class MainController {
 	public String createUser(@ModelAttribute("user") User user){
 		if (userService.createUser(user))
 			return "redirect:/";
-		else
+		else//TODO this is not a rest method
 			return "error: Couldn't create user";
 	}
 

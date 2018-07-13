@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="jswapdb@192.168.1.150" uuid="18c803ea-c161-4741-84f3-6673b42ff3b1">
+    <data-source source="LOCAL" name="jswapdb@localhost" uuid="ccab8a2c-fbf7-4f1c-8ff3-2e44aa9d1de5">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://192.168.1.150:5432/jswapdb</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/jswapdb</jdbc-url>
       <driver-properties>
         <property name="ApplicationName" value="DataGrip" />
       </driver-properties>

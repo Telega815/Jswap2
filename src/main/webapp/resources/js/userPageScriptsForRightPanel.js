@@ -148,7 +148,7 @@ function sendFile(file) {
             return req;
         },
         success: function (data) {
-
+            //TODO some shit here i donno
         },
         error: function (e) {
             alert(e.responseText);
@@ -177,8 +177,11 @@ function deleteTmpFile(event) {
         contentType: false,
         processData: false,
         success: function (data) {
-            alert(data);
-            document.getElementById("fileRow_"+ id).style.display = "none";
+            if (data == "true"){
+                document.getElementById("fileRow_"+ id).style.display = "none";
+            }else{
+                alert(data);
+            }
         },
         error: function (e) {
             alert(e.responseText);

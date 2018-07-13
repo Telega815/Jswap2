@@ -70,9 +70,16 @@ public class UploadingController {
      */
     @PostMapping(value = "/restService/deleteFile")
     @ResponseBody
-    public Boolean deleteFile(@RequestParam (name="clientId") Integer clientId,
+    public boolean deleteFile(@RequestParam (name="clientId") Integer clientId,
                               @RequestParam (name="fileId") Integer fileId){
         return fileService.deleteTmpFile(clientId, fileId);
+    }
+
+
+    @PostMapping(value = "restService/saveNewPost")
+    @ResponseBody
+    public boolean saveNewPost(){
+        return true;
     }
 
 

@@ -18,8 +18,6 @@ import java.util.List;
 public class HtmlService {
 
 
-    //--------------------------------------------------------------------------------------
-
     @Autowired
     private PostsDAO postsDAO;
     @Autowired

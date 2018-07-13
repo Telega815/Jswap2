@@ -31,7 +31,6 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/IE.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ScrollStop.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForRightPanel.js"></script>
-
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsPostEdit.js" ></script>
 
     <main>
@@ -49,17 +48,14 @@
                         </div>
                         <a href="#"><img src="${pageContext.request.contextPath}/resources/media/feeds/UserFeedEdit.png" alt="" class="userLogoEdit"></a>
                     </div>
-                    <div class="NoFeeds">
-                        <c:if test="${haventFeeds == false}">
-                            <span> У Вас нет лент </span>
-                        </c:if>
-                    </div>
                     <table class="userFolders">
-                        ${feeds}
+                        ${feedsHtml}
                     </table>
+
                     <div class="CreateFolderBlock">
                         <a href="#"><img src="${pageContext.request.contextPath}/resources/media/feeds/CreateFolder.png" alt=""></a>
                     </div>
+
                     <c:set var="sizeLimitGB" value="${user.sizeLimit/1024/1024/1024}"/>
                     <div class="MemoryLimitBlock">
                         <div class="MemoryLimitNone" >
@@ -75,7 +71,6 @@
 
                 </div>
             <div class="mainCenter" id="mainCenter">
-                ${posts}
             </div>
 
 
@@ -91,12 +86,12 @@
                         <span class="FeedHeaderTextUpload">${user.username.toUpperCase()}</span>
                     </div>
                     <div class="uploadBlock">
-                        <div class="upload">
-                            <span>Загружать в</span>
-                            <select id="selectFeed">
-                                ${feedsAsOptions}
-                            </select>
-                        </div>
+                        <%--<div class="upload">--%>
+                            <%--<span>Загружать в</span>--%>
+                            <%--<select id="selectFeed">--%>
+                                <%--${feedsAsOptions}--%>
+                            <%--</select>--%>
+                        <%--</div>--%>
                         <div>
                             <span>Заметка</span>
                             <%--<textarea id="uploadComment" name="comment" rows="3"></textarea>--%>
