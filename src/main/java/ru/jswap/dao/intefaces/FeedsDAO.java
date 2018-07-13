@@ -6,7 +6,7 @@ import ru.jswap.entities.User;
 import java.util.List;
 
 public interface FeedsDAO {
-    Feeds getFeed(int id);
+    Feeds getFeed(long id);
     Feeds getFeed(String feedname, User user);
     List<Feeds> getFeeds(User user);
     long saveFeed(Feeds feed);

@@ -43,6 +43,10 @@ public class UserService {
         return feedsDAO.getFeeds(user);
     }
 
+    public Feeds getFeed (int feedId){
+        return feedsDAO.getFeed(feedId);
+    }
+
     public List<Feeds> getFeedsForWrite(User authenticatedUser, List<Feeds> currentFeeds){
         List<Feeds> feedsForWrite = new ArrayList<>();
         AccessParams accessParams = new AccessParams();

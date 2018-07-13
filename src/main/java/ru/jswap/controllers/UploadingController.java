@@ -1,13 +1,16 @@
 package ru.jswap.controllers;
 
+import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import ru.jswap.entities.Feeds;
 import ru.jswap.entities.FileData;
 import ru.jswap.entities.Post;
 import ru.jswap.entities.User;
+import ru.jswap.objects.AccessParams;
 import ru.jswap.objects.RequestPostInfo;
 import ru.jswap.objects.ResponsePostInfo;
 import ru.jswap.services.FileService;
@@ -82,6 +85,33 @@ public class UploadingController {
         return true;
     }
 
+    @PostMapping(value = "restService/getPostsOfFeed")
+    @ResponseBody
+    public String getPostsHtml(@RequestParam (name="feedId") Integer feedId){
+        Feeds feed = userService.getFeed(feedId);
+        AccessParams accessParams = new AccessParams();
+        accessParams.setParams(feed.getAccesstype());
+        Boolean userIdentificated=userService.checkUser(feed.getUser());
+
+        switch (accessParams.getRead()){
+            case 0:
+                return htmlService.getAllPostsHtml(feed,userIdentificated);
+            case 1:
+                //TODO PinAccessCheck
+                return "Pincode Requared";
+
+            case 2:
+                if (userIdentificated){
+                    return htmlService.getAllPostsHtml(feed,true);
+                }
+                else{
+                    return "Autentification Requared";
+                }
+
+
+        }
+      return "Undefined behavior";
+    }
 
 
 

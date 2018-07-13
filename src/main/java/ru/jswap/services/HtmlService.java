@@ -71,6 +71,8 @@ public class HtmlService {
         label.addAttribute("for", "pic_"+feed.getId());
         HtmlGenerator span = new HtmlGeneratorImpl("span");
         span.addAttribute("id", "feed_"+feed.getId());
+        span.addAttribute("class","feeds");
+
         span.setInnerText(feed.getFeedname());
         label.setInnerText(span.toString());
 

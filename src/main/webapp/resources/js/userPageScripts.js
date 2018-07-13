@@ -29,6 +29,15 @@ $(document).ready(function(){
     for(var i=0; i <fileSizeNodes.length; i++) {
         fileSizeNodes[i].innerText=formatSize(fileSizeNodes[i].innerText);
     }
+    //trueSizeFreeSpace
+    var spaceBizy = document.getElementById("leftPanelUserFilesSize");
+    var spaceFree = document.getElementById("leftPanelUserSizeLimit");
+    spaceBizy.innerText=spaceBizy.innerText/1024/1024/1024;
+    spaceFree.innerText=spaceFree.innerText/1024/1024/1024;
+
+
+
+
     //trueSizeSpaceOfFeeds
     var fileSizeFeeds = document.getElementsByClassName("tdRight");
     for(i = 0; i <fileSizeFeeds.length; i++) {
@@ -39,6 +48,7 @@ $(document).ready(function(){
             fileSizeFeeds[i].innerText = "Занято 0 Байт";
         }
     }
+
 
 
 

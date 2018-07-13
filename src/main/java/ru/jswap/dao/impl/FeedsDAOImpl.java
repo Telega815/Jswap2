@@ -18,7 +18,7 @@ public class FeedsDAOImpl implements FeedsDAO {
 
     @Transactional
     @Override
-    public Feeds getFeed(int id) {
+    public Feeds getFeed(long id) {
         return sessionFactory.getCurrentSession().get(Feeds.class, id);
     }
 
