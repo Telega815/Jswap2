@@ -51,7 +51,7 @@ public class TempPost implements Runnable{
             return -1;
         }
 
-        startTimeOut();
+        this.startTimeOut();
         return key;
     }
 
@@ -73,6 +73,7 @@ public class TempPost implements Runnable{
     }
 
     public boolean deleteFile(int key){
+        this.startTimeOut();
         File file = new File(paths.get(key).getPath());
         if(file.delete()){
             files.remove(key);
