@@ -22,7 +22,7 @@ function getPostsOfFeeds(event) {
         contentType: false,
         processData: false,
         success: function (data) {
-                if (data=="Pincode Requared" || data=="Autentification Requared" || data=="Undefined behavior"){
+                if (data==="Pincode required" || data==="Authentication required" || data==="Undefined behavior"){
                     alert(data)
                 }
                 else {

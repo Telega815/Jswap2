@@ -5,14 +5,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import ru.jswap.entities.FileData;
 import ru.jswap.entities.FilePath;
+import ru.jswap.objects.JSON.ClientIdInfo;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class TempPost implements Runnable{
+
     private Logger logger = LoggerFactory.getLogger(TempPost.class);
     private final int MILLS = 180000;
     private Map<Integer, FileData> files;
@@ -55,6 +58,28 @@ public class TempPost implements Runnable{
         return key;
     }
 
+    /**
+     * @return ClientIdInfo if client have any files
+     */
+    public ClientIdInfo getClientIdInfo(){
+        ClientIdInfo info = new ClientIdInfo();
+        if (files.size() != 0) {
+            info.setFileIds(files.keySet().toArray(new Integer[0]));
+            List<String> filenames= new ArrayList<>();
+            List<Long> filesizes = new ArrayList<>();
+            for (FileData file:files.values()) {
+                filenames.add(file.getFilename());
+                filesizes.add(file.getSize());
+            }
+            info.setFilenames(filenames.toArray(new String[0]));
+            info.setFileSizes(filesizes.toArray(new Long[0]));
+            info.setHaveFiles(true);
+        } else {
+            info.setHaveFiles(false);
+        }
+        return info;
+    }
+
     public void startTimeOut(){
         if (timeoutThread == null) timeoutThread = new Thread(this);
 
@@ -73,13 +98,16 @@ public class TempPost implements Runnable{
     }
 
     public boolean deleteFile(int key){
+        boolean res = true;
         this.startTimeOut();
         File file = new File(paths.get(key).getPath());
-        if(file.delete()){
-            files.remove(key);
-            paths.remove(key);
-            return true;}
-        return false;
+        if(!file.delete()){
+            logger.info("\n{}: WARNING!: deleteFile of Temp Post Failed!", new java.util.Date(System.currentTimeMillis()).toString());
+            res = false;
+        }
+        files.remove(key);
+        paths.remove(key);
+        return res;
     }
 
     public boolean deleteAllFiles(){
@@ -105,4 +133,17 @@ public class TempPost implements Runnable{
         }
     }
 
+    /**
+     * @param newLocation permanent location of new post
+     * @param filesToRelocate indexes of files to relocate
+     * @return true if succeeded
+     */
+    private boolean relocateFiles(File newLocation, int[] filesToRelocate){
+        boolean res = true;
+        for (int key : filesToRelocate) {
+            File file = new File(paths.get(key).getPath());
+            res &= file.renameTo(newLocation);
+        }
+        return res;
+    }
 }

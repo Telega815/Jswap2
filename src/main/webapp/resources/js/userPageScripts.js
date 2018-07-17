@@ -10,9 +10,8 @@ var selectedPost;
 var editingPost = false;
 var fileTables;
 
-var selectedFeed;
 $(document).ready(function(){
-    selectedFeed = document.getElementById("feed_1").innerText;
+
     fileTables = document.getElementsByClassName("FeedFolders");
     spoilerButtons = document.getElementsByClassName("LinkSpoiler");
     spoilerGradient = document.getElementsByClassName("CommentPostGrad");
@@ -103,26 +102,6 @@ function hidePostEdit(postId){
         postDownloadImgs[i].hidden = false;
         sliceTextForPostEdit(postFilesNames[i]);
     }
-}
-
-function changeFeed(event) {
-    selectedFeed = event.target.innerText;
-    var postsBlock = document.getElementById("mainCenter");
-    var children = postsBlock.children;
-    for (var i = 0; children.length !== 0; ){
-        children[i].remove();
-    }
-    $.ajax({
-        url: document.URL + "/" + selectedFeed + "/getPosts",
-        type: "POST",
-        success: function (data) {
-            postsBlock.innerHTML = data;
-            hideEdit();
-        },
-        error: function (e) {
-            alert(e.responseText);
-        }
-    })
 }
 
 function optionsAction(event) {

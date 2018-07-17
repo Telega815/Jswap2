@@ -1,6 +1,5 @@
 package ru.jswap.controllers;
 
-import com.sun.xml.internal.bind.v2.TODO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -11,12 +10,11 @@ import ru.jswap.entities.FileData;
 import ru.jswap.entities.Post;
 import ru.jswap.entities.User;
 import ru.jswap.objects.AccessParams;
-import ru.jswap.objects.RequestPostInfo;
-import ru.jswap.objects.ResponsePostInfo;
+import ru.jswap.objects.JSON.ClientIdInfo;
+import ru.jswap.objects.JSON.NewPostInfo;
 import ru.jswap.services.FileService;
 import ru.jswap.services.HtmlService;
 import ru.jswap.services.UserService;
-import ru.jswap.validators.FileValidator;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,9 +29,6 @@ public class UploadingController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private FileValidator fileValidator;
 
     @Autowired
     private HtmlService htmlService;
@@ -65,6 +60,15 @@ public class UploadingController {
         return fileService.getAndIncrementMaxId().toString();
     }
 
+    /**
+     * @param clientId received from front end (Used to distinguish between different tabs)
+     * @return ClientIdInfo if client have any files
+     */
+    @PostMapping(value = "/restService/getClientIdInfo", produces = "application/json")
+    @ResponseBody
+    public ClientIdInfo getClientIdInfo(@RequestParam (name = "clientId") Integer clientId){
+        return fileService.getClientIdInfo(clientId);
+    }
 
     /**
      * @param clientId Used to distinguish between different tabs
@@ -79,11 +83,13 @@ public class UploadingController {
     }
 
 
-    @PostMapping(value = "restService/saveNewPost")
+    @PostMapping(value = "restService/saveNewPost", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public boolean saveNewPost(){
+    public boolean saveNewPost(@RequestParam NewPostInfo info){
+        fileService.saveNewPost(info);
         return true;
     }
+
 
     @PostMapping(value = "restService/getPostsOfFeed")
     @ResponseBody
@@ -98,14 +104,14 @@ public class UploadingController {
                 return htmlService.getAllPostsHtml(feed,userIdentificated);
             case 1:
                 //TODO PinAccessCheck
-                return "Pincode Requared";
+                return "Pincode required";
 
             case 2:
                 if (userIdentificated){
                     return htmlService.getAllPostsHtml(feed,true);
                 }
                 else{
-                    return "Autentification Requared";
+                    return "Authentication required";
                 }
 
 
@@ -132,23 +138,7 @@ public class UploadingController {
 
 
 
-//    @PostMapping(value = "/{username}/uploadFile")
-//    @ResponseBody
-//    public int upload(@RequestParam(name = "file",required = false) MultipartFile[] multipartFiles,
-//                      @SessionAttribute(value = "user", required = false) User user,
-//                      @PathVariable("username") String username) {
-//        if (user == null) user = userService.getUser(username);
-//        return fileService.saveMultipartFile(multipartFiles[0], user);
-//    }
     //------------------------------------------------------------------------------
-
-    @GetMapping(value = "/{username}/deleteTmpFile/{filename:.+}")
-    @ResponseBody
-    public String deleteTmpFile(@PathVariable("filename") String filename) {
-        if (fileService.deleteFileFromTempPost(filename))
-            return "success";
-        return "error";
-    }
 
     @PostMapping(value = "/{username}/deleteFile")
     @ResponseBody
@@ -161,27 +151,6 @@ public class UploadingController {
             return "loginFailure";
         return "error";
     }
-
-    //------------------------------------------------------------------------------
-    @RequestMapping(value = "/{username}/save", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
-    @ResponseBody
-    public ResponsePostInfo enable(@RequestBody RequestPostInfo info) throws IOException {
-        Post post = fileService.saveTempPost(info);
-        fileService.postEditDeleteFiles(info.getFilesToDelete());
-
-        ResponsePostInfo respInfo = new ResponsePostInfo();
-        if (post == null){
-            respInfo.setPostId(0);
-            respInfo.setHtmlPost("");
-            respInfo.setNullPost(true);
-            return respInfo;
-        }
-        respInfo.setHtmlPost(htmlService.getPostHtml(post, userService.checkUser(post.getFeed().getUser())));
-        respInfo.setPostId(post.getPostPk());
-        respInfo.setNullPost(false);
-        return respInfo;
-    }
-
 
 
     @RequestMapping(value = "/{username}/{feedname}/download/{postid}/{filename:.+}")

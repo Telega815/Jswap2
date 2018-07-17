@@ -8,15 +8,19 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <html>
 <head>
     <title>Регистрация</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_header.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_registration.css">
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
+    <sec:csrfMetaTags />
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/csrfHeader.js" ></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/RegistrationScripts.js" ></script>
 </head>
 <body>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/RegistrationScripts.js" ></script>
+
 <div class="bodyBack">
     <header>
         <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/header2.jsp"/>

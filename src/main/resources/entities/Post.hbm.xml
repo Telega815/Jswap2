@@ -14,7 +14,7 @@
         </many-to-one>
         <property name="date" column="date"/>
         <property name="time" column="time"/>
-        <property name="enabled" column="enabled"/>
+        <property name="createdBy" column="createdBy"/>
         <property name="size" column="size"/>
     </class>
 </hibernate-mapping>

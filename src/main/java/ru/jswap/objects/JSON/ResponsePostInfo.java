@@ -1,4 +1,4 @@
-package ru.jswap.objects;
+package ru.jswap.objects.JSON;
 
 public class ResponsePostInfo {
     private String htmlPost;

@@ -31,12 +31,11 @@ function checkUsername(event) {
     var username = event.target.value;
     if (username === ""){
         imjInvalid[0].hidden = false;
-    imjValid[0].hidden = true;
-    return;
+        imjValid[0].hidden = true;
+        return;
     }
-    var url = "http://" + window.location.host + "/service/checkUsername";
     $.ajax({
-        url: url,
+        url: window.location.protocol +"//" + window.location.host + "/service/checkUsername?"+csrfParameter+"="+csrfToken,
         type: "POST",
         data: username,
         success: function (data) {

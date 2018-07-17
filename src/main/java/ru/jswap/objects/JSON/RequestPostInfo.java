@@ -1,8 +1,8 @@
-package ru.jswap.objects;
+package ru.jswap.objects.JSON;
 
 public class RequestPostInfo {
     private String comment;
-    private String feedName;
+    private long feedId;
     private long postID;
     private long[] filesToDelete;
 
@@ -17,12 +17,12 @@ public class RequestPostInfo {
         this.comment = comment;
     }
 
-    public String getFeedName() {
-        return feedName;
+    public long getFeedName() {
+        return feedId;
     }
 
-    public void setFeedName(String feedName) {
-        this.feedName = feedName;
+    public void setFeedName(long feedId) {
+        this.feedId = feedId;
     }
 
     public long getPostID() {

@@ -10,26 +10,24 @@ public class Post {
     private Feeds feed;
     private Date date;
     private Time time;
-    private boolean enabled;
     private long size;
+    private String createdBy;
 
     public Post() {
     }
 
 
-    public Post(Feeds feed, Date date, Time time, boolean enabled) {
+    public Post(Feeds feed, Date date, Time time) {
         this.feed = feed;
         this.date = date;
         this.time = time;
-        this.enabled = enabled;
     }
 
-    public Post(String commentary, Feeds feed, Date date, Time time, boolean enabled) {
+    public Post(String commentary, Feeds feed, Date date, Time time) {
         this.commentary = commentary;
         this.feed = feed;
         this.date = date;
         this.time = time;
-        this.enabled = enabled;
     }
 
     public Long getPostPk() {
@@ -74,22 +72,15 @@ public class Post {
                 Objects.equals(commentary, post.commentary) &&
                 Objects.equals(date, post.date) &&
                 Objects.equals(time, post.time) &&
+                Objects.equals(createdBy, post.createdBy) &&
                 size == post.size;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(postPk, commentary, feed, date, time, size);
+        return Objects.hash(postPk, commentary, feed, date, time, size , createdBy);
     }
 
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
 
     public Feeds getFeed() {
         return feed;
@@ -105,5 +96,13 @@ public class Post {
 
     public void setSize(long size) {
         this.size = size;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }
