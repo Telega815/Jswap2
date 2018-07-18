@@ -15,6 +15,6 @@ public interface FilesDAO {
     List<FileData> getFiles(Post[] posts);
     void saveFile(FileData fileData);
     void deleteFile(FileData fileData);
+    void deleteFile(long fileId);
     void updatefile(FileData fileData);
-
 }

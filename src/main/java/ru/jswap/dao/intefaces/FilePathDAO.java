@@ -6,4 +6,5 @@ public interface FilePathDAO {
     FilePath getPath(Integer id);
     int savePath(FilePath path);
     void deletePath(FilePath path);
+    void deletePath(Integer id);
 }

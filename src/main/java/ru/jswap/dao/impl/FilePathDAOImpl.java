@@ -29,4 +29,10 @@ public class FilePathDAOImpl implements FilePathDAO {
     public void deletePath(FilePath path) {
         sessionFactory.getCurrentSession().delete(path);
     }
+
+    @Transactional
+    @Override
+    public void deletePath(Integer id) {
+        sessionFactory.getCurrentSession().createQuery("delete from FilePath where id = :id").setParameter("id", id);
+    }
 }

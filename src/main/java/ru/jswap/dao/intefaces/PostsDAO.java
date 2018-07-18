@@ -12,5 +12,6 @@ public interface PostsDAO {
     Post getPost(Long post_pk);
     Long savePost(Post post);
     void deletePost(Post post);
+    void deletePost(Long post_pk);
     void updatePost(Post post);
 }

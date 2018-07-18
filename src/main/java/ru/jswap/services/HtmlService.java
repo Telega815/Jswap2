@@ -81,6 +81,7 @@ public class HtmlService {
         //tdRight--------------------------------------------------------------------
         HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
         tdRight.addAttribute("class", "tdRight");
+        tdRight.addAttribute("id", "feedTdRight_"+feed.getId());
 
         double sizeByte = feed.getSize();
         //sizeSpaceOfFeeds
@@ -348,7 +349,7 @@ public class HtmlService {
 
 
         HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
-        tdRight.addAttribute("class", "FeedtdRight");
+        tdRight.addAttribute("class", "FeedtdRight FeedtdRight_" + fileData.getPost().getPostPk());
         //SizeFileOfPost
         tdRight.setInnerText(String.valueOf(sizeByte));
 

@@ -10,67 +10,43 @@ var selectedPost;
 var editingPost = false;
 var fileTables;
 
-$(document).ready(function(){
-
-    fileTables = document.getElementsByClassName("FeedFolders");
-    spoilerButtons = document.getElementsByClassName("LinkSpoiler");
-    spoilerGradient = document.getElementsByClassName("CommentPostGrad");
-    optionBlocks = document.getElementsByClassName("ediFeedOptions");
-    textBlocks = document.getElementsByClassName("commentPost");
-    deleteRows = document.getElementsByClassName("deleteRow");
-    fileCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit");
-    inputFileFields = document.getElementsByClassName("uploadDad");
-    saveButtons = document.getElementsByClassName("SaveButton");
-
-    hideEdit();
-    //trueSizeOfPosts
-    var fileSizeNodes = document.getElementsByClassName("FeedtdRight");
-    for(var i=0; i <fileSizeNodes.length; i++) {
-        fileSizeNodes[i].innerText=formatSize(fileSizeNodes[i].innerText);
-    }
-    //trueSizeFreeSpace
-    var spaceBizy = document.getElementById("leftPanelUserFilesSize");
-    var spaceFree = document.getElementById("leftPanelUserSizeLimit");
-    spaceBizy.innerText=spaceBizy.innerText/1024/1024/1024;
-    spaceFree.innerText=spaceFree.innerText/1024/1024/1024;
-
-
-
-
-    //trueSizeSpaceOfFeeds
-    var fileSizeFeeds = document.getElementsByClassName("tdRight");
-    for(i = 0; i <fileSizeFeeds.length; i++) {
-        if (fileSizeFeeds[i].innerText!="0.0") {
-            fileSizeFeeds[i].innerText = "Занято " + formatSize(fileSizeFeeds[i].innerText);
-        }
-        else{
-            fileSizeFeeds[i].innerText = "Занято 0 Байт";
-        }
-    }
+// $(document).ready(function(){
+//
+//     fileTables = document.getElementsByClassName("FeedFolders");
+//     spoilerButtons = document.getElementsByClassName("LinkSpoiler");
+//     spoilerGradient = document.getElementsByClassName("CommentPostGrad");
+//     optionBlocks = document.getElementsByClassName("ediFeedOptions");
+//     textBlocks = document.getElementsByClassName("commentPost");
+//     deleteRows = document.getElementsByClassName("deleteRow");
+//     fileCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit");
+//     inputFileFields = document.getElementsByClassName("uploadDad");
+//     saveButtons = document.getElementsByClassName("SaveButton");
+//
+//     hideEdit();
+//
+//
+// });
+//
+// function hideEdit() {
+//     for (var i = 0; i < deleteRows.length; i++){
+//         deleteRows[i].hidden = true;
+//
+//         inputFileFields[i].style.display = "none";
+//         inputFileFields[i].style.display = "none";
+//         saveButtons[i].style.display = "none";
+//         if (textBlocks[i].innerText !== ""){
+//             mathLines(0, spoilerButtons[i].id.split("_")[1]);
+//         }else{
+//             spoilerButtons[i].style.display = "none";
+//             spoilerGradient[i].style.display = "none";
+//         }
+//     }
+//     for (i = 0; i < fileCheckBoxes.length; i++){
+//         fileCheckBoxes[i].hidden = true;
+//     }
+// }
 
 
-
-
-});
-
-function hideEdit() {
-    for (var i = 0; i < deleteRows.length; i++){
-        deleteRows[i].hidden = true;
-
-        inputFileFields[i].style.display = "none";
-        inputFileFields[i].style.display = "none";
-        saveButtons[i].style.display = "none";
-        if (textBlocks[i].innerText !== ""){
-            mathLines(0, spoilerButtons[i].id.split("_")[1]);
-        }else{
-            spoilerButtons[i].style.display = "none";
-            spoilerGradient[i].style.display = "none";
-        }
-    }
-    for (i = 0; i < fileCheckBoxes.length; i++){
-        fileCheckBoxes[i].hidden = true;
-    }
-}
 
 function hidePostEdit(postId){
     var delRow = document.getElementById("deleteRow_"+postId);
@@ -104,52 +80,7 @@ function hidePostEdit(postId){
     }
 }
 
-function optionsAction(event) {
-    selectedPost = event.target.id.split("_")[1];
-    var text = event.target.innerText;
-    switch (text){
-        case "Edit":
-            var deleteRow = document.getElementById("deleteRow_"+selectedPost);
-            var postFileCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit_"+selectedPost);
-            var postDownloadImgs = document.getElementsByClassName("FeedTdDownload_"+selectedPost);
-            var postGrad = document.getElementById("CommentPostGrad_"+selectedPost);
-            var uploadDad = document.getElementById("uploadDad_"+selectedPost);
-            var dragArea = document.getElementById("postEditDragArea_"+selectedPost);
-            for (var i = 0; i < postDownloadImgs.length; i++){
-                postFileCheckBoxes[i].hidden = false;
-                postDownloadImgs[i].hidden = true;
-            }
-            if (document.getElementById("postComment_"+selectedPost).innerText !== ""){
-                mathLines(1, selectedPost);
-            }
-            document.getElementById("postComment_"+selectedPost).setAttribute("contenteditable", "true");
-            document.getElementById("postComment_"+selectedPost).className += " CommentPostConten";
-            postGrad.style.display ="none";
-            deleteRow.hidden = false;
-            deleteRow.style.borderTop = "1px";
-            document.getElementById("hideButton_"+selectedPost).style.display = "none";
-            document.getElementById("SaveButton_"+selectedPost).style.display = "flex";
-            uploadDad.style.display = "flex";
-            dragArea.ondrop = editPostDrop;
-            dragArea.ondragover = editPostDragover;
-            dragArea.ondragleave = editPostDragleave;
-            editingPost = true;
-            break;
-        case "Delete":
-            $.ajax({
-                url: document.URL + "/" + selectedFeed + "/delete/" + selectedPost,
-                type: "GET",
-                success: function (data) {
-                    alert(data);
-                    document.getElementById("FeedContainer_"+selectedPost).style.display="none";
-                },
-                error: function (e) {
-                    alert(e.responseText);
-                }
 
-            })
-    }
-}
 
 function formatSize(length){
     var i = 0, type = ['б','Кб','Мб','Гб','Тб','Пб'];

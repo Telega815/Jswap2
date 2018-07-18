@@ -3,29 +3,31 @@
 $(document).ready(function(){
 
 
-var innerDropZone = document.getElementById("innerDropZone");
-innerDropZone.ondrop = function(event) {
-    event.preventDefault();
-    innerDropZone.style.backgroundColor = "transparent";
-    var files = event.dataTransfer.files;
-    showUploadBlock();
-    showFiles(files);
-    sendFiles(files);
-};
-innerDropZone.ondragover = function() {
-    innerDropZone.style.backgroundColor = 'gray';
-    return false;
-};
+    var innerDropZone = document.getElementById("innerDropZone");
+    innerDropZone.ondrop = function(event) {
+        event.preventDefault();
+        innerDropZone.style.backgroundColor = "transparent";
+        var files = event.dataTransfer.files;
+        showUploadBlock();
+        showFiles(files);
+        sendFiles(files);
+    };
+    innerDropZone.ondragover = function() {
+        innerDropZone.style.backgroundColor = 'gray';
+        return false;
+    };
 
-innerDropZone.ondragleave = function() {
-    innerDropZone.style.backgroundColor = "transparent";
-    return false;
-};
-var body = document.getElementById("bodyBack");
-body.ondragenter = editPostDragEnter;
-body.ondragleave = editPostDragWindowleave;
+    innerDropZone.ondragleave = function() {
+        innerDropZone.style.backgroundColor = "transparent";
+        return false;
+    };
+    var body = document.getElementById("bodyBack");
+    body.ondragenter = editPostDragEnter;
+    body.ondragleave = editPostDragWindowleave;
+
+
+
 });
-
 
 // for edit post----------------------------------------------------------------------
 function editPostDrop(event) {
@@ -254,5 +256,87 @@ function postEditMainDeleteCheckboxClicked(event) {
         for (var i = 0; i < deleteCheckboxes.length; i++) {
             deleteCheckboxes[i].checked = false;
         }
+    }
+}
+
+// hide edit of all posts in current feed ---------------------------------------------------------------
+function hideEditOfAllPosts() {
+    var posts = document.getElementsByClassName("FeedContainer");
+    for(var i = 0; i < posts.length; i++){
+        var postId = posts[i].id.split("_")[1];
+        hidePostEdit(postId);
+    }
+}
+
+// format sizes in all posts --------------------------------------------------------------------------------
+function formatSizesOfAllPosts() {
+    var fileSizeNodes = document.getElementsByClassName("FeedtdRight");
+    for (var i = 0; i < fileSizeNodes.length; i++){
+        var postId = fileSizeNodes[i].classList.item(1).split("_")[1];
+        formatSizesForPost(postId);
+    }
+}
+
+// format sizes of all files of post
+function formatSizesForPost(postId) {
+    var fileSizeNodes = document.getElementsByClassName("FeedtdRight_"+postId);
+    for(var i=0; i <fileSizeNodes.length; i++) {
+        fileSizeNodes[i].innerText=formatSize(fileSizeNodes[i].innerText);
+    }
+}
+
+function optionsAction(event) {
+    selectedPost = event.target.id.split("_")[1];
+    var text = event.target.innerText;
+    switch (text){
+        case "Edit":
+            var deleteRow = document.getElementById("deleteRow_"+selectedPost);
+            var postFileCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit_"+selectedPost);
+            var postDownloadImgs = document.getElementsByClassName("FeedTdDownload_"+selectedPost);
+            var postGrad = document.getElementById("CommentPostGrad_"+selectedPost);
+            var uploadDad = document.getElementById("uploadDad_"+selectedPost);
+            var dragArea = document.getElementById("postEditDragArea_"+selectedPost);
+            for (var i = 0; i < postDownloadImgs.length; i++){
+                postFileCheckBoxes[i].hidden = false;
+                postDownloadImgs[i].hidden = true;
+            }
+            if (document.getElementById("postComment_"+selectedPost).innerText !== ""){
+                mathLines(1, selectedPost);
+            }
+            document.getElementById("postComment_"+selectedPost).setAttribute("contenteditable", "true");
+            document.getElementById("postComment_"+selectedPost).className += " CommentPostConten";
+            postGrad.style.display ="none";
+            deleteRow.hidden = false;
+            deleteRow.style.borderTop = "1px";
+            document.getElementById("hideButton_"+selectedPost).style.display = "none";
+            document.getElementById("SaveButton_"+selectedPost).style.display = "flex";
+            uploadDad.style.display = "flex";
+            dragArea.ondrop = editPostDrop;
+            dragArea.ondragover = editPostDragover;
+            dragArea.ondragleave = editPostDragleave;
+            editingPost = true;
+            break;
+        case "Delete":
+            var formData = new FormData();
+            formData.append("postId", selectedPost);
+            $.ajax({
+                url: window.location.protocol +"//"+window.location.host+"/restService/deletePost?"+csrfParameter+"="+csrfToken,
+                type: "POST",
+                enctype: "multipart/form-data",
+                method: "POST",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    alert(data);
+                    if (data === true)
+                        document.getElementById("mainCenter").removeChild(document.getElementById("FeedContainer_"+selectedPost));
+                },
+                error: function (e) {
+                    alert(e.responseText);
+                }
+
+            })
     }
 }

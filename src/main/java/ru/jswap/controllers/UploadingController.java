@@ -12,6 +12,7 @@ import ru.jswap.entities.User;
 import ru.jswap.objects.AccessParams;
 import ru.jswap.objects.JSON.ClientIdInfo;
 import ru.jswap.objects.JSON.NewPostInfo;
+import ru.jswap.objects.JSON.ResponsePostInfo;
 import ru.jswap.services.FileService;
 import ru.jswap.services.HtmlService;
 import ru.jswap.services.UserService;
@@ -83,14 +84,26 @@ public class UploadingController {
     }
 
 
-    @PostMapping(value = "restService/saveNewPost", consumes = "application/json", produces = "application/json")
+    @RequestMapping(method = RequestMethod.POST, value = "restService/saveNewPost", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public boolean saveNewPost(@RequestParam NewPostInfo info){
-        fileService.saveNewPost(info);
-        return true;
+    public ResponsePostInfo saveNewPost(@RequestBody NewPostInfo info){
+        Post post = fileService.saveNewPost(info);
+        ResponsePostInfo responsePostInfo = new ResponsePostInfo();
+        if (post == null){
+            responsePostInfo.setNullPost(true);
+        }else{
+            responsePostInfo.setPostId(post.getPostPk());
+            responsePostInfo.setHtmlPost(htmlService.getPostHtml(post, userService.checkUser(post.getFeed().getUser())));
+            responsePostInfo.setNullPost(false);
+        }
+        return responsePostInfo;
     }
 
 
+    /**
+     * @param feedId id of the required feed
+     * @return posts of feed as html
+     */
     @PostMapping(value = "restService/getPostsOfFeed")
     @ResponseBody
     public String getPostsHtml(@RequestParam (name="feedId") Integer feedId){
@@ -117,6 +130,16 @@ public class UploadingController {
 
         }
       return "Undefined behavior";
+    }
+
+    /**
+     * @param postId id of post to delete
+     * @return true if delete was successful
+     */
+    @PostMapping(value = "restService/deletePost")
+    @ResponseBody
+    public boolean deletePost(@RequestParam Long postId){
+        return fileService.deletePostRecursive(postId);
     }
 
 
@@ -152,13 +175,13 @@ public class UploadingController {
         return "error";
     }
 
-
+    //TODO this is a total shit
     @RequestMapping(value = "/{username}/{feedname}/download/{postid}/{filename:.+}")
     public void download(@PathVariable("filename") String filename,
                          @PathVariable("postid") int postid,
                          HttpServletResponse response){
         FileData fileData = fileService.getFile(filename, postid);
-        String filePath = fileService.getFilePath(fileData);
+        String filePath = "dsfsdfsf";//fileService.getFilePath(fileData);
 
         File file = new File(filePath);
 
@@ -183,19 +206,19 @@ public class UploadingController {
         }
     }
 
-    @RequestMapping(value = "/{username}/{feedname}/delete/{postid}")
-    @ResponseBody
-    public String delete(@SessionAttribute(value = "user", required = false) User user,
-                         @PathVariable("username") String username,
-                         @PathVariable("feedname") String feedname,
-                         @PathVariable("postid") long postid){
-        if (user == null) user = userService.getUser(username);
-        if (userService.checkUser(user)){
-            Post post = fileService.getPost(postid);
-            fileService.deletePost(post, true);
-            return "success";
-        }else{
-            return "go fuck your self!";
-        }
-    }
+//    @RequestMapping(value = "/{username}/{feedname}/delete/{postid}")
+//    @ResponseBody
+//    public String delete(@SessionAttribute(value = "user", required = false) User user,
+//                         @PathVariable("username") String username,
+//                         @PathVariable("feedname") String feedname,
+//                         @PathVariable("postid") long postid){
+//        if (user == null) user = userService.getUser(username);
+//        if (userService.checkUser(user)){
+//            Post post = fileService.getPost(postid);
+//            fileService.deletePost(post, true);
+//            return "success";
+//        }else{
+//            return "go fuck your self!";
+//        }
+//    }
 }

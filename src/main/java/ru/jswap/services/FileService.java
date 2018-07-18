@@ -9,9 +9,11 @@ import ru.jswap.dao.intefaces.*;
 import ru.jswap.entities.*;
 import ru.jswap.objects.JSON.ClientIdInfo;
 import ru.jswap.objects.JSON.NewPostInfo;
+import ru.jswap.objects.JSON.ResponsePostInfo;
 import ru.jswap.objects.TempPost;
 
 import java.io.File;
+import java.sql.Time;
 import java.util.*;
 
 @Component(value = "fileService")
@@ -43,7 +45,7 @@ public class FileService {
      */
     public Integer getAndIncrementMaxId(){
         if(tempPosts == null) tempPosts = new HashMap<>();
-        tempPosts.put(maxId, new TempPost());
+        tempPosts.put(maxId, new TempPost(filesDAO, filePathDAO));
         maxId++;
         return maxId-1;
     }
@@ -89,46 +91,89 @@ public class FileService {
         return post.deleteFile(fileId);
     }
 
-    public void saveNewPost(NewPostInfo info){
+    public Post saveNewPost(NewPostInfo info){
+        ResponsePostInfo responsePostInfo = new ResponsePostInfo();
         Post post = new Post();
+        post.setCommentary(info.getPostComment());
+        Feeds feed = feedsDAO.getFeed(info.getFeedId());
+        File feedPath = new File(this.getFeedFolder(feed));
+        if(!feedPath.exists()){
+            if (!feedPath.mkdirs()) {
+                logger.info("\n{}: WARNING! = directory creation failed; path = {}", new java.util.Date(System.currentTimeMillis()).toString(), feedPath.getAbsolutePath());
+                return null;
+            }
+        }
+
+        post.setFeed(feed);
         TempPost tempPost = tempPosts.get(info.getClientId());
+        post.setSize(tempPost.getPostSize());
+        long currTime = System.currentTimeMillis();
+        post.setDate(new java.sql.Date(currTime));
+        post.setTime(new Time(currTime));
+        post.setPostPk(postsDAO.savePost(post));
 
         for (int key : info.getFilesToSave()) {
-            FilePath filePath = tempPost.getPath(key);
-            FileData fileData = tempPost.getFileName(key);
-
-            filePath.setPath(this.getFilePath(fileData));
-
+            tempPost.saveFileToDb(key, feedPath, post);
         }
+        tempPosts.replace(info.getClientId(), new TempPost(filesDAO, filePathDAO));
+        resizeFeed(feed, post.getSize());
+        return post;
+    }
+
+    public boolean deleteFile(long fileId){
+        FileData fileData = filesDAO.getFile(fileId);
+        return deleteFile(fileData);
+    }
+
+    private boolean deleteFile(FileData fileData){
+        boolean res;
+        File file = new File(fileData.getFilepath().getPath() + File.separator + fileData.getFilepath().getId());
+        res = file.delete();
+        filesDAO.deleteFile(fileData);
+        filePathDAO.deletePath(fileData.getFilepath());
+        this.resizePost(fileData.getPost(), -fileData.getSize());
+        return res;
+    }
+
+    public boolean deletePostRecursive(long postId){
+        boolean res = true;
+        Post post = postsDAO.getPost(postId);
+        List<FileData> fileDataList = filesDAO.getFiles(post);
+        for (FileData fileData: fileDataList) {
+            res &= deleteFile(fileData);
+        }
+        postsDAO.deletePost(post);
+        this.resizeFeed(post.getFeed(), -post.getSize());
+        return res;
     }
 
 
 
 // OLD STAFF
-    public void postEditDeleteFiles(long[] filesToDelete){
-        logger.info("\n{}: started postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
-        if(filesToDelete.length != 0){
-            for (int i = 0; i < filesToDelete.length; i++) {
-                deleteFile(filesDAO.getFile(filesToDelete[i]));
-            }
-            logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
-            return;
-        }
-        logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete); filesToDelete was empty", new java.util.Date(System.currentTimeMillis()).toString());
-    }
+//    public void postEditDeleteFiles(long[] filesToDelete){
+//        logger.info("\n{}: started postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
+//        if(filesToDelete.length != 0){
+//            for (int i = 0; i < filesToDelete.length; i++) {
+//                deleteFile(filesDAO.getFile(filesToDelete[i]));
+//            }
+//            logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
+//            return;
+//        }
+//        logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete); filesToDelete was empty", new java.util.Date(System.currentTimeMillis()).toString());
+//    }
 
     //------------------------------------------------------------------------------------------------------------------
 
-    public boolean deleteFile(FileData fileData){
-        Post post = fileData.getPost();
-        boolean res = deleteFileFromDatabase(fileData);
-        res &= deleteFileFromHDD(fileData);
-        if (res) {
-            resizePost(fileData.getPost(), -(fileData.getSize()));
-        }
-        deletePost(post,false);
-        return res;
-    }
+//    public boolean deleteFile(FileData fileData){
+//        Post post = fileData.getPost();
+//        boolean res = deleteFileFromDatabase(fileData);
+//        res &= deleteFileFromHDD(fileData);
+//        if (res) {
+//            resizePost(fileData.getPost(), -(fileData.getSize()));
+//        }
+//        deletePost(post,false);
+//        return res;
+//    }
 
     private boolean deleteFileFromDatabase(FileData fileData){
         try {
@@ -149,28 +194,28 @@ public class FileService {
 
 
 
-    public boolean deletePost(Post post, boolean recursive){
-        boolean res = true;
-        List<FileData> fileDataList = filesDAO.getFiles(post);
-        User user = post.getFeed().getUser();
-        if (!fileDataList.isEmpty() && recursive){
-            for (FileData fileData:fileDataList) {
-                res &= deleteFile(fileData);
-            }
-        }else if (!fileDataList.isEmpty()) return false;
+//    public boolean deletePost(Post post, boolean recursive){
+//        boolean res = true;
+//        List<FileData> fileDataList = filesDAO.getFiles(post);
+//        User user = post.getFeed().getUser();
+//        if (!fileDataList.isEmpty() && recursive){
+//            for (FileData fileData:fileDataList) {
+//                res &= deleteFile(fileData);
+//            }
+//        }else if (!fileDataList.isEmpty()) return false;
+//
+//        res &= deletePostFromDatabase(post);
+//        res &= deletePostFromHDD(post);
+//        if(res){
+//            resizeFeed(post.getFeed(), -(post.getSize()));
+//        }
+//        return res;
+//    }
 
-        res &= deletePostFromDatabase(post);
-        res &= deletePostFromHDD(post);
-        if(res){
-            resizeFeed(post.getFeed(), -(post.getSize()));
-        }
-        return res;
-    }
-
-    private boolean deletePostFromHDD(Post post){
-        File file = new File(getPostFolder(post));
-        return file.delete();
-    }
+//    private boolean deletePostFromHDD(Post post){
+//        File file = new File(getPostFolder(post));
+//        return file.delete();
+//    }
 
     private boolean deletePostFromDatabase(Post post){
         try {
@@ -190,16 +235,9 @@ public class FileService {
     }
 
     private String getFeedFolder(Feeds feed){
-        return getUserFolder(feed.getUser()) + File.separator + feed.getFeedname();
+        return getUserFolder(feed.getUser()) + File.separator + feed.getFeedname() + File.separator;
     }
 
-    private String getPostFolder(Post post){
-        return getFeedFolder(post.getFeed()) + File.separator + post.getPostPk().toString();
-    }
-
-    public String getFilePath(FileData fileData){
-        return this.getPostFolder(fileData.getPost()) + File.separator + fileData.getFilename();
-    }
     //------------------------------------------------------------------------------------------------------------------
 
 
@@ -214,12 +252,14 @@ public class FileService {
     public List<Post> getPosts(Feeds feed){
         return postsDAO.getPosts(feed);
     }
-    public void deletePosts(Feeds feed){
-        List<Post> posts = getPosts(feed);
-        for (Post post: posts) {
-            deletePost(post, true);
-        }
-    }
+
+
+//    public void deletePosts(Feeds feed){
+//        List<Post> posts = getPosts(feed);
+//        for (Post post: posts) {
+//            deletePost(post, true);
+//        }
+//    }
 
     // Methods for size calculation-------------------------------------------------------------------------------------------
     private void resizeUser(User user, long size){

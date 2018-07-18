@@ -55,6 +55,12 @@ public class PostsDAOImpl implements PostsDAO {
 
     @Transactional
     @Override
+    public void deletePost(Long post_pk) {
+        sessionFactory.getCurrentSession().createQuery("delete from Post where id = :post_pk").setParameter("post_pk", post_pk);
+    }
+
+    @Transactional
+    @Override
     public void updatePost(Post post) {
         sessionFactory.getCurrentSession().update(post);
     }

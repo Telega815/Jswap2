@@ -81,6 +81,12 @@ public class FilesDAOImpl implements FilesDAO {
 
     @Transactional
     @Override
+    public void deleteFile(long fileId) {
+        sessionFactory.getCurrentSession().createQuery("delete from FileData where filePk = :fileId").setParameter("fileId", fileId);
+    }
+
+    @Transactional
+    @Override
     public void updatefile(FileData fileData) {
         sessionFactory.getCurrentSession().update(fileData);
     }

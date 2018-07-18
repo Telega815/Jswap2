@@ -3,8 +3,11 @@ package ru.jswap.objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
+import ru.jswap.dao.intefaces.FilePathDAO;
+import ru.jswap.dao.intefaces.FilesDAO;
 import ru.jswap.entities.FileData;
 import ru.jswap.entities.FilePath;
+import ru.jswap.entities.Post;
 import ru.jswap.objects.JSON.ClientIdInfo;
 
 import java.io.File;
@@ -16,14 +19,21 @@ import java.util.Map;
 
 public class TempPost implements Runnable{
 
+    private FilesDAO filesDAO;
+
+    private FilePathDAO filePathDAO;
+
     private Logger logger = LoggerFactory.getLogger(TempPost.class);
     private final int MILLS = 180000;
     private Map<Integer, FileData> files;
     private Map<Integer, FilePath> paths;
     private String FILE_PATH = "\\\\DESKTOP-JJNRSE9"+File.separator+"folder_for_swapy" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
     private Thread timeoutThread;
+    private long postSize = 0;
 
-    public TempPost() {
+    public TempPost(FilesDAO filesDAO, FilePathDAO filePathDAO) {
+        this.filesDAO = filesDAO;
+        this.filePathDAO = filePathDAO;
         files = new HashMap<>();
         paths = new HashMap<>();
     }
@@ -41,6 +51,7 @@ public class TempPost implements Runnable{
         FileData fileData = new FileData();
         fileData.setFilename(multipartFile.getOriginalFilename());
         fileData.setSize(multipartFile.getSize());
+        postSize += fileData.getSize();
         files.put(key,fileData);
 
         FilePath filePath = new FilePath();
@@ -116,9 +127,13 @@ public class TempPost implements Runnable{
             File file = new File(path.getPath());
             res &= file.delete();
         }
+        this.resetPost();
+        return res;
+    }
+
+    public void resetPost(){
         files = new HashMap<>();
         paths = new HashMap<>();
-        return res;
     }
 
 
@@ -134,16 +149,36 @@ public class TempPost implements Runnable{
     }
 
     /**
-     * @param newLocation permanent location of new post
-     * @param filesToRelocate indexes of files to relocate
+     * @param newLocation permanent location of feed
+     * @param key index of file to relocate
+     * @param post post that contains relocating file
      * @return true if succeeded
      */
-    private boolean relocateFiles(File newLocation, int[] filesToRelocate){
-        boolean res = true;
-        for (int key : filesToRelocate) {
-            File file = new File(paths.get(key).getPath());
-            res &= file.renameTo(newLocation);
-        }
+    public boolean saveFileToDb(int key, File newLocation, Post post){
+        boolean res;
+        FilePath filePath = this.getPath(key);
+        FileData fileData = this.getFileName(key);
+        fileData.setPost(post);
+
+        File file = new File(filePath.getPath());
+        filePath.setPath(newLocation.getAbsolutePath());
+        int id = filePathDAO.savePath(filePath);
+        filePath.setId(id);
+
+        fileData.setFilepath(filePath);
+
+        File newFile = new File(filePath.getPath() + File.separator + filePath.getId());
+        res = file.renameTo(newFile);
+
+        filesDAO.saveFile(fileData);
         return res;
+    }
+
+    public long getPostSize() {
+        return postSize;
+    }
+
+    public void setPostSize(long postSize) {
+        this.postSize = postSize;
     }
 }

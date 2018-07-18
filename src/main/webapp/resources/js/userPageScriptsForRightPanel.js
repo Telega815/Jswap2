@@ -216,20 +216,16 @@ function deleteTmpFile(event) {
 //----------------------------------------------------------------------------
 function saveFiles() {
     var comment = document.getElementById('uploadComment');
-    var feeds = document.getElementsByClassName("input-hidden");
-    var currentFeedId;
-    for (var i = 0; i < feeds.length; i++){
-        if(feeds[i].getAttribute("checked") === "checked"){
-            currentFeedId = feeds[i];
-            break;
-        }
-    }
     var filesToSave = document.getElementsByClassName("UploadedFileRow");
+    var indexesOfFiles = [];
+    for (var index = 0; index < filesToSave.length; index++){
+        indexesOfFiles.push(filesToSave[index].id.split("_")[1]);
+    }
     var obj = {
+        clientId: sessionStorage.getItem("clientId"),
+        feedId: selectedFeed,
         postComment: comment.innerText,
-        feedId: currentFeedId,
-        filesToSave: filesToSave,
-        clientId: sessionStorage.getItem("clientId")
+        filesToSave: indexesOfFiles
     };
     var data = JSON.stringify(obj);
     $.ajax({
@@ -241,15 +237,17 @@ function saveFiles() {
         method: 'POST',
         data: data,
         success: function(data){
+            if(!data.nullPost){
+                var div = document.createElement('div');
+                div.innerHTML = data.htmlPost;
 
-            // var div = document.createElement('div');
-            // div.innerHTML = data.htmlPost;
-            //
-            // var mainCenter = document.getElementById("mainCenter");
-            // mainCenter.insertBefore(div.firstChild, mainCenter.childNodes[1]);
-            // hidePostEdit(data.postId);
-            //
-            // hideUploadBlock();
+                var mainCenter = document.getElementById("mainCenter");
+                mainCenter.insertBefore(div.firstChild, mainCenter.childNodes[0]);
+                hidePostEdit(data.postId);
+                formatSizesForPost(data.postId);
+            }
+
+            hideUploadBlock();
         },
         error: function (e) {
             alert(e.responseText);

@@ -32,7 +32,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ScrollStop.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForLeftPanel.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForRightPanel.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsPostEdit.js" ></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScriptsForCenterPanel.js" ></script>
 
     <main>
 
