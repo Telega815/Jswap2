@@ -23,10 +23,8 @@
 <body >
 <div class="bodyBack" id="bodyBack">
     <header>
-        <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/header2.jsp"/>
+        <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/headerAnonymous.jsp"/>
     </header>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/userPageScripts.js" ></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/UploadScripts.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/FeedOptions.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/IE.js" ></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/ScrollStop.js" ></script>

@@ -1,8 +1,10 @@
+var filesToDelete = [];
+var enterCounter = 0;
+var selectedPost;
+var editingPost = false;
 
 //---------------------innerDZ-------------------
 $(document).ready(function(){
-
-
     var innerDropZone = document.getElementById("innerDropZone");
     innerDropZone.ondrop = function(event) {
         event.preventDefault();
@@ -24,12 +26,42 @@ $(document).ready(function(){
     var body = document.getElementById("bodyBack");
     body.ondragenter = editPostDragEnter;
     body.ondragleave = editPostDragWindowleave;
-
-
-
 });
 
 // for edit post----------------------------------------------------------------------
+function hidePostEdit(postId){
+    var delRow = document.getElementById("deleteRow_"+postId);
+    var firstFileRow = document.getElementsByClassName("postFileRaws_"+postId)[0];
+    var delCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit_"+postId);
+    var uploadDad = document.getElementById("uploadDad_"+postId);
+    var saveDiv = document.getElementById("SaveButton_"+postId);
+    var postComment = document.getElementById("postComment_"+postId);
+    var postDownloadImgs = document.getElementsByClassName("FeedTdDownload_"+postId);
+    var spoilerButton = document.getElementById("hideButton_"+postId);
+    var postGrad = document.getElementById("CommentPostGrad_"+postId);
+    var postFilesNames = document.getElementsByClassName("PostTdCenter_"+postId);
+
+    if (postComment.innerText.length !== 0){
+        mathLines(0, postId);
+        postComment.setAttribute("contenteditable", "false");
+        postComment.classList.remove("CommentPostConten");
+    }else{
+        spoilerButton.style.display = "none";
+        postGrad.style.display = "none";
+    }
+
+    firstFileRow.style.borderTop = "1px";
+    delRow.hidden = true;
+    uploadDad.style.display = "none";
+    saveDiv.style.display = "none";
+    for (var i = 0; i <delCheckBoxes.length; i++){
+        delCheckBoxes[i].hidden = true;
+        postDownloadImgs[i].hidden = false;
+        sliceTextForPostEdit(postFilesNames[i]);
+    }
+}
+
+
 function editPostDrop(event) {
     event.preventDefault();
     var postID = event.target.id.split("_")[1];
@@ -339,4 +371,17 @@ function optionsAction(event) {
 
             })
     }
+}
+
+
+function formatSize(length){
+    var i = 0, type = ['б','Кб','Мб','Гб','Тб','Пб'];
+    while((length / 1000 | 0) && i < type.length - 1) {
+        length /= 1024;
+        i++;
+    }
+    if (i>2)
+        return length.toFixed(2) + ' ' + type[i];
+    else
+        return length.toFixed(0) + ' ' + type[i];
 }
