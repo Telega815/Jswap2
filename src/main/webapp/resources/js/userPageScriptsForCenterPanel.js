@@ -352,6 +352,9 @@ function optionsAction(event) {
             var formData = new FormData();
             formData.append("postId", selectedPost);
             $.ajax({
+                headers: {
+                    'Accept': 'application/json'
+                },
                 url: window.location.protocol +"//"+window.location.host+"/restService/deletePost?"+csrfParameter+"="+csrfToken,
                 type: "POST",
                 enctype: "multipart/form-data",
@@ -361,9 +364,21 @@ function optionsAction(event) {
                 contentType: false,
                 processData: false,
                 success: function (data) {
-                    alert(data);
-                    if (data === true)
+                    if (!data.nullPost){
                         document.getElementById("mainCenter").removeChild(document.getElementById("FeedContainer_"+selectedPost));
+
+                        var tdRight = document.getElementsByClassName("tdRight");
+                        //UpdateFeedAndUserSpace
+                        for (var i=0; i<tdRight.length;i++){
+
+                            if (tdRight[i].id.split("_")[1]==selectedFeed){
+                                tdRight[i].innerText = "Занято " + formatSize(data.feedSize);
+
+                            }
+                        }
+                        document.getElementById("leftPanelUserFilesSize").innerText = (data.userSpace/1024/1024/1024).toFixed(2);
+                    }
+
                 },
                 error: function (e) {
                     alert(e.responseText);

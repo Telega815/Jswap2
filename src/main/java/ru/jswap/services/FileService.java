@@ -135,7 +135,7 @@ public class FileService {
         return res;
     }
 
-    public boolean deletePostRecursive(long postId){
+    public Post deletePostRecursive(long postId){
         boolean res = true;
         Post post = postsDAO.getPost(postId);
         List<FileData> fileDataList = filesDAO.getFiles(post);
@@ -144,7 +144,12 @@ public class FileService {
         }
         postsDAO.deletePost(post);
         this.resizeFeed(post.getFeed(), -post.getSize());
-        return res;
+        if (res){
+            return post;
+        }
+        else{
+            return null;
+        }
     }
 
 

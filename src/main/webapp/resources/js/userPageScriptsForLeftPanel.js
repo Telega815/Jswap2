@@ -12,7 +12,7 @@ $(document).ready(function(){
     //trueSizeFreeSpace
     var spaceBizy = document.getElementById("leftPanelUserFilesSize");
     var spaceFree = document.getElementById("leftPanelUserSizeLimit");
-    spaceBizy.innerText=spaceBizy.innerText/1024/1024/1024;
+    spaceBizy.innerText=(spaceBizy.innerText/1024/1024/1024).toFixed(2);
     spaceFree.innerText=spaceFree.innerText/1024/1024/1024;
 
     //trueSizeSpaceOfFeeds

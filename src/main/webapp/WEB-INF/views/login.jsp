@@ -19,7 +19,7 @@
 <body>
 <div class="bodyBack">
 	<header>
-		<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/header2.jsp"/>
+		<jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/headerAnonymous.jsp"/>
 	</header>
 
 	<main>

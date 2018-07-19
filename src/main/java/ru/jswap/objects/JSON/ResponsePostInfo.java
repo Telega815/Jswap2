@@ -4,6 +4,8 @@ public class ResponsePostInfo {
     private String htmlPost;
     private long postId;
     private boolean nullPost;
+    private long feedSize;
+    private long userSpace;
 
     public ResponsePostInfo() {
     }
@@ -30,5 +32,21 @@ public class ResponsePostInfo {
 
     public void setNullPost(boolean nullPost) {
         this.nullPost = nullPost;
+    }
+
+    public long getFeedSize() {
+        return feedSize;
+    }
+
+    public void setFeedSize(long feedSize) {
+        this.feedSize = feedSize;
+    }
+
+    public long getUserSpace() {
+        return userSpace;
+    }
+
+    public void setUserSpace(long userSpace) {
+        this.userSpace = userSpace;
     }
 }

@@ -95,6 +95,9 @@ public class UploadingController {
             responsePostInfo.setPostId(post.getPostPk());
             responsePostInfo.setHtmlPost(htmlService.getPostHtml(post, userService.checkUser(post.getFeed().getUser())));
             responsePostInfo.setNullPost(false);
+
+            responsePostInfo.setFeedSize(post.getFeed().getSize());
+            responsePostInfo.setUserSpace(post.getFeed().getUser().getFilesSize());
         }
         return responsePostInfo;
     }
@@ -136,12 +139,26 @@ public class UploadingController {
      * @param postId id of post to delete
      * @return true if delete was successful
      */
-    @PostMapping(value = "restService/deletePost")
+    @PostMapping(value = "restService/deletePost", produces = "application/json")
     @ResponseBody
-    public boolean deletePost(@RequestParam Long postId){
-        return fileService.deletePostRecursive(postId);
-    }
+    public ResponsePostInfo deletePost(@RequestParam Long postId){
+        ResponsePostInfo responsePostInfo = new ResponsePostInfo();
+        Post post = fileService.deletePostRecursive(postId);
+        if (post!=null){
+            responsePostInfo.setFeedSize(post.getFeed().getSize());
+            responsePostInfo.setUserSpace(post.getFeed().getUser().getFilesSize());
+            responsePostInfo.setNullPost(false);
+        }
+        else{
+            responsePostInfo.setNullPost(true);
+        }
 
+
+
+
+
+        return responsePostInfo;
+    }
 
 
 

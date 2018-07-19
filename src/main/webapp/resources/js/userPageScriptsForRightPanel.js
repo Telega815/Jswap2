@@ -240,6 +240,15 @@ function saveFiles() {
             if(!data.nullPost){
                 var div = document.createElement('div');
                 div.innerHTML = data.htmlPost;
+                var tdRight = document.getElementsByClassName("tdRight");
+                for (var i=0; i<tdRight.length;i++){
+
+                    if (tdRight[i].id.split("_")[1]==selectedFeed){
+                        tdRight[i].innerText = "Занято " + formatSize(data.feedSize);
+
+                    }
+                }
+                document.getElementById("leftPanelUserFilesSize").innerText = (data.userSpace/1024/1024/1024).toFixed(2);
 
                 var mainCenter = document.getElementById("mainCenter");
                 mainCenter.insertBefore(div.firstChild, mainCenter.childNodes[0]);
