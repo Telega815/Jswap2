@@ -242,49 +242,70 @@ public class HtmlService {
         HtmlGenerator dragHiddenArea = new HtmlGeneratorImpl("div");
         dragHiddenArea.addAttribute("id", "editPostDragHiddenArea_"+post.getPostPk());
         dragHiddenArea.addAttribute("class", "editPostDragHiddenArea");
+
+        HtmlGenerator buttonsEditDeleteSelectAll = new HtmlGeneratorImpl("div");
+        buttonsEditDeleteSelectAll.addAttribute("class", "ButtonsPostEditDeleteSelectAll");
+        buttonsEditDeleteSelectAll.addAttribute("id", "ButtonsPostEditDeleteSelectAll_"+post.getPostPk());
+        HtmlGenerator postInputEditDelete = new HtmlGeneratorImpl("input");
+        postInputEditDelete.addAttribute("type","submit");
+        postInputEditDelete.addAttribute("value","Delete selection");
+        postInputEditDelete.addAttribute("style","background-image: url(../../resources/media/feeds/delete.png)");
+        postInputEditDelete.addAttribute("id", "postInputEditDelete_"+post.getPostPk());
+        postInputEditDelete.addAttribute("class", "postInputEditDelete");
+        postInputEditDelete.addAttribute("onclick", "postEditDeleteButtonClick( event )");
+        HtmlGenerator postInputEditSelectAll = new HtmlGeneratorImpl("input");
+        postInputEditSelectAll.addAttribute("type","submit");
+        postInputEditSelectAll.addAttribute("value","Select All");
+        postInputEditSelectAll.addAttribute("id", "postInputEditSelectAll_"+post.getPostPk());
+        postInputEditSelectAll.addAttribute("class", "postInputEditSelectAll");
+        postInputEditSelectAll.addAttribute("onclick", "postEditMainDeleteCheckboxClicked(event)");
+        postInputEditSelectAll.addAttribute("style","background-image: url(../../resources/media/feeds/checked.png)");
+
+        buttonsEditDeleteSelectAll.setInnerText(postInputEditDelete.toString()+postInputEditSelectAll.toString());
+
         //FilesTable
         HtmlGenerator postFilesTable  = new HtmlGeneratorImpl("table");
         postFilesTable.addAttribute("class", "FeedFolders");
         postFilesTable.addAttribute("id", "PostFilesTable_"+post.getPostPk());
 
-        HtmlGenerator tr = new HtmlGeneratorImpl("tr");
-        tr.addAttribute("class" , "deleteRow DeleteBorder BackgroundNone");
-        tr.addAttribute("id" , "deleteRow_"+post.getPostPk());
+//        HtmlGenerator tr = new HtmlGeneratorImpl("tr");
+//        tr.addAttribute("class" , "deleteRow DeleteBorder BackgroundNone");
+//        tr.addAttribute("id" , "deleteRow_"+post.getPostPk());
+//
+//        HtmlGenerator tdLeft = new HtmlGeneratorImpl("td");
+//        tdLeft.addAttribute("class", "FeedtdLeftEdit");
+//        tdLeft.setFullTag(true);
+//
+//        HtmlGenerator tdCenter = new HtmlGeneratorImpl("td");
+//        tdCenter.addAttribute("class", "FeedtdCenterEdit");
+//        tdCenter.setInnerText("<span> </span>");
 
-        HtmlGenerator tdLeft = new HtmlGeneratorImpl("td");
-        tdLeft.addAttribute("class", "FeedtdLeftEdit");
-        tdLeft.setFullTag(true);
+//        HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
+//        tdRight.addAttribute("class", "FeedtdRightEdit");
+//        HtmlGenerator deleteLabel = new HtmlGeneratorImpl("p");
+//        HtmlGenerator deleteButtonImg = new HtmlGeneratorImpl("img");
+//        deleteButtonImg.addAttribute("src", "../../resources/media/feeds/PostEdit.png");
+//        deleteButtonImg.addAttribute("id", "postDeleteButtonImg_" + post.getPostPk());
+//        deleteLabel.setInnerText(deleteButtonImg.toString() + "Delete");
+//        deleteLabel.addAttribute("onclick", "postEditDeleteButtonClick(event)");
+//        deleteLabel.addAttribute("id", "postDeleteLabel_" + post.getPostPk());
+//        tdRight.setInnerText(deleteLabel.toString());
 
-        HtmlGenerator tdCenter = new HtmlGeneratorImpl("td");
-        tdCenter.addAttribute("class", "FeedtdCenterEdit");
-        tdCenter.setInnerText("<span> </span>");
+//        HtmlGenerator tdDeleteCheckbox = new HtmlGeneratorImpl("td");
+//        HtmlGenerator deleteCheckBox = new HtmlGeneratorImpl("input");
+//        deleteCheckBox.addAttribute("id" ,"deleteCheckBox_"+ post.getPostPk());
+//        deleteCheckBox.addAttribute("onclick", "postEditMainDeleteCheckboxClicked(event)");
+//        deleteCheckBox.addAttribute("type" ,"checkbox");
+//        tdDeleteCheckbox.setInnerText(deleteCheckBox.toString());
 
-        HtmlGenerator tdRight = new HtmlGeneratorImpl("td");
-        tdRight.addAttribute("class", "FeedtdRightEdit");
-        HtmlGenerator deleteLabel = new HtmlGeneratorImpl("p");
-        HtmlGenerator deleteButtonImg = new HtmlGeneratorImpl("img");
-        deleteButtonImg.addAttribute("src", "../../resources/media/feeds/PostEdit.png");
-        deleteButtonImg.addAttribute("id", "postDeleteButtonImg_" + post.getPostPk());
-        deleteLabel.setInnerText(deleteButtonImg.toString() + "Delete");
-        deleteLabel.addAttribute("onclick", "postEditDeleteButtonClick(event)");
-        deleteLabel.addAttribute("id", "postDeleteLabel_" + post.getPostPk());
-        tdRight.setInnerText(deleteLabel.toString());
-
-        HtmlGenerator tdDeleteCheckbox = new HtmlGeneratorImpl("td");
-        HtmlGenerator deleteCheckBox = new HtmlGeneratorImpl("input");
-        deleteCheckBox.addAttribute("id" ,"deleteCheckBox_"+ post.getPostPk());
-        deleteCheckBox.addAttribute("onclick", "postEditMainDeleteCheckboxClicked(event)");
-        deleteCheckBox.addAttribute("type" ,"checkbox");
-        tdDeleteCheckbox.setInnerText(deleteCheckBox.toString());
-
-        tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString() + tdDeleteCheckbox.toString());
+//        tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString());
 
         StringBuilder filesHtml = new StringBuilder();
         List<FileData> files = filesDAO.getFiles(post);
         for (int j = 0; j < files.size(); j++) {
             filesHtml.append(getFileHtml(files.get(j), showPrivateContent, j));
         }
-        postFilesTable.setInnerText(tr.toString()+filesHtml.toString());
+        postFilesTable.setInnerText( buttonsEditDeleteSelectAll.toString()+filesHtml.toString());
 
         //Upload and submit
         HtmlGenerator postUploadBlock = new HtmlGeneratorImpl("div");
@@ -306,17 +327,32 @@ public class HtmlService {
 
         dragHiddenArea.setInnerText(postFilesTable.toString()+postUploadBlock.toString());
 
+
         HtmlGenerator postSaveBlock = new HtmlGeneratorImpl("div");
+
+
         postSaveBlock.addAttribute("class", "SaveButton");
         postSaveBlock.addAttribute("id", "SaveButton_"+ post.getPostPk());
+
+        HtmlGenerator submitCancel = new HtmlGeneratorImpl("input");
+//        submitCancel.addAttribute("class", "SaveSubmit");
+//        submitCancel.addAttribute("onclick", "updatePostAfterEdit(event)");
+//        submitCancel.addAttribute("id", "SaveSubmit_"+ post.getPostPk());
+        submitCancel.addAttribute("id", "postEditCancel_"+post.getPostPk());
+        submitCancel.addAttribute("type", "submit");
+        submitCancel.addAttribute("value", "Cancel");
+        submitCancel.addAttribute("onclick", "postEditCancelClicked(event)");
+        submitCancel.addAttribute("style","background-image: url(../../resources/media/feeds/cancel.png);");
+
         HtmlGenerator submit = new HtmlGeneratorImpl("input");
         submit.addAttribute("class", "SaveSubmit");
         submit.addAttribute("onclick", "updatePostAfterEdit(event)");
         submit.addAttribute("id", "SaveSubmit_"+ post.getPostPk());
         submit.addAttribute("type", "submit");
         submit.addAttribute("value", "Save");
+        submit.addAttribute("style","background-image: url(../../resources/media/feeds/SavePost.png);");
 
-        postSaveBlock.setInnerText(submit.toString());
+        postSaveBlock.setInnerText(submitCancel.toString() + submit.toString());
 
         postForm.setInnerText(hideButton.toString() + commentpostWrapper.toString()
                 + postGradient.toString() + dragArea.toString() + dragHiddenArea.toString() + postSaveBlock.toString());

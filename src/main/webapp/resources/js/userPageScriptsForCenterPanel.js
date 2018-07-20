@@ -26,11 +26,102 @@ $(document).ready(function(){
     var body = document.getElementById("bodyBack");
     body.ondragenter = editPostDragEnter;
     body.ondragleave = editPostDragWindowleave;
+
+    // -----------------------------ctrl & Shift -------------------
+    var body = document.body;
+
+    $("body").click(bodyClick);
+
+
+
 });
 
 // for edit post----------------------------------------------------------------------
+function filesClickInit() {
+    var posts = document.getElementsByClassName("FeedContainer");
+    for (var i = 0; i < posts.length; i++){
+        filesClickInitForOnePost(posts[i].id.split("_")[1]);
+    }
+}
+function filesClickInitForOnePost(postId) {
+    var select_start_index = -1;
+    jQuery("#editPostDragHiddenArea_"+postId).on('click', '.FeedFolders tbody tr', function ctrlShift(e) {
+
+        var t_rows = $(this).parent().find('tr');
+
+
+        if (!e.shiftKey && !e.ctrlKey) {
+            var fakeEvent = {
+                target:document.body
+            };
+            bodyClick(fakeEvent);
+
+            $('.active').children().children(3).removeAttr("checked");
+            t_rows.removeClass('active');
+            $(this).addClass('active');
+            $('.active').children().children(3).attr("checked", "checked");
+
+
+            select_start_index = t_rows.index(this);
+        }
+
+        if (e.ctrlKey) {
+            // console.log('ctrl');
+
+            if ($(this).hasClass('active')) {
+                $(this).children().children(3).removeAttr("checked");
+                $(this).removeClass('active');
+
+                // console.log("sdfg");
+            } else {
+                $(this).addClass('active');
+                $('.active').children().children(3).attr("checked", "checked");
+
+
+            }
+        }
+
+        if (e.shiftKey) {
+            var select_end_index = t_rows.index(this);
+            var each_start, each_end;
+            if(select_start_index != -1){
+                // console.log('shift');
+                if(select_start_index < select_end_index){
+                    each_start = select_start_index;
+                    each_end = select_end_index;
+                }
+                else{
+                    each_start = select_end_index;
+                    each_end = select_start_index;
+                }
+                t_rows.each(function(index){
+                    if(index >= each_start && index <= each_end){
+                        $(this).addClass('active');
+                        $('.active').children().children(3).attr("checked", "checked");
+                    }
+                });
+            }
+
+        }
+
+    });
+
+
+}
+
+function bodyClick(e) {
+    if (e.target.type === "submit"||$(e.target).hasClass('FeedFolders')||$(e.target).parents().hasClass('FeedFolders')) {
+
+        return false;
+    }
+    else{
+        $('.FeedTdDeleteEdit').children().removeAttr('checked');
+        $('.active').removeClass('active');
+    }
+}
+
 function hidePostEdit(postId){
-    var delRow = document.getElementById("deleteRow_"+postId);
+    var delRow = document.getElementById("ButtonsPostEditDeleteSelectAll_"+postId);
     var firstFileRow = document.getElementsByClassName("postFileRaws_"+postId)[0];
     var delCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit_"+postId);
     var uploadDad = document.getElementById("uploadDad_"+postId);
@@ -41,17 +132,19 @@ function hidePostEdit(postId){
     var postGrad = document.getElementById("CommentPostGrad_"+postId);
     var postFilesNames = document.getElementsByClassName("PostTdCenter_"+postId);
 
+    postComment.style.height = "auto";
     if (postComment.innerText.length !== 0){
         mathLines(0, postId);
-        postComment.setAttribute("contenteditable", "false");
-        postComment.classList.remove("CommentPostConten");
     }else{
         spoilerButton.style.display = "none";
         postGrad.style.display = "none";
     }
+    postComment.setAttribute("contenteditable", "false");
+    postComment.classList.remove("CommentPostConten");
 
     firstFileRow.style.borderTop = "1px";
-    delRow.hidden = true;
+    //delRow.hidden = true;
+    delRow.style.display = "none";
     uploadDad.style.display = "none";
     saveDiv.style.display = "none";
     for (var i = 0; i <delCheckBoxes.length; i++){
@@ -265,6 +358,7 @@ function postEditSendSaveInfo(postID) {
     });
 }
 function postEditDeleteButtonClick( event ){
+    event.preventDefault();
     var postID = event.target.id.split("_")[1];
     var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
     var fileID;
@@ -278,17 +372,25 @@ function postEditDeleteButtonClick( event ){
 }
 
 function postEditMainDeleteCheckboxClicked(event) {
+    event.preventDefault();
     var postID = event.target.id.split("_")[1];
     var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
-    if (event.target.checked === true) {
-        for (var i = 0; i < deleteCheckboxes.length; i++) {
-            deleteCheckboxes[i].checked = true;
-        }
-    }else{
-        for (var i = 0; i < deleteCheckboxes.length; i++) {
-            deleteCheckboxes[i].checked = false;
-        }
+    for (var i = 0; i < deleteCheckboxes.length; i++) {
+        deleteCheckboxes[i].setAttribute("checked", "checked");
+        deleteCheckboxes[i].parentElement.parentElement.classList.add('active');
     }
+}
+
+function postEditCancelClicked(event) {
+    event.preventDefault();
+    var postID = event.target.id.split("_")[1];
+    var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
+    for (var i = 0; i < deleteCheckboxes.length; i++) {
+        fileID = deleteCheckboxes[i].id.split("_")[1];
+        deleteCheckboxes[i].removeAttribute("checked");
+        document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "transparent";
+    }
+    hidePostEdit(postID);
 }
 
 // hide edit of all posts in current feed ---------------------------------------------------------------
@@ -302,9 +404,9 @@ function hideEditOfAllPosts() {
 
 // format sizes in all posts --------------------------------------------------------------------------------
 function formatSizesOfAllPosts() {
-    var fileSizeNodes = document.getElementsByClassName("FeedtdRight");
+    var fileSizeNodes = document.getElementsByClassName("FeedContainer");
     for (var i = 0; i < fileSizeNodes.length; i++){
-        var postId = fileSizeNodes[i].classList.item(1).split("_")[1];
+        var postId = fileSizeNodes[i].id.split("_")[1];
         formatSizesForPost(postId);
     }
 }
@@ -317,12 +419,14 @@ function formatSizesForPost(postId) {
     }
 }
 
+
+
 function optionsAction(event) {
     selectedPost = event.target.id.split("_")[1];
     var text = event.target.innerText;
     switch (text){
         case "Edit":
-            var deleteRow = document.getElementById("deleteRow_"+selectedPost);
+            var deleteRow = document.getElementById("ButtonsPostEditDeleteSelectAll_"+selectedPost);
             var postFileCheckBoxes = document.getElementsByClassName("FeedTdDeleteEdit_"+selectedPost);
             var postDownloadImgs = document.getElementsByClassName("FeedTdDownload_"+selectedPost);
             var postGrad = document.getElementById("CommentPostGrad_"+selectedPost);
@@ -338,7 +442,8 @@ function optionsAction(event) {
             document.getElementById("postComment_"+selectedPost).setAttribute("contenteditable", "true");
             document.getElementById("postComment_"+selectedPost).className += " CommentPostConten";
             postGrad.style.display ="none";
-            deleteRow.hidden = false;
+            //deleteRow.hidden = false;\
+            deleteRow.style.display = "flex";
             deleteRow.style.borderTop = "1px";
             document.getElementById("hideButton_"+selectedPost).style.display = "none";
             document.getElementById("SaveButton_"+selectedPost).style.display = "flex";
@@ -400,3 +505,5 @@ function formatSize(length){
     else
         return length.toFixed(0) + ' ' + type[i];
 }
+
+
