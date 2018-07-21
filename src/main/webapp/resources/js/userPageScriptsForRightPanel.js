@@ -255,6 +255,7 @@ function saveFiles() {
                 mainCenter.insertBefore(div.firstChild, mainCenter.childNodes[0]);
                 hidePostEdit(data.postId);
                 formatSizesForPost(data.postId);
+                filesClickInitForOnePost(data.postId);
             }
 
             hideUploadBlock();

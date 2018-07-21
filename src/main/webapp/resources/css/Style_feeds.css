@@ -456,9 +456,9 @@ input[type=radio]:checked + label>span{
 }
 
 
-.FeedFolders td {
-	padding: 6px 0 6px 0;
-}
+/*.FeedFolders td {*/
+	/*padding: 6px 0 6px 0;*/
+/*}*/
 
 
 .FeedFolders tr:hover{
@@ -492,7 +492,7 @@ input[type=radio]:checked + label>span{
 	width: 370px;
 	min-width: 150px;
 	max-width: 370px;
-
+	padding: 0 0 0 10px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: clip;
@@ -573,297 +573,38 @@ input[type=radio]:checked + label>span{
 	border-radius: 5px;
 	padding: 5px 5px 5px 30px;
 	cursor: pointer;
-	background-image: url("../media/feeds/SavePost.png");
 	background-repeat: no-repeat;
 	background-size: 20px 20px;
 	background-position: 5% 50%;
 	/*width: 140px;*/
 }
 
+.ButtonsPostEditDeleteSelectAll {
+	display: flex;
+	justify-content: space-around;
+	width: 100%;
+	height: 30px;
+	margin: 10px 0 10px 0;
+}
+
+.ButtonsPostEditDeleteSelectAll input {
+	/*margin-right: 10px;*/
+	background-color: #3e4b56;
+	font-size: 16px;
+	color: white;
+	border-radius: 5px;
+	padding: 5px 5px 5px 30px;
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-size: 20px 20px;
+	background-position: 5% 50%;
+
+}
+
 #myfile,#uploadFile,#myfileUpload {
 	display: none;
 }
 
-/*.mainCenter {*/
-	/*display: flex;*/
-	/*flex:1 1;*/
-	/*flex-direction: column;*/
-	/*align-items: flex-start;*/
-	/*!*background-color: lime;*!*/
-	/*justify-content: flex-start;*/
-	/*max-width: 550px;*/
-	/*margin-top: 70px;*/
-/*}*/
-
-/*.FeedContainer {*/
-	/*margin: 10px 0 10px 0;*/
-	/*max-width: 550px;*/
-	/*background-color: white;*/
-	/*!*border: 1px solid #3e4b56;*!*/
-	/*box-shadow: 0 0 6px #3e4b56;*/
-/*}*/
-
-/*.FeedHeader {*/
-	/*display: flex;*/
-	/*justify-content: space-between;*/
-	/*!*justify-content: space-around;*!*/
-	/*align-items: center;*/
-	/*height: 40px;*/
-	/*!*background-color: #3e4b56;*!*/
-	/*background-color: #ffffff;*/
-	/*margin: 10px 0 25px 0;*/
-/*}*/
-
-
-/*.FeedHeaderLeft {*/
-	/*display: flex;*/
-	/*flex-direction: row;*/
-	/*align-items: center;*/
-/*}*/
-
-/*.FeedLogo {*/
-	/*width: auto;*/
-	/*height: 40px;*/
-	/*margin-left: 10px;*/
-	/*margin-right: 10px;*/
-/*}*/
-
-/*.FeedText {*/
-	/*display: flex;*/
-	/*flex-direction: column;*/
-/*}*/
-
-/*.FeedHeaderText {*/
-	/*cursor: default;*/
-	/*font-size: 20px;*/
-	/*color: black;*/
-/*}*/
-
-/*.FeedHeaderTextTime {*/
-	/*cursor: default;*/
-	/*font-size: 12px;*/
-	/*color: black;*/
-/*}*/
-
-/*.FeedLogoEdit {*/
-	/*width: auto;*/
-	/*height: 8px;*/
-	/*margin-left: 10px;*/
-	/*margin-right: 20px;*/
-	/*!*background-color: blue;*!*/
-/*}*/
-/*!*-------------------------------*!*/
-/*.EditBlock{*/
-	/*display: flex;*/
-	/*justify-content: center;*/
-	/*align-items: center;*/
-	/*height: 100%;*/
-	/*cursor:pointer;*/
-/*}*/
-
-/*.EditBlock:hover {*/
-	/*opacity: 0.5;*/
-/*}*/
-
-/*.EditBlock:hover ~ .ediFeedOptions{*/
-	/*visibility: visible;*/
-	/*opacity: 1;*/
-	/*transition: visibility 0s linear 0s, opacity 500ms;*/
-
-/*}*/
-/*.ediFeedOptions:hover {*/
-	/*visibility: visible;*/
-	/*opacity: 1;*/
-/*}*/
-
-/*!*-------------------------------*!*/
-/*.ediFeedOptions {*/
-	/*visibility: hidden;*/
-	/*opacity: 0;*/
-	/*transition: visibility 0s linear 300ms, opacity 500ms;*/
-	/*display: flex;*/
-	/*flex-direction: column;*/
-	/*padding: 2px 0 2px 0;*/
-	/*position: absolute;*/
-	/*margin: 0 0 0 570px;*/
-	/*min-height: 65px;*/
-	/*min-width: 100px;*/
-	/*background-color: #fff;*/
-	/*box-shadow: 0 0 6px #3e4b56;*/
-	/*border-radius: 5px;*/
-	/*z-index: 2;*/
-/*}*/
-
-/*.ediFeedOptions p {*/
-	/*text-decoration: none;*/
-	/*margin: 2px 0 2px 0;*/
-	/*padding-left: 10px;*/
-	/*padding-right: 10px;*/
-	/*color: black;*/
-	/*cursor: default;*/
-/*}*/
-
-/*.ediFeedOptions p:hover {*/
-	/*background-color: #c5c5c5;*/
-/*}*/
-
-/*.ediFeedOptions::after{*/
-	/*content: '';*/
-	/*position: absolute;*/
-	/*top: 22px;*/
-	/*height: 20px;*/
-	/*width: 20px;*/
-	/*background-color: #fff;*/
-	/*transform: rotate(45deg);*/
-	/*left: -9px;*/
-	/*z-index: -1;*/
-	/*box-shadow: -3px 3px 6px #3e4b56;*/
-/*}*/
-
-/*.commentPost {*/
-	/*!*display: flex;*!*/
-	/*!*display: none;*!*/
-	/*!*align-items: center;*!*/
-	/*padding: 5px 5px 5px 15px;*/
-	/*font-weight: bold;*/
-	/*!*min-height: 0px;*!*/
-	/*font-size: 18px;*/
-	/*cursor: default;*/
-	/*word-break: break-all;*/
-	/*!*background-color: red;*!*/
-/*}*/
-
-/*.PostTextarea {*/
-	/*!*border: 1px solid #3e4b56;*!*/
-	/*border-radius: 5px;*/
-	/*padding: 5px 5px 5px 5px;*/
-	/*font-size: 16px;*/
-	/*font-weight: bold;*/
-	/*width: 510px;*/
-	/*max-width: 510px;*/
-	/*min-width: 510px;*/
-	/*min-height: 20px;*/
-
-	/*cursor: default;*/
-	/*overflow: hidden;*/
-	/*resize: none;*/
-/*}*/
-
-/*.FeedFolders {*/
-	/*width: 550px;*/
-	/*word-break: break-all;*/
-	/*background-color: white;*/
-	/*margin: 0 0 10px 0;*/
-/*}*/
-
-/*.FeedFolders a {*/
-	/*text-decoration: none;*/
-	/*color: black;*/
-/*}*/
-
-/*.FeedFolders tr {*/
-	/*height: 30px;*/
-	/*min-height: 25px;*/
-/*}*/
-
-/*.FeedtdLeft img{*/
-	/*height: 30px;*/
-	/*width: 35px;*/
-	/*margin-right: 2px;*/
-/*}*/
-
-/*.FeedtdLeft {*/
-	/*display: flex;*/
-	/*align-items: center;*/
-	/*justify-content: center;*/
-	/*min-height: 20px;*/
-	/*min-width: 20px;*/
-/*}*/
-
-/*.FeedtdCenter {*/
-	/*cursor: default;*/
-	/*font-weight: bold;*/
-	/*font-size: 18px;*/
-	/*font-family: Geneva, Arial, Helvetica, sans-serif;*/
-	/*width: 320px;*/
-	/*min-width: 150px;*/
-	/*max-width: 350px;*/
-/*}*/
-/*.FeedtdRight {*/
-	/*cursor: default;*/
-	/*font-size: 14px;*/
-	/*width: 75px;*/
-	/*min-width: 86px;*/
-/*}*/
-
-/*.FeedTdDownload {*/
-	/*width: 50px;*/
-	/*height: 37px;*/
-/*}*/
-/*.FeedTdDownload img{*/
-	/*width: 30px;*/
-	/*height: 30px;*/
-/*}*/
-
-/*.FeedtdRightEdit {*/
-	/*cursor: default;*/
-	/*font-size: 18px;*/
-	/*width: 75px;*/
-	/*min-width: 86px;*/
-/*}*/
-
-/*.FeedtdRightEdit img {*/
-	/*height: 20px;*/
-	/*width: 20px;*/
-/*}*/
-
-/*.FeedTdDeleteEdit{*/
-	/*text-align: center;*/
-/*}*/
-
-
-/*.uploadDad {*/
-	/*display: flex;*/
-	/*justify-content: center;*/
-	/*align-items: center;*/
-	/*border: 3px dashed #3e4b56;*/
-	/*border-radius: 5px;*/
-	/*height: 30px;*/
-	/*width: 400px;*/
-	/*margin: 20px 15% 0 15%;*/
-/*}*/
-/*.uploadDad img {*/
-	/*cursor: pointer;*/
-	/*height: 25px;*/
-	/*width: auto;*/
-/*}*/
-
-/*.SaveButton {*/
-	/*display: flex;*/
-	/*justify-content: flex-end;*/
-	/*width: 100%;*/
-	/*height: 30px;*/
-	/*margin: 10px 0 10px 0;*/
-/*}*/
-
-/*.SaveButton input {*/
-	/*margin-right: 10px;*/
-	/*background-color: #3e4b56;*/
-	/*font-size: 16px;*/
-	/*color: white;*/
-	/*border-radius: 5px;*/
-	/*padding: 5px 5px 5px 30px;*/
-	/*cursor: pointer;*/
-	/*background-image: url("../media/feeds/SavePost.png");*/
-	/*background-repeat: no-repeat;*/
-	/*background-size: 20px 20px;*/
-	/*background-position: 5% 50%;*/
-	/*!*width: 140px;*!*/
-/*}*/
-
-/*#myfile,#uploadFile,#myfileUpload {*/
-	/*display: none;*/
-/*}*/
 /*--------------------------------mainRight-------------*/
 .mainRight {
 	width: 410px;
@@ -896,194 +637,6 @@ input[type=radio]:checked + label>span{
 }
 
 /*-----------STYLE uploadContainer ------------*/
-
-/*.uploadContainer {*/
-	/*!*display: none;*!*/
-
-	/*position: sticky;*/
-	/*position: -webkit-sticky;*/
-	/*position: -moz-sticky;*/
-	/*position: -ms-sticky;*/
-	/*position: -o-sticky;*/
-	/*top: 90px;*/
-	/*width: 410px;*/
-	/*background-color: white;*/
-	/*visibility: hidden;*/
-	/*padding: 0 0 5px 0;*/
-/*}*/
-
-/*.FeedHeaderUpload {*/
-	/*display: flex;*/
-	/*align-items: center;*/
-	/*height: 60px;*/
-	/*background-color: #3e4b56;*/
-/*}*/
-
-/*.FeedHeaderTextUpload {*/
-	/*cursor: default;*/
-	/*font-size: 24px;*/
-	/*color: white;*/
-/*}*/
-
-/*.FeedLogoUpload {*/
-	/*width: auto;*/
-	/*height: 40px;*/
-	/*margin-left: 10px;*/
-	/*margin-right: 10px;*/
-/*}*/
-
-/*.uploadBlock {*/
-	/*display: flex;*/
-	/*flex-direction: column;*/
-	/*max-height: 70vh;*/
-	/*!*justify-content: center;*!*/
-	/*align-items: center;*/
-/*}*/
-
-/*.upload {*/
-	/*display: flex;*/
-	/*flex-direction: column;*/
-	/*align-items: center;*/
-	/*min-height: 55px;*/
-/*}*/
-/*.uploadBlock span {*/
-	/*margin: 0 0 5px 0;*/
-	/*font-size: 20px;*/
-	/*color: black;*/
-/*}*/
-
-/*.upload select {*/
-	/*width: 390px;*/
-	/*height: 30px;*/
-	/*max-height: 30px;*/
-	/*min-height: 30px;*/
-	/*border: 1px solid grey;*/
-	/*border-radius: 5px;*/
-	/*font-size: 14px;*/
-	/*color: black;*/
-/*}*/
-
-/*.comment {*/
-	/*width: 380px;*/
-	/*min-height: 55px;*/
-	/*max-height: 50vh;*/
-	/*overflow: auto;*/
-	/*max-width: 380px;*/
-	/*min-width: 380px;*/
-	/*font-size: 17px;*/
-	/*border: 1px solid grey;*/
-	/*border-radius: 5px;*/
-	/*padding: 5px 5px 5px 5px;*/
-	/*word-wrap: break-word;*/
-
-/*}*/
-
-
-/*.uploadStatus {*/
-	/*display: inline-block;*/
-	/*overflow-x: hidden;*/
-	/*width: 380px;*/
-	/*margin: 10px 15px 5px 15px;*/
-	/*padding: 5px 5px 5px 5px;*/
-	/*max-height: 50vh;*/
-	/*overflow: auto;*/
-	/*border-radius: 5px;*/
-/*}*/
-
-
-/*.uploadStatus tr {*/
-	/*display: flex;*/
-	/*justify-content: space-around;*/
-	/*margin-top: 20px;*/
-	/*cursor: default;*/
-	/*margin-left: 20px;*/
-/*}*/
-
-/*.th {*/
-	/*width: 50px;*/
-	/*font-size: 15px;*/
-	/*color: black;*/
-/*}*/
-/*.uploadStatus img {*/
-	/*max-width: 15px;*/
-	/*max-height: 15px;*/
-/*}*/
-
-/*.thOne {*/
-	/*width: 189px;*/
-	/*text-align: left;*/
-/*}*/
-
-
-/*.uploadDadBlock {*/
-	/*display: flex;*/
-	/*justify-content: center;*/
-	/*align-items: center;*/
-	/*width: 370px;*/
-	/*height: 30px;*/
-	/*min-height: 30px;*/
-	/*margin: 20px auto;*/
-	/*border: 3px dashed #3e4b56;*/
-	/*border-radius: 5px;*/
-/*}*/
-
-/*.uploadDadBlock img {*/
-	/*width: auto;*/
-	/*height: 90%;*/
-	/*cursor: pointer;*/
-/*}*/
-
-/*.uploadButton {*/
-	/*display: flex;*/
-	/*justify-content: center;*/
-	/*align-items: center;*/
-	/*position: relative;*/
-	/*left: 330px;*/
-	/*width: 150px;*/
-	/*height: 40px;*/
-	/*margin-bottom: 20px;*/
-	/*background-color: #3e4b56;*/
-	/*border-radius: 10px;*/
-	/*cursor: pointer;*/
-/*}*/
-
-/*.uploadButton img {*/
-	/*width: auto;*/
-	/*height: 20px;*/
-	/*margin-right: 5px;*/
-/*}*/
-
-/*.uploadButton span {*/
-	/*font-size: 20px;*/
-	/*color: white;*/
-/*}*/
-
-/*.SubmitBottonUploadBlock {*/
-	/*display: flex;*/
-	/*justify-content: flex-end;*/
-	/*width: 100%;*/
-	/*height: 30px;*/
-	/*max-height: 30px;*/
-	/*min-height: 30px;*/
-	/*margin: 10px 0 10px 0;*/
-/*}*/
-
-/*.SubmitBottonUploadBlock input {*/
-	/*margin-right: 10px;*/
-	/*background-color: #3e4b56;*/
-	/*font-size: 16px;*/
-	/*color: white;*/
-	/*border-radius: 5px;*/
-	/*padding: 5px 5px 5px 30px;*/
-	/*cursor: pointer;*/
-	/*background-image: url("../media/feeds/SavePost.png");*/
-	/*background-repeat: no-repeat;*/
-	/*background-size: 20px 20px;*/
-	/*background-position: 5% 50%;*/
-	/*min-height: 30px;*/
-	/*!*width: 140px;*!*/
-/*}*/
-
 
 
 .uploadContainer {
@@ -1302,4 +855,8 @@ input[type=radio]:checked + label>span{
 	background-position: 5% 50%;
 	min-height: 30px;
 	/*width: 140px;*/
+}
+
+.active {
+	background-color: rgba(0,0,0,.2);
 }

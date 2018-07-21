@@ -55,6 +55,7 @@ function getPostsOfFeed(event) {
                     document.getElementById("mainCenter").innerHTML = data;
                     hideEditOfAllPosts();
                     formatSizesOfAllPosts();
+                    filesClickInit();
                 }
         },
         error: function (e) {
