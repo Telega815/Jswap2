@@ -12,6 +12,7 @@ $(document).ready(function(){
     //trueSizeFreeSpace
     var spaceBizy = document.getElementById("leftPanelUserFilesSize");
     var spaceFree = document.getElementById("leftPanelUserSizeLimit");
+    updateUserSpace();
     spaceBizy.innerText=(spaceBizy.innerText/1024/1024/1024).toFixed(2);
     spaceFree.innerText=spaceFree.innerText/1024/1024/1024;
 
@@ -60,4 +61,18 @@ function getPostsOfFeed(event) {
             alert(e.responseText);
         }
     })
+}
+
+function updateUserSpace() {
+    var spaceBizy = document.getElementById("leftPanelUserFilesSize");
+    var spaceFree = document.getElementById("leftPanelUserSizeLimit");
+
+    var sizeBar = document.getElementsByClassName("MemoryLimitNoneStatus")[0];
+    if (spaceBizy.innerText!=0) {
+        sizeBar.style.width = spaceBizy.innerText/spaceFree.innerText*100 + "%";
+    }
+    else{
+        sizeBar.style.width = "1%";
+    }
+
 }

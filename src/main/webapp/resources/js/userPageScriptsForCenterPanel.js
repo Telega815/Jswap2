@@ -377,6 +377,7 @@ function optionsAction(event) {
                             }
                         }
                         document.getElementById("leftPanelUserFilesSize").innerText = (data.userSpace/1024/1024/1024).toFixed(2);
+                        updateUserSpace();
                     }
 
                 },

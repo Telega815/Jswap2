@@ -249,6 +249,7 @@ function saveFiles() {
                     }
                 }
                 document.getElementById("leftPanelUserFilesSize").innerText = (data.userSpace/1024/1024/1024).toFixed(2);
+                updateUserSpace();
 
                 var mainCenter = document.getElementById("mainCenter");
                 mainCenter.insertBefore(div.firstChild, mainCenter.childNodes[0]);
