@@ -92,7 +92,6 @@ public class FileService {
     }
 
     public Post saveNewPost(NewPostInfo info){
-        ResponsePostInfo responsePostInfo = new ResponsePostInfo();
         Post post = new Post();
         post.setCommentary(info.getPostComment());
         Feeds feed = feedsDAO.getFeed(info.getFeedId());
@@ -112,8 +111,12 @@ public class FileService {
         post.setTime(new Time(currTime));
         post.setPostPk(postsDAO.savePost(post));
 
+        boolean res = true;
         for (int key : info.getFilesToSave()) {
-            tempPost.saveFileToDb(key, feedPath, post);
+            res &= tempPost.saveFileToDb(key, feedPath, post);
+        }
+        if (!res){
+            logger.info("\n{}: WARNING! = saving to db failed;", new java.util.Date(System.currentTimeMillis()).toString());
         }
         tempPosts.replace(info.getClientId(), new TempPost(filesDAO, filePathDAO));
         resizeFeed(feed, post.getSize());
@@ -236,7 +239,7 @@ public class FileService {
     // Methods for file paths-------------------------------------------------------------------------------------------
 
     private String getUserFolder(User user){
-        return "\\\\DESKTOP-JJNRSE9"+File.separator+"folder_for_swapy" + File.separator + "tmpFiles" + File.separator + user.getUsername();
+        return "\\\\DESKTOP-0E2VB4G" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + user.getUsername();
     }
 
     private String getFeedFolder(Feeds feed){

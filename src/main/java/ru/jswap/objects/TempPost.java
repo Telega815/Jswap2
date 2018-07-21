@@ -1,5 +1,6 @@
 package ru.jswap.objects;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,6 +13,9 @@ import ru.jswap.objects.JSON.ClientIdInfo;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +31,7 @@ public class TempPost implements Runnable{
     private final int MILLS = 180000;
     private Map<Integer, FileData> files;
     private Map<Integer, FilePath> paths;
-    private String FILE_PATH = "\\\\DESKTOP-JJNRSE9"+File.separator+"folder_for_swapy" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
+    private String FILE_PATH = "\\\\DESKTOP-0E2VB4G" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
     private Thread timeoutThread;
     private long postSize = 0;
 
@@ -64,7 +68,6 @@ public class TempPost implements Runnable{
             logger.info("\n{}: WARNING! = relocation failed; path = {}; filename = {}", new java.util.Date(System.currentTimeMillis()).toString(), file.getAbsolutePath(), multipartFile.getOriginalFilename());
             return -1;
         }
-
         this.startTimeOut();
         return key;
     }
@@ -137,6 +140,7 @@ public class TempPost implements Runnable{
     }
 
 
+    //TODO this need to be redone(to unpredictable behavior)
     @Override
     public void run() {
         try {
@@ -155,7 +159,7 @@ public class TempPost implements Runnable{
      * @return true if succeeded
      */
     public boolean saveFileToDb(int key, File newLocation, Post post){
-        boolean res;
+        boolean res = false;
         FilePath filePath = this.getPath(key);
         FileData fileData = this.getFileName(key);
         fileData.setPost(post);
@@ -166,10 +170,14 @@ public class TempPost implements Runnable{
         filePath.setId(id);
 
         fileData.setFilepath(filePath);
-
         File newFile = new File(filePath.getPath() + File.separator + filePath.getId());
-        res = file.renameTo(newFile);
-
+        try {
+            Files.move(file.toPath(),newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            res = true;
+        } catch (IOException e) {
+            logger.info("\n{}: cached exception in 'saveFileToDb' of TempPost: "+e.getMessage(), new java.util.Date(System.currentTimeMillis()).toString());
+            res = false;
+        }
         filesDAO.saveFile(fileData);
         return res;
     }
