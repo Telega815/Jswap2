@@ -91,8 +91,22 @@ public class UploadingController {
     @RequestMapping(method = RequestMethod.POST, value = "restService/saveNewPost", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponsePostInfo saveNewPost(@RequestBody NewPostInfo info){
-        Post post = fileService.saveNewPost(info);
+        Feeds feed = userService.getFeed(info.getFeedId());
+        AccessParams params = new AccessParams();
         ResponsePostInfo responsePostInfo = new ResponsePostInfo();
+        boolean authenticatedAsPageOwner = userService.checkUser(feed.getUser());
+        Post post;
+        if(authenticatedAsPageOwner){
+            post = fileService.saveNewPost(info, feed, feed.getUser().getUsername());
+        }else{
+            params.setParams(feed.getAccesstype());
+            if (params.getWrite() == 0){
+                post = fileService.saveNewPost(info, feed, userService.getAuthenticatedUsername());
+            }else{
+                post = null;
+            }
+        }
+
         if (post == null){
             responsePostInfo.setNullPost(true);
         }else{
@@ -117,17 +131,17 @@ public class UploadingController {
         Feeds feed = userService.getFeed(feedId);
         AccessParams accessParams = new AccessParams();
         accessParams.setParams(feed.getAccesstype());
-        Boolean userIdentificated=userService.checkUser(feed.getUser());
+        Boolean userAuthenticated=userService.checkUser(feed.getUser());
 
         switch (accessParams.getRead()){
             case 0:
-                return htmlService.getAllPostsHtml(feed,userIdentificated);
+                return htmlService.getAllPostsHtml(feed,userAuthenticated);
             case 1:
                 //TODO PinAccessCheck
                 return "Pincode required";
 
             case 2:
-                if (userIdentificated){
+                if (userAuthenticated){
                     return htmlService.getAllPostsHtml(feed,true);
                 }
                 else{

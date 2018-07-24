@@ -91,10 +91,9 @@ public class FileService {
         return post.deleteFile(fileId);
     }
 
-    public Post saveNewPost(NewPostInfo info){
+    public Post saveNewPost(NewPostInfo info, Feeds feed, String createdBy){
         Post post = new Post();
         post.setCommentary(info.getPostComment());
-        Feeds feed = feedsDAO.getFeed(info.getFeedId());
         File feedPath = new File(this.getFeedFolder(feed));
         if(!feedPath.exists()){
             if (!feedPath.mkdirs()) {
@@ -102,7 +101,7 @@ public class FileService {
                 return null;
             }
         }
-
+        post.setCreatedBy(createdBy);
         post.setFeed(feed);
         TempPost tempPost = tempPosts.get(info.getClientId());
         post.setSize(tempPost.getPostSize());

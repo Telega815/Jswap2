@@ -43,7 +43,7 @@ public class UserService {
         return feedsDAO.getFeeds(user);
     }
 
-    public Feeds getFeed (int feedId){
+    public Feeds getFeed (long feedId){
         return feedsDAO.getFeed(feedId);
     }
 

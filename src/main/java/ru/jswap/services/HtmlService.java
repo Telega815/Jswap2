@@ -135,7 +135,7 @@ public class HtmlService {
 //
         HtmlGenerator postHeaderName = new HtmlGeneratorImpl("p");
         postHeaderName.addAttribute("class", "FeedHeaderText");
-        postHeaderName.setInnerText(post.getFeed().getUser().getUsername().toUpperCase());
+        postHeaderName.setInnerText(post.getCreatedBy().toUpperCase());
 
         HtmlGenerator postHeaderDate = new HtmlGeneratorImpl("p");
         postHeaderDate.addAttribute("class", "FeedHeaderTextTime");
