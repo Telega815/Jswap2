@@ -14,13 +14,13 @@
     <title>UserPage</title>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_header.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/Style_feeds.css">
-
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.3.1.js" ></script>
     <sec:csrfMetaTags />
     <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/csrfHeader.js" ></script>
-
+    <script src="${pageContext.request.contextPath}/resources/js/userPageScriptsCreateFeed.js"></script>
 </head>
 <body >
+
 <div class="bodyBack" id="bodyBack">
     <header>
         <jsp:include page="${pageContext.request.contextPath}/WEB-INF/views/content/parts/headerAnonymous.jsp"/>
@@ -54,7 +54,7 @@
                     </table>
 
                     <div class="CreateFolderBlock">
-                        <a href="#"><img src="${pageContext.request.contextPath}/resources/media/feeds/CreateFolder.png" alt=""></a>
+                        <a href="#" onclick="showCreateFeedWindow()"><img src="${pageContext.request.contextPath}/resources/media/feeds/CreateFolder.png" alt=""></a>
                     </div>
 
                     <div class="MemoryLimitBlock">
@@ -113,5 +113,6 @@
     </main>
 
 </div>
+<jsp:include page="parts/createFeedWindow.jsp"/>
 </body>
 </html>

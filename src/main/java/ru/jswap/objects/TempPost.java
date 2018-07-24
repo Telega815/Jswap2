@@ -31,7 +31,7 @@ public class TempPost implements Runnable{
     private final int MILLS = 180000;
     private Map<Integer, FileData> files;
     private Map<Integer, FilePath> paths;
-    private String FILE_PATH = "\\\\DESKTOP-0E2VB4G" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
+    private String FILE_PATH = "C:" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + "temp" + File.separator;
     private Thread timeoutThread;
     private long postSize = 0;
 

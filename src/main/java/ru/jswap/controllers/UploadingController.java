@@ -84,6 +84,10 @@ public class UploadingController {
     }
 
 
+    /**
+     * @param info about creating post (comment, feedID, ...)
+     * @return info about created post (id, ... )
+     */
     @RequestMapping(method = RequestMethod.POST, value = "restService/saveNewPost", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public ResponsePostInfo saveNewPost(@RequestBody NewPostInfo info){
@@ -152,11 +156,6 @@ public class UploadingController {
         else{
             responsePostInfo.setNullPost(true);
         }
-
-
-
-
-
         return responsePostInfo;
     }
 

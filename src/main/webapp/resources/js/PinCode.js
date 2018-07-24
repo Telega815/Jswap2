@@ -6,13 +6,11 @@ $(document).ready(function(){
     PinInputHide();
     uploadButton = document.getElementById("uploadButton");
     uploadButton.disabled = true;
-    document.getElementsByClassName("")
     pinField = document.getElementById("pinInputField");
     $("#enterPinButton").hide();
     checkWriteAccess();
     var href = document.getElementById("viewFilesHref");
     href.addEventListener("click",function(e){e.preventDefault(); checkReadAccess(e)}, false);
-
 });
 function PinInputShow(){
     $("#pinBlock").show();
