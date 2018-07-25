@@ -43,7 +43,7 @@ public class UserService {
         return feedsDAO.getFeeds(user);
     }
 
-    public Feeds getFeed (int feedId){
+    public Feeds getFeed (long feedId){
         return feedsDAO.getFeed(feedId);
     }
 
@@ -76,15 +76,13 @@ public class UserService {
         user.setPwd(passwordEncoder.encode(user.getPwd()));
         userDAO.saveUser(user);
         groupMembersDAO.saveUser(groupsDAO.getGroup("users").getId(), user.getUsername());
-        String rootPath = "C:/tmpFiles";
-        File dir = new File(rootPath + File.separator + user.getUsername());
-        if(!dir.exists()){
-            dir.mkdirs();
-        }
         return true;
     }
+
     private boolean validateUser(User user){
         if (this.getUser(user.getUsername()) != null){
+            return false;
+        }else if (user.getUsername().toUpperCase().equals("ANONYMOUS")){
             return false;
         }else if (!Pattern.matches("^[A-Za-z0-9]*$", user.getPwd())){
             return false;

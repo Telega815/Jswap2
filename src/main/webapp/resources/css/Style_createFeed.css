@@ -35,6 +35,8 @@
 }
 
 .FeedHeaderTittle {
+	display: flex;
+	flex-direction: inherit;
     font-size: 24px;
 	margin-left: 20px;
 	color: white;
@@ -58,15 +60,16 @@
 }
 
 .feedCreatingName span {
-	margin: 0px 20px 0 30px;
-	font-size: 24px;
+	margin: 0px 20px 0 20px;
+	font-size: 21px;
 }
 
 .feedCreatingName input {
 	width: 350px;
 	height: 25px;
-	font-size: 24px;
-	border-bottom: 1px solid orange;
+	padding: 0 0 0 5px;
+	border: 1px solid black;
+	border-radius: 2px;
 	cursor: text;
 }
 
@@ -83,61 +86,66 @@
 	margin-bottom: 20px;
 	cursor: pointer;
 }
+
 #advancedOptions:after {
 	content: "";
 	display: inline-block;
+	height: 8px;
 	width: 7px;
-	height: 7px;
-	margin-left: 5px;
-    background-size: 100%;
-    background: url("../media/createFeed/arrow.png") no-repeat;
+	margin: 5px 0 0 5px;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-image: url("../media/createFeed/arrow.png");
 }
+
+.advancedOptionsClass:after {
+	transform: rotate(180deg);
+}
+
 
 #advancedOptionsShow {
 	display: none;
 	flex-direction: column;
-	width: 100%;
+	width: 75%;
 
 }
 
 .showBlocks {
 	display: flex;
 	margin-bottom: 20px;
-	margin-left: 30px;
+	margin-left: 20px;
 }
 
 .showBlock1 span {
 	width: 75px;
-	font-size: 24px;
+	font-size: 21px;
 	margin-right: 20px;
 }
 .showBlock1 select {
-	width: 200px;
-	font-size: 15px;
-	border: 1px solid grey;
-	border-radius: 5px;
+	width: 240px;
+	border: 1px solid black;
+	border-radius: 2px;
 }
 .showBlock1 option {
 	font-size: 15px;
 }
 
 .showBlock2 span {
-	font-size: 20px;
+	font-size: 21px;
 }
 .showBlock2 input {
 	width: 55px;
-	height: 20px;
+	height: 25px;
 	padding: 2px 2px 0px 2px;
-	font-size: 17px;
-	border: 1px solid grey;
-	margin: 0 5px;
+	font-size: 15px;
+	border: 1px solid black;
+	margin: 0 0 0 10px;
 }
 .showBlock2 select {
 	width: 50px;
-	height: 24px;
 	font-size: 15px;
-	margin-bottom: 10px;
-	border: 1px solid grey;
+	margin: 0 0 0 5px;
+	border: 1px solid black;
 }
 .showBlock2 option {
 	font-size: 15px;
