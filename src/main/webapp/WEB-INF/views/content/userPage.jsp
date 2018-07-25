@@ -84,7 +84,7 @@
                 <div id="uploadContainer" class="uploadContainer">
                     <div class="FeedHeaderUpload">
                         <img src="${pageContext.request.contextPath}/resources/media/feeds/nick_name_B.png" class="FeedLogoUpload">
-                        <span class="FeedHeaderTextUpload">${user.username.toUpperCase()}</span>
+                        <span class="FeedHeaderTextUpload">${authUsername}</span>
                     </div>
                     <div class="uploadBlock">
                         <div>

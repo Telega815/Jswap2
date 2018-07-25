@@ -54,7 +54,7 @@
 /*Имя*/
 
 .feedCreatingName {
-	margin: 20px 0px;
+	margin: 20px 0 0 0;
 	display: flex;
 	
 }
@@ -102,6 +102,16 @@
 	transform: rotate(180deg);
 }
 
+#feedCreatingNameError{
+	display: flex;
+	justify-content: center;
+	margin: 0 0 5px 0;
+	color: red;
+}
+
+#feedCreatingErrorSpan{
+	visibility: hidden;
+}
 
 #advancedOptionsShow {
 	display: none;

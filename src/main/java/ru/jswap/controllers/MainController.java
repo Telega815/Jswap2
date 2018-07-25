@@ -89,6 +89,7 @@ public class MainController {
 				modelAndView.addObject("feedsHtml", feedsHtml);
 				modelAndView.addObject("pinCode", new PinAccess());
 				modelAndView.addObject("accessToPageContent", authenticatedAsPageOwner);
+				modelAndView.addObject("authUsername", userService.getAuthenticatedUserName());
 				break;
 		}
 		return modelAndView;

@@ -18,6 +18,30 @@ function init() {
 	});
 }
 
+function checkFeedName(event) {
+    var name = event.target.value;
+    var error = document.getElementById("feedCreatingErrorSpan");
+    var english = /^[A-Za-z0-9]*$/;
+    var feeds = document.getElementsByClassName("feeds");
+    var nameValid = true;
+    if (name === "" || !english.test(name)){
+        error.innerText = "Invalid characters";
+        nameValid = false;
+    }else{
+        for (var i = 0; i < feeds.length; i++){
+            if (feeds[i].innerText.toUpperCase() === name.toUpperCase()){
+                error.innerText = "Feed already exists";
+                nameValid = false;
+                break;
+            }
+        }
+    }
+    if (!nameValid){
+        error.style.visibility = "visible";
+    }else{
+        error.style.visibility = "hidden";
+    }
+}
 
 function check(e,value) {
     //Check Charater

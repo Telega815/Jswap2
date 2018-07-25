@@ -11,6 +11,7 @@ import ru.jswap.entities.User;
 import ru.jswap.objects.AccessParams;
 
 import java.io.File;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -100,12 +101,12 @@ public class UserService {
         return authentication != null && user.getUsername().equals(authentication.getName());
     }
 
-    public String getAuthenticatedUsername(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
-            return authentication.getName();
+    public String getAuthenticatedUserName(){
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        if (name.toUpperCase().equals("ANONYMOUSUSER")){
+            name = "ANONYMOUS";
         }
-        return null;
+        return name;
     }
 
     public boolean checkPin(User user, String pin){

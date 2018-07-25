@@ -101,7 +101,7 @@ public class UploadingController {
         }else{
             params.setParams(feed.getAccesstype());
             if (params.getWrite() == 0){
-                post = fileService.saveNewPost(info, feed, userService.getAuthenticatedUsername());
+                post = fileService.saveNewPost(info, feed, userService.getAuthenticatedUserName());
             }else{
                 post = null;
             }

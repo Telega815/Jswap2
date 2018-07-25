@@ -21,7 +21,10 @@
         </div>
         <div class="feedCreatingName">
             <span>Feed name:</span>
-            <input type="text" placeholder="Feed name" />
+            <input onchange="checkFeedName(event)" type="text" placeholder="Feed name" />
+        </div>
+        <div id="feedCreatingNameError">
+            <span id="feedCreatingErrorSpan">Feed already exists</span>
         </div>
         <div class="feedCreatingOptions">
             <span id="advancedOptions">Additional settings</span>
