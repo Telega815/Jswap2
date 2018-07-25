@@ -4,36 +4,38 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AccessParams {
-    private int read;
-    private int write;
+    private short read;
+    private short write;
 
 
     public AccessParams() {
     }
 
-    public AccessParams(int read, int write) {
+    public AccessParams(short read, short write) {
         this.read = read;
         this.write = write;
     }
-    public void setParams(int numb) {
-        this.read=numb%3;
-        this.write=numb/3;
+    public void setParams(short numb) {
+        this.read= (short) (numb%3);
+        this.write=(short)(numb/3);
 
     }
-
-    public int getRead() {
+    public short getParams() {
+        return (short) (read+write*3);
+    }
+    public short getRead() {
         return read;
     }
 
-    public void setRead(int read) {
+    public void setRead(short read) {
         this.read = read;
     }
 
-    public int getWrite() {
+    public short getWrite() {
         return write;
     }
 
-    public void setWrite(int write) {
+    public void setWrite(short write) {
         this.write = write;
     }
 }

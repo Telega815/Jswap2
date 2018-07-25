@@ -25,10 +25,14 @@ public class FeedsDAOImpl implements FeedsDAO {
     @Transactional
     @Override
     public Feeds getFeed(String feedname, User user) {
-        return (Feeds) sessionFactory.getCurrentSession()
+        List<Feeds> feeds = sessionFactory.getCurrentSession()
                 .createQuery("from Feeds where feedname = :feedname and user = :user")
                 .setParameter("feedname", feedname)
-                .setParameter("user", user).list().get(0);
+                .setParameter("user", user).list();
+        if (feeds.isEmpty()){
+            return null;
+        }
+        return feeds.get(0);
     }
 
     @Transactional
