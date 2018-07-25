@@ -3,7 +3,6 @@ window.addEventListener("DOMContentLoaded", init);
 function init() {
 	var advancedOptions=document.getElementById('advancedOptions');
 	var advancedOptionsShow=document.getElementById('advancedOptionsShow');
-    var advancedOptions=document.getElementById('advancedOptions');
     advancedOptionsShow.style.display='none';
 
 	advancedOptions.addEventListener('click',function() {
