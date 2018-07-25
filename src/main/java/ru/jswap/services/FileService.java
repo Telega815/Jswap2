@@ -9,6 +9,7 @@ import ru.jswap.dao.intefaces.*;
 import ru.jswap.entities.*;
 import ru.jswap.objects.JSON.ClientIdInfo;
 import ru.jswap.objects.JSON.NewPostInfo;
+import ru.jswap.objects.JSON.RequestPostInfo;
 import ru.jswap.objects.JSON.ResponsePostInfo;
 import ru.jswap.objects.TempPost;
 
@@ -23,6 +24,7 @@ public class FileService {
     private Logger logger = LoggerFactory.getLogger(FileService.class);
     private int maxId = 0;
     private Map<Integer,TempPost> tempPosts;
+    private Map<Long, TempPost> tempForExistingPosts;
 
     @Autowired
     private UserDAO userDAO;
@@ -74,7 +76,7 @@ public class FileService {
             return -1;
         }
         post = tempPosts.get(clientId);
-        fileId = post.addFile(multipartFile, clientId, sessionId, key);
+        fileId = post.addFile(multipartFile, (long) clientId, sessionId, key);
         if(fileId >= 0) {
             tempPosts.put(clientId, post);
         }
@@ -153,85 +155,41 @@ public class FileService {
             return null;
         }
     }
+    //----------------------------------post edit-----------------------------------------------------
+    public boolean uploadFileToExistingPost(Long postId, MultipartFile file, int fileId, String sessionId){
+        TempPost tempPost;
+        if (tempForExistingPosts.containsKey(postId)){
+            tempPost = tempForExistingPosts.get(postId);
+        }else{
+            tempPost = new TempPost(filesDAO, filePathDAO);
+            tempForExistingPosts.put(postId, tempPost);
+        }
+        return tempPost.addFile(file, postId, sessionId, fileId) != -1;
+    }
 
-
-
-// OLD STAFF
-//    public void postEditDeleteFiles(long[] filesToDelete){
-//        logger.info("\n{}: started postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
-//        if(filesToDelete.length != 0){
-//            for (int i = 0; i < filesToDelete.length; i++) {
-//                deleteFile(filesDAO.getFile(filesToDelete[i]));
-//            }
-//            logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete);", new java.util.Date(System.currentTimeMillis()).toString());
-//            return;
-//        }
-//        logger.info("\n{}: finished postEditDeleteFiles(long[] filesToDelete); filesToDelete was empty", new java.util.Date(System.currentTimeMillis()).toString());
-//    }
-
-    //------------------------------------------------------------------------------------------------------------------
-
-//    public boolean deleteFile(FileData fileData){
-//        Post post = fileData.getPost();
-//        boolean res = deleteFileFromDatabase(fileData);
-//        res &= deleteFileFromHDD(fileData);
-//        if (res) {
-//            resizePost(fileData.getPost(), -(fileData.getSize()));
-//        }
-//        deletePost(post,false);
-//        return res;
-//    }
-
-    private boolean deleteFileFromDatabase(FileData fileData){
-        try {
-            FilePath filepath = fileData.getFilepath();
-            filesDAO.deleteFile(fileData);
-            filePathDAO.deletePath(filepath);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+    public boolean deleteFileFromTempForExistingPost(Long postId, int fileId){
+        TempPost tempPost;
+        if (tempForExistingPosts.containsKey(postId)){
+            tempPost = tempForExistingPosts.get(postId);
+            return tempPost.deleteFile(fileId);
+        }else{
             return false;
         }
     }
 
-    private boolean deleteFileFromHDD(FileData fileData){
-        File file = new File(fileData.getFilepath().getPath());
-        return file.delete();
-    }
-
-
-
-//    public boolean deletePost(Post post, boolean recursive){
-//        boolean res = true;
-//        List<FileData> fileDataList = filesDAO.getFiles(post);
-//        User user = post.getFeed().getUser();
-//        if (!fileDataList.isEmpty() && recursive){
-//            for (FileData fileData:fileDataList) {
-//                res &= deleteFile(fileData);
-//            }
-//        }else if (!fileDataList.isEmpty()) return false;
-//
-//        res &= deletePostFromDatabase(post);
-//        res &= deletePostFromHDD(post);
-//        if(res){
-//            resizeFeed(post.getFeed(), -(post.getSize()));
-//        }
-//        return res;
-//    }
-
-//    private boolean deletePostFromHDD(Post post){
-//        File file = new File(getPostFolder(post));
-//        return file.delete();
-//    }
-
-    private boolean deletePostFromDatabase(Post post){
-        try {
-            postsDAO.deletePost(post);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+    public Post updateExistingPost(RequestPostInfo info, Post post){
+        TempPost tempPost = tempForExistingPosts.get(info.getPostID());
+        File newLocation = new File(this.getFeedFolder(post.getFeed()));
+        boolean res = true;
+        for (int key : info.getFilesToSave()) {
+            res &= tempPost.saveFileToDb(key, newLocation, post);
         }
+        if (!res){
+            logger.info("\n{}: WARNING! = saving to db failed;", new java.util.Date(System.currentTimeMillis()).toString());
+        }
+        this.resizePost(post, tempPost.getPostSize());
+        tempForExistingPosts.put(info.getPostID(), new TempPost(filesDAO, filePathDAO));
+        return post;
     }
 
 
@@ -247,7 +205,6 @@ public class FileService {
 
     //------------------------------------------------------------------------------------------------------------------
 
-
     public FileData getFile(String filename, int postid){
         return filesDAO.getFile(filename, postid);
     }
@@ -260,13 +217,6 @@ public class FileService {
         return postsDAO.getPosts(feed);
     }
 
-
-//    public void deletePosts(Feeds feed){
-//        List<Post> posts = getPosts(feed);
-//        for (Post post: posts) {
-//            deletePost(post, true);
-//        }
-//    }
 
     // Methods for size calculation-------------------------------------------------------------------------------------------
     private void resizeUser(User user, long size){

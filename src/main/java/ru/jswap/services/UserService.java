@@ -97,6 +97,7 @@ public class UserService {
     }
 
     public boolean checkUser(User user){
+        if (user == null) return false;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null && user.getUsername().equals(authentication.getName());
     }

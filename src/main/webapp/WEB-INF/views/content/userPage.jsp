@@ -49,7 +49,7 @@
                         </div>
                         <a href="#"><img src="${pageContext.request.contextPath}/resources/media/feeds/UserFeedEdit.png" alt="" class="userLogoEdit"></a>
                     </div>
-                    <table class="userFolders">
+                    <table id="tableFeeds" class="userFolders">
                         ${feedsHtml}
                     </table>
 
