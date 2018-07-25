@@ -176,11 +176,11 @@ public class UploadingController {
     //TODO createFeed finishThisShit
     @PostMapping(value = "restService/createFeed")
     @ResponseBody
-    public String deletePost(@RequestParam (name="feedName") String feedName,
-                             @RequestParam (name="modeRead") Short modeRead,
-                             @RequestParam (name="modeWrite") Short modeWrite,
-                             @RequestParam (name="limitSize") Integer limitSize,
-                             @RequestParam (name="sizeType") Boolean sizeType,
+    public String createFeed(@RequestParam (name="feedName", required = false) String feedName,
+                             @RequestParam (name="modeRead", required = false) Short modeRead,
+                             @RequestParam (name="modeWrite", required = false) Short modeWrite,
+                             @RequestParam (name="limitSize", required = false) Integer limitSize,
+                             @RequestParam (name="sizeType", required = false) Boolean sizeType,
                              @SessionAttribute (name="user", required = false) User user) {
         String htmlFeedName;
         if (user == null) {

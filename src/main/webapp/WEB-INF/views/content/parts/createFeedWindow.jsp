@@ -21,14 +21,14 @@
         </div>
         <div class="feedCreatingName">
             <span>Feed name:</span>
-            <input type="text" placeholder="Feed name" />
+            <input id="feedName" type="text" placeholder="Feed name" />
         </div>
         <div class="feedCreatingOptions">
             <span id="advancedOptions">Additional settings</span>
             <div id="advancedOptionsShow">
                 <div class="showBlocks showBlock1">
                     <span>Read</span>
-                    <select>
+                    <select id="modeRead">
                         <option>Free read</option>
                         <option>pin-code required</option>
                         <option>Full authentication required</option>
@@ -36,7 +36,7 @@
                 </div>
                 <div class="showBlocks showBlock1">
                     <span>Write</span>
-                    <select>
+                    <select id="modeWrite">
                         <option>Free write</option>
                         <option>pin-code required</option>
                         <option>Full authentication required</option>
@@ -44,19 +44,19 @@
                 </div>
                 <div class="showBlocks showBlock2">
                     <span>Restrict space for feed to: </span>
-                    <input type="number" name="" placeholder="0" id="txtF" onKeyPress="return check(event,value)" onInput="checkLength()"/>
-                    <select>
-                        <option>Kb</option>
+                    <input id="limitSize" type="number" name="" placeholder="0" id="txtF" onKeyPress="return check(event,value)" onInput="checkLength()"/>
+                    <select id="sizeType">
+
                         <option>Mb</option>
                         <option>Gb</option>
-                        <option>Tb</option>
+
                     </select>
                 </div>
             </div>
         </div>
         <div class="feedCreatingButtons">
             <button onclick="hideCreateFeedWindow()">Отмена</button>
-            <button>Сохранить</button>
+            <button onclick="sendFormCreateFeed()">Сохранить</button>
         </div>
     </div>
     </div>
