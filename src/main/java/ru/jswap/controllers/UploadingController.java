@@ -159,9 +159,34 @@ public class UploadingController {
         return responsePostInfo;
     }
 
+    //TODO createFeed finishThisShit
+    @PostMapping(value = "restService/createFeed")
+    @ResponseBody
+    public String deletePost(@RequestParam (name="feedName") String feedName,
+                             @RequestParam (name="modeRead") Short modeRead,
+                             @RequestParam (name="modeWrite") Short modeWrite,
+                             @RequestParam (name="limitSize") Integer limitSize,
+                             @RequestParam (name="sizeType") Boolean sizeType,
+                             @SessionAttribute (name="user", required = false) User user) {
+        String htmlFeedName;
+        if (user == null) {
 
+            htmlFeedName = "Session expaired";
 
-
+        } else {
+            if (userService.checkUser(user)) {
+                Feeds feed = userService.newFeedWrite(user, feedName, modeRead, modeWrite, limitSize, sizeType);
+                if (feed != null) {
+                    htmlFeedName = htmlService.getFeedHtml(feed);
+                } else {
+                    htmlFeedName = "feed already exist";
+                }
+            } else {
+                htmlFeedName = "Access violation";
+            }
+        }
+    return htmlFeedName;
+    }
 
 
 

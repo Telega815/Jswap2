@@ -110,6 +110,27 @@ public class UserService {
         return null;
     }
 
+    public Feeds newFeedWrite(User user, String feedName, short modeRead, short modeWrite, Integer limitSize, Boolean sizeType ){
+        Feeds feed = null;
+        if (feedsDAO.getFeed(feedName, user)==null && modeRead>=0 && modeRead<=2 && modeWrite>=0 && modeWrite<=2 && limitSize>=0 && limitSize<=9999){
+            feed = new Feeds();
+            feed.setUser(user);
+            feed.setFeedname(feedName);
+
+            AccessParams params =new AccessParams(modeRead, modeWrite);
+            feed.setAccesstype(params.getParams());
+            if (sizeType) {
+                limitSize=limitSize*1024*1024*1024;
+            }
+            else{
+                limitSize=limitSize*1024*1024;
+            }
+            feed.setSize(limitSize);
+            feedsDAO.saveFeed(feed);
+        }
+        return feed;
+    }
+
     public boolean checkPin(User user, String pin){
         return user.getPincode() == Integer.valueOf(pin);
     }
