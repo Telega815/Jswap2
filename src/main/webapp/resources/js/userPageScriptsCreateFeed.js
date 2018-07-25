@@ -3,13 +3,17 @@ window.addEventListener("DOMContentLoaded", init);
 function init() {
 	var advancedOptions=document.getElementById('advancedOptions');
 	var advancedOptionsShow=document.getElementById('advancedOptionsShow');
+    var advancedOptions=document.getElementById('advancedOptions');
+    advancedOptionsShow.style.display='none';
 
 	advancedOptions.addEventListener('click',function() {
 		if (advancedOptionsShow.style.display=='none') {
 			advancedOptionsShow.style.display='flex';
+            advancedOptions.classList.add("advancedOptionsClass");
 		}
 		  else {
 			advancedOptionsShow.style.display='none';
+            advancedOptions.classList.remove("advancedOptionsClass");
 	  	}
 	});
 }

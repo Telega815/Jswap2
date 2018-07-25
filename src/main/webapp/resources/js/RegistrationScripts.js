@@ -34,6 +34,13 @@ function checkUsername(event) {
         imjValid[0].hidden = true;
         return;
     }
+    var anon = "ANONYMOUS";
+    if (username.toUpperCase() === anon){
+        imjInvalid[0].hidden = false;
+        imjValid[0].hidden = true;
+        errorFields[0].textContent = "Name is reserved";
+        return;
+    }
     $.ajax({
         url: window.location.protocol +"//" + window.location.host + "/service/checkUsername?"+csrfParameter+"="+csrfToken,
         type: "POST",
