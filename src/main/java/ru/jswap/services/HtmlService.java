@@ -35,15 +35,15 @@ public class HtmlService {
         return res.toString();
     }
 
-    public String getFeedsHtml(List<Feeds> feeds){
+    public String getFeedsHtml(List<Feeds> feeds, boolean showPrivateContent){
         StringBuilder res = new StringBuilder();
         for (Feeds feed:feeds) {
-            res.append(this.getFeedHtml(feed));
+            res.append(this.getFeedHtml(feed, showPrivateContent));
         }
         return res.toString();
     }
 
-    public String getFeedHtml(Feeds feed){
+    public String getFeedHtml(Feeds feed, boolean showPrivateContent){
         HtmlGenerator tr = new HtmlGeneratorImpl("tr");
 
         //tdLeft---------------------------------------------------------------------------------
@@ -87,8 +87,19 @@ public class HtmlService {
         //sizeSpaceOfFeeds
         tdRight.setInnerText(String.valueOf(sizeByte));
 
-        tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString());
+        //tdEditFeed--------------------------------------------------------------------
+        if (showPrivateContent) {
+            HtmlGenerator tdEditFeed = new HtmlGeneratorImpl("td");
+            tdEditFeed.addAttribute("class", "tdEditFeed");
+            tdEditFeed.addAttribute("style", "display: none;");
+            HtmlGenerator tdEditFeedImg = new HtmlGeneratorImpl("img");
+            tdEditFeedImg.addAttribute("src", "../../resources/media/feeds/edit.png");
 
+            tdEditFeed.setInnerText(tdEditFeedImg.toString());
+            tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString() + tdEditFeed.toString());
+        }else{
+            tr.setInnerText(tdLeft.toString() + tdCenter.toString() + tdRight.toString());
+        }
         return tr.toString();
     }
 

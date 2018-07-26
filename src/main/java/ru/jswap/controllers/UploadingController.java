@@ -188,10 +188,11 @@ public class UploadingController {
             htmlFeedName = "Session expaired";
 
         } else {
-            if (userService.checkUser(user)) {
+            boolean authAsPageOwner = userService.checkUser(user);
+            if (authAsPageOwner) {
                 Feeds feed = userService.newFeedWrite(user, feedName, modeRead, modeWrite, limitSize, sizeType);
                 if (feed != null) {
-                    htmlFeedName = htmlService.getFeedHtml(feed);
+                    htmlFeedName = htmlService.getFeedHtml(feed, authAsPageOwner);
                 } else {
                     htmlFeedName = "feed already exist";
                 }

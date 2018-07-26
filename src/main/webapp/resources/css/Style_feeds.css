@@ -91,7 +91,7 @@ html {
 
 .userLogoEdit {
 	width: auto;
-	height: 25px;
+	height: 22px;
 	margin-left: 10px;
 	margin-right: 10px;
 }
@@ -162,6 +162,7 @@ input[type=radio]:checked + label>span{
 .tdLeft {
 	min-height: 20px;
 	min-width: 20px;
+	width: 20px;
 }
 
 .tdRight {
@@ -170,12 +171,25 @@ input[type=radio]:checked + label>span{
 	min-width: 86px;
 }
 
+.tdEditFeed {
+	min-height: 20px;
+	min-width: 20px;
+	display: none;
+}
+.tdEditFeed img {
+	cursor: pointer;
+	height: 18px;
+	width: 18px;
+}
 .tdCenter {
 	font-weight: bold;
 	font-size: 18px;
 	font-family: Geneva, Arial, Helvetica, sans-serif;
 	min-width: 150px;
 	max-width: 150px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
 }
 
 .MemoryLimitBlock{
@@ -633,7 +647,7 @@ input[type=radio]:checked + label>span{
 }
 .DragFilePostBlock img {
 	cursor: pointer;
-	height: 25px;
+	height: 40px;
 	width: auto;
 }
 
@@ -659,6 +673,13 @@ input[type=radio]:checked + label>span{
 	align-items: center;
 	height: 60px;
 	background-color: #3e4b56;
+}
+
+#CloseUploadContainer{
+	height: 20px;
+	width: 20px;
+	margin: 0 0 0 250px;
+	cursor: pointer;
 }
 
 .FeedHeaderTextUpload {

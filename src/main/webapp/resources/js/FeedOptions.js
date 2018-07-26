@@ -9,3 +9,4 @@ function hideOpt(event){
 	options.style.visibility = "hidden";
 	options.style.opacity = "0";
 }
+

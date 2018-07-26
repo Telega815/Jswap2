@@ -18,6 +18,7 @@
     <div class="feedCreating">
         <div class="FeedHeaderCreate">
             <span class="FeedHeaderTittle">Создание ленты</span>
+            <img onclick="hideCreateFeedWindow()" src="${pageContext.request.contextPath}/resources/media/feeds/x.png" alt="">
         </div>
         <div class="feedCreatingName">
             <span>Feed name:</span>
@@ -47,7 +48,7 @@
                 </div>
                 <div class="showBlocks showBlock2">
                     <span>Restrict space for feed to: </span>
-                    <input id="limitSize" type="number" name="" placeholder="0" id="txtF" onKeyPress="return check(event,value)" onInput="checkLength()"/>
+                    <input id="limitSize" type="number" name="" placeholder="0" onKeyPress="return check(event,value)" onInput="checkLength()"/>
                     <select id="sizeType">
 
                         <option>Mb</option>
@@ -58,7 +59,7 @@
             </div>
         </div>
         <div class="feedCreatingButtons">
-            <button onclick="hideCreateFeedWindow()">Отмена</button>
+            <%--<button>Отмена</button>--%>
             <button onclick="sendFormCreateFeed()">Сохранить</button>
         </div>
     </div>

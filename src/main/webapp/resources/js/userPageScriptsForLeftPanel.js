@@ -77,3 +77,13 @@ function updateUserSpace() {
     }
 
 }
+
+function showFeedEdits() {
+    var edits = document.getElementsByClassName("tdEditFeed");
+    for (var i =0; i < edits.length; i++){
+        if (edits[i].style.display === "none")
+            edits[i].style.display = "table-cell";
+        else
+            edits[i].style.display = "none";
+    }
+}

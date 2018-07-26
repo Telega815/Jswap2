@@ -79,7 +79,7 @@ public class MainController {
 								if (o1.getId() < o2.getId()) return -1;
 								else return 1;
 							});
-					feedsHtml = htmlService.getFeedsHtml(feeds);
+					feedsHtml = htmlService.getFeedsHtml(feeds, authenticatedAsPageOwner);
 				}else {
 					feedsHtml = "<p>you don't have any feeds</p>";
 				}

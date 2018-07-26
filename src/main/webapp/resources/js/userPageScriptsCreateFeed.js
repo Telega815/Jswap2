@@ -3,18 +3,32 @@ window.addEventListener("DOMContentLoaded", init);
 function init() {
 	var advancedOptions=document.getElementById('advancedOptions');
 	var advancedOptionsShow=document.getElementById('advancedOptionsShow');
-    advancedOptionsShow.style.display='none';
+    advancedOptionsShow.style.height = "0px";
+    advancedOptions.addEventListener('click', openCloseAdvancedOptions);
+}
 
-	advancedOptions.addEventListener('click',function() {
-		if (advancedOptionsShow.style.display=='none') {
-			advancedOptionsShow.style.display='flex';
-            advancedOptions.classList.add("advancedOptionsClass");
-		}
-		  else {
-			advancedOptionsShow.style.display='none';
-            advancedOptions.classList.remove("advancedOptionsClass");
-	  	}
-	});
+function openCloseAdvancedOptions() {
+    var advancedOptions=document.getElementById('advancedOptions');
+    var advancedOptionsShow=document.getElementById('advancedOptionsShow');
+
+    if (advancedOptionsShow.style.height === "0px") {
+        advancedOptions.classList.add("advancedOptionsClass");
+        advancedOptionsShow.style.height = "140px";
+    }
+    else {
+        advancedOptions.classList.remove("advancedOptionsClass");
+        advancedOptionsShow.style.height = "0px";
+    }
+}
+
+function closeAdvancedOptions() {
+    var advancedOptions=document.getElementById('advancedOptions');
+    var advancedOptionsShow=document.getElementById('advancedOptionsShow');
+
+    if (advancedOptionsShow.style.height !== "0px") {
+        advancedOptions.classList.remove("advancedOptionsClass");
+        advancedOptionsShow.style.height = "0px";
+    }
 }
 
 function checkFeedName(event) {
@@ -67,6 +81,7 @@ function checkLength() {
 function hideCreateFeedWindow() {
     var createFeedWindow = document.getElementById("createFeedWindow");
     createFeedWindow.style.display = "none";
+    closeAdvancedOptions();
 }
 
 function showCreateFeedWindow() {

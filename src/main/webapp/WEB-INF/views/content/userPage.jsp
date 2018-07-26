@@ -47,16 +47,18 @@
                                 <p class="userHeaderText">Ленты</p>
                             </div>
                         </div>
-                        <a href="#"><img src="${pageContext.request.contextPath}/resources/media/feeds/UserFeedEdit.png" alt="" class="userLogoEdit"></a>
+                        <c:if test="${accessToPageContent}">
+                            <a href="#"><img onclick="showFeedEdits()" src="${pageContext.request.contextPath}/resources/media/feeds/gear.png" alt="" class="userLogoEdit"></a>
+                        </c:if>
                     </div>
                     <table class="userFolders">
                         ${feedsHtml}
                     </table>
-
-                    <div class="CreateFolderBlock">
-                        <a href="#" onclick="showCreateFeedWindow()"><img src="${pageContext.request.contextPath}/resources/media/feeds/CreateFolder.png" alt=""></a>
-                    </div>
-
+                    <c:if test="${accessToPageContent}">
+                        <div class="CreateFolderBlock">
+                            <a href="#" onclick="showCreateFeedWindow()"><img src="${pageContext.request.contextPath}/resources/media/feeds/CreateFolder.png" alt=""></a>
+                        </div>
+                    </c:if>
                     <div class="MemoryLimitBlock">
                         <div class="MemoryLimitNone" >
                             <%--style="width: ${sizeBar}%;"--%>
@@ -78,13 +80,14 @@
         <%--right part with upload block------------------------------------------%>
             <div class="mainRight">
                 <div id="dropZone" class="DragFilePostBlock">
-                    <input id="uploadFile" onchange="inputAction(event)" type="file" multiple> <img onclick="showUploadBlock()" src="${pageContext.request.contextPath}/resources/media/feeds/UploadDad.png" alt="">
+                    <input id="uploadFile" onchange="inputAction(event)" type="file" multiple> <img onclick="showUploadBlock()" src="${pageContext.request.contextPath}/resources/media/feeds/plus.png" alt="">
                 </div>
 
                 <div id="uploadContainer" class="uploadContainer">
                     <div class="FeedHeaderUpload">
                         <img src="${pageContext.request.contextPath}/resources/media/feeds/nick_name_B.png" class="FeedLogoUpload">
                         <span class="FeedHeaderTextUpload">${authUsername}</span>
+                        <img  onclick="hideUploadBlock()" src="${pageContext.request.contextPath}/resources/media/feeds/x.png" id="CloseUploadContainer">
                     </div>
                     <div class="uploadBlock">
                         <div>
