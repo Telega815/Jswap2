@@ -10,9 +10,7 @@ import ru.jswap.entities.FileData;
 import ru.jswap.entities.Post;
 import ru.jswap.entities.User;
 import ru.jswap.objects.AccessParams;
-import ru.jswap.objects.JSON.ClientIdInfo;
-import ru.jswap.objects.JSON.NewPostInfo;
-import ru.jswap.objects.JSON.ResponsePostInfo;
+import ru.jswap.objects.JSON.*;
 import ru.jswap.services.FileService;
 import ru.jswap.services.HtmlService;
 import ru.jswap.services.UserService;
@@ -173,36 +171,87 @@ public class UploadingController {
         return responsePostInfo;
     }
 
-    //TODO createFeed finishThisShit
-    @PostMapping(value = "restService/createFeed")
+    @PostMapping(value = "restService/createFeed", produces = "application/json")
     @ResponseBody
-    public String createFeed(@RequestParam (name="feedName", required = false) String feedName,
-                             @RequestParam (name="modeRead", required = false) Short modeRead,
-                             @RequestParam (name="modeWrite", required = false) Short modeWrite,
-                             @RequestParam (name="limitSize", required = false) Integer limitSize,
-                             @RequestParam (name="sizeType", required = false) Boolean sizeType,
-                             @SessionAttribute (name="user", required = false) User user) {
-        String htmlFeedName;
+    public ResponseFeedInfo createFeed(@RequestParam (name="feedName") String feedName,
+                                       @RequestParam (name="modeRead") Short modeRead,
+                                       @RequestParam (name="modeWrite") Short modeWrite,
+                                       @RequestParam (name="limitSize") Integer limitSize,
+                                       @RequestParam (name="sizeType") Boolean sizeType,
+                                       @SessionAttribute (name="user", required = false) User user) {
+        ResponseFeedInfo info = new ResponseFeedInfo();
         if (user == null) {
-
-            htmlFeedName = "Session expaired";
-
-        } else {
-            boolean authAsPageOwner = userService.checkUser(user);
-            if (authAsPageOwner) {
+            info.setStatus("Failure");
+            info.setHtml("Session expaired");
+        }else if(feedName.equals("")){
+            info.setStatus("Failure");
+            info.setHtml("Invalid feedname");
+        }else {
+            if (userService.checkUser(user)) {
                 Feeds feed = userService.newFeedWrite(user, feedName, modeRead, modeWrite, limitSize, sizeType);
                 if (feed != null) {
-                    htmlFeedName = htmlService.getFeedHtml(feed, authAsPageOwner);
+                    info.setStatus("Success");
+                    info.setHtml(htmlService.getFeedHtml(feed));
+                    info.setId(feed.getId());
                 } else {
-                    htmlFeedName = "feed already exist";
+                    info.setStatus("Failure");
+                    info.setHtml("feed already exist");
                 }
             } else {
-                htmlFeedName = "Access violation";
+                info.setStatus("Failure");
+                info.setHtml("Access violation");
             }
         }
-    return htmlFeedName;
+    return info;
     }
 
+    //----------------------------------post edit-----------------------------------------------------
+    @PostMapping(value = "restService/uploadFileToExistingPost")
+    @ResponseBody
+    public boolean uploadFileToExistingPost(@RequestParam (name="postId") Long postId,
+                                         @RequestParam (name="file")MultipartFile file,
+                                         @RequestParam (name="fileId") Integer fileId,
+                                         HttpSession session){
+        return fileService.uploadFileToExistingPost(postId, file, fileId, session.getId());
+    }
+
+    @PostMapping(value = "restService/deleteFileFromExistingPost")
+    @ResponseBody
+    public boolean deleteFileFromExistingPost(@RequestParam (name="postId") Long postId,
+                                            @RequestParam (name="fileId") Integer fileId){
+        return fileService.deleteFileFromTempForExistingPost(postId, fileId);
+    }
+
+    @PostMapping(value = "restService/updateExistingPost", consumes = "application/json")
+    @ResponseBody
+    public String updateExistingPost(@SessionAttribute(name = "user") User user,
+                                     @RequestBody RequestPostInfo info){
+        String response = null;
+        Post post = fileService.getPost(info.getPostID());
+        AccessParams params = new AccessParams();
+        params.setParams(post.getFeed().getAccesstype());
+        switch (params.getWrite()){
+            case 0:
+                fileService.updateExistingPost(info, post);
+                response = htmlService.getPostHtml(post, userService.checkUser(user));
+                break;
+            case 1:
+                response = "pin-code required";
+                break;
+            case 2:
+                if (user == null){
+                    response = "Authentication required";
+                }else{
+                    if (userService.checkUser(user)){
+                        response = htmlService.getPostHtml(post, true);
+                    }else {
+                        response = "Authentication required";
+                    }
+                }
+                break;
+        }
+        return response;
+    }
 
 
 

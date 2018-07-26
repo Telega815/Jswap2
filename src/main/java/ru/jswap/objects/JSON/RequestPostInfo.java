@@ -5,6 +5,7 @@ public class RequestPostInfo {
     private long feedId;
     private long postID;
     private long[] filesToDelete;
+    private int[] filesToSave;
 
     public RequestPostInfo() {
     }
@@ -39,5 +40,13 @@ public class RequestPostInfo {
 
     public void setFilesToDelete(long[] filesToDelete) {
         this.filesToDelete = filesToDelete;
+    }
+
+    public int[] getFilesToSave() {
+        return filesToSave;
+    }
+
+    public void setFilesToSave(int[] filesToSave) {
+        this.filesToSave = filesToSave;
     }
 }

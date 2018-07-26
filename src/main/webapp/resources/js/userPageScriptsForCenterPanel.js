@@ -273,13 +273,15 @@ function showFileInPostEdit(file) {
     return fileRow;
 }
 
+//TODO some shit here i donno
 function sendFilesFromPostEdit(files){
     for (var i = 0; i < files.length; i++) {
         var formData = new FormData();
         formData.append("file", files[i], files[i].name);
+        formData.append("fileId", sdfsdfsdffsf);
 
         $.ajax({
-            url: document.URL + "/uploadFile?${_csrf.parameterName}=${_csrf.token}",
+            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
             enctype: "multipart/form-data",
             method: 'POST',
             type: 'POST',
@@ -290,18 +292,41 @@ function sendFilesFromPostEdit(files){
             xhr: function () {
                 var req = $.ajaxSettings.xhr();
                 var reqUp = req.upload;
-                reqUp.id = "postEditSendXHR_"+j;
-                reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
-                j++;
+                reqUp.id = "xhr_"+fileCounter;
+                reqUp.addEventListener('progress', uploadProgress, false);
                 return req;
             },
             success: function (data) {
-
+                //TODO some shit here i donno
             },
             error: function (e) {
                 alert(e.responseText);
             }
         });
+        // $.ajax({
+        //     url: document.URL + "/uploadFile?${_csrf.parameterName}=${_csrf.token}",
+        //     enctype: "multipart/form-data",
+        //     method: 'POST',
+        //     type: 'POST',
+        //     data: formData,
+        //     cache: false,
+        //     contentType: false,
+        //     processData: false,
+        //     xhr: function () {
+        //         var req = $.ajaxSettings.xhr();
+        //         var reqUp = req.upload;
+        //         reqUp.id = "postEditSendXHR_"+j;
+        //         reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
+        //         j++;
+        //         return req;
+        //     },
+        //     success: function (data) {
+        //
+        //     },
+        //     error: function (e) {
+        //         alert(e.responseText);
+        //     }
+        // });
     }
 }
 

@@ -51,7 +51,7 @@
                             <a href="#"><img onclick="showFeedEdits()" src="${pageContext.request.contextPath}/resources/media/feeds/gear.png" alt="" class="userLogoEdit"></a>
                         </c:if>
                     </div>
-                    <table class="userFolders">
+                    <table id="tableFeeds" class="userFolders">
                         ${feedsHtml}
                     </table>
                     <c:if test="${accessToPageContent}">

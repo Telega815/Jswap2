@@ -42,7 +42,7 @@ public class TempPost implements Runnable{
         paths = new HashMap<>();
     }
 
-    public int addFile(MultipartFile multipartFile, int clientId, String sessionId, int key){
+    public int addFile(MultipartFile multipartFile, Long clientId, String sessionId, int key){
         File file = new File(FILE_PATH + sessionId + File.separator + clientId + File.separator + key);
 
         if(!file.exists()){

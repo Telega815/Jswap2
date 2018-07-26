@@ -81,7 +81,14 @@ function checkLength() {
 function hideCreateFeedWindow() {
     var createFeedWindow = document.getElementById("createFeedWindow");
     createFeedWindow.style.display = "none";
+    document.getElementById("feedName").value="";
+    document.getElementById("modeRead").selectedIndex=0;
+    document.getElementById("modeWrite").selectedIndex=0;
+    document.getElementById("limitSize").value="";
+    document.getElementById("sizeType").selectedindex=0;
     closeAdvancedOptions();
+
+
 }
 
 function showCreateFeedWindow() {
@@ -110,6 +117,9 @@ function sendFormCreateFeed() {
 
     $.ajax({
         url: window.location.protocol +"//"+window.location.host+"/restService/createFeed?"+csrfParameter+"="+csrfToken,
+        headers: {
+            'Accept': 'application/json'
+        },
         enctype: "multipart/form-data",
         method: "POST",
         data: formData,
@@ -117,7 +127,22 @@ function sendFormCreateFeed() {
         contentType: false,
         processData: false,
         success: function (data) {
-            alert(data);
+            if (data.status==="Failure"){
+                alert(data.html);
+            }
+            else{
+                var tableFeeds = document.getElementById("tableFeeds");
+                var div = document.createElement("table");
+
+                div.innerHTML = data.html;
+                var tr = div.firstChild;
+                tableFeeds.appendChild(tr);
+                document.getElementById("feed_" +data.id).onclick = getPostsOfFeed;
+
+
+                hideCreateFeedWindow();
+
+            }
 
             // if (!data.nullPost){
             //     document.getElementById("mainCenter").removeChild(document.getElementById("FeedContainer_"+selectedPost));
