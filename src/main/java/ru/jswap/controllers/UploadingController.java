@@ -191,7 +191,7 @@ public class UploadingController {
                 Feeds feed = userService.newFeedWrite(user, feedName, modeRead, modeWrite, limitSize, sizeType);
                 if (feed != null) {
                     info.setStatus("Success");
-                    info.setHtml(htmlService.getFeedHtml(feed));
+                    info.setHtml(htmlService.getFeedHtml(feed, true));
                     info.setId(feed.getId());
                 } else {
                     info.setStatus("Failure");
