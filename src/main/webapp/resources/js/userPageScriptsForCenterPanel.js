@@ -3,6 +3,9 @@ var enterCounter = 0;
 var selectedPost;
 var editingPost = false;
 
+
+var postEditFileCounter = 0;
+
 //---------------------innerDZ-------------------
 $(document).ready(function(){
     var innerDropZone = document.getElementById("innerDropZone");
@@ -160,8 +163,7 @@ function editPostDrop(event) {
     var postID = event.target.id.split("_")[1];
     event.target.style.backgroundColor = "transparent";
     var files = event.dataTransfer.files;
-    showFilesInPostEdit(postID, files);
-    sendFilesFromPostEdit(files);
+    showAndSendFilesInPostEdit(postID, files);
     editPostDragleave(event);
     editPostDragWindowleave(event);
 }
@@ -222,27 +224,28 @@ function editPostDragWindowleave(event) {
 function postEditInputClick( event ){
     var postID = event.target.id.split("_")[1];
     var files = event.target.files;
-    showFilesInPostEdit(postID, files);
-    sendFilesFromPostEdit(files);
-    //alert(event.target.id);
-}
-function showFilesInPostEdit(postID, files){
-    var uploadTable = document.getElementById("PostFilesTable_"+postID);
-    for (var i = 0; i < files.length; i++){
-        uploadTable.tBodies[0].appendChild(showFileInPostEdit(files[i]));
-    }
-    //calculateLen();
+    showAndSendFilesInPostEdit(postID, files);
 }
 
-function showFileInPostEdit(file) {
+function showAndSendFilesInPostEdit(postID, files){
+    var uploadTable = document.getElementById("PostFilesTable_"+postID);
+    for (var i = 0; i < files.length; i++){
+        while (document.getElementById("postEditFileRow_"+fileCounter) !== null){
+            postEditFileCounter++;
+        }
+        uploadTable.tBodies[0].appendChild(showFileInPostEdit(files[i]));
+        sendFilesFromPostEdit(files[i]);
+    }
+
+}
+
+function showFileInPostEdit(file, fileId) {
     var fileRow = document.createElement("tr");
-    fileRow.id = "postEditFileRow_" + fileCount;
+    fileRow.id = "postEditFileRow_" + fileId;
 
     var td1 = document.createElement("td");
     td1.className = "FeedTdLeft";
-    // var previewImg = document.createElement("img");
-    // previewImg.setAttribute("src", "/resources/media/feeds/photofile.png");
-    // td1.appendChild(previewImg);
+
 
     var td2 = document.createElement("td");
     td2.className = "FeedTdCenter";
@@ -253,7 +256,6 @@ function showFileInPostEdit(file) {
     var td3 = document.createElement("td");
     td3.innerText = formatSize(file.size);
     td3.className = "FeedTdRight";
-    //progressStatuses.push(th3);
 
     var td4 = document.createElement("td");
 
@@ -269,65 +271,41 @@ function showFileInPostEdit(file) {
     fileRow.appendChild(td3);
     fileRow.appendChild(td4);
 
-    fileCount++;
     return fileRow;
 }
 
-//TODO some shit here i donno
-function sendFilesFromPostEdit(files){
-    for (var i = 0; i < files.length; i++) {
-        var formData = new FormData();
-        formData.append("file", files[i], files[i].name);
-        formData.append("fileId", sdfsdfsdffsf);
+function sendFilesFromPostEdit(file){
+    var formData = new FormData();
+    formData.append("file", file, file.name);
+    formData.append("fileId", postEditFileCounter);
 
-        $.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
-            enctype: "multipart/form-data",
-            method: 'POST',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            xhr: function () {
-                var req = $.ajaxSettings.xhr();
-                var reqUp = req.upload;
-                reqUp.id = "xhr_"+fileCounter;
-                reqUp.addEventListener('progress', uploadProgress, false);
-                return req;
-            },
-            success: function (data) {
-                //TODO some shit here i donno
-            },
-            error: function (e) {
-                alert(e.responseText);
-            }
-        });
-        // $.ajax({
-        //     url: document.URL + "/uploadFile?${_csrf.parameterName}=${_csrf.token}",
-        //     enctype: "multipart/form-data",
-        //     method: 'POST',
-        //     type: 'POST',
-        //     data: formData,
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false,
-        //     xhr: function () {
-        //         var req = $.ajaxSettings.xhr();
-        //         var reqUp = req.upload;
-        //         reqUp.id = "postEditSendXHR_"+j;
-        //         reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
-        //         j++;
-        //         return req;
-        //     },
-        //     success: function (data) {
-        //
-        //     },
-        //     error: function (e) {
-        //         alert(e.responseText);
-        //     }
-        // });
-    }
+    $.ajax({
+        url: window.location.protocol + "//" +
+            window.location.host +
+            "/restService/uploadFileToExistingPost?"+
+            csrfParameter+"="+csrfToken,
+
+        enctype: "multipart/form-data",
+        method: 'POST',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhr: function () {
+            var req = $.ajaxSettings.xhr();
+            var reqUp = req.upload;
+            reqUp.id = "postEditSendXHR_"+postEditFileCounter;
+            reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
+            return req;
+        },
+        success: function (data) {
+            //TODO some shit here i donno
+        },
+        error: function (e) {
+            alert(e.responseText);
+        }
+    });
 }
 
 function uploadProgressForPostEdit(event) {
@@ -336,15 +314,11 @@ function uploadProgressForPostEdit(event) {
     var percent = parseInt(event.loaded / event.total * 100);
     progressStatus.style.background = "linear-gradient(90deg, #18ff00 " + percent + "%, #FFF " + percent +"%)";
 
-    //progressStatuses[event.target.id].innerText = parseInt(event.loaded / event.total * 100) + "%";
-    //if (progressStatuses[event.target.id].innerText === "100%")
-    //    progressStatuses[event.target.id].style.color = "green";
 }
 
 function updatePostAfterEdit(event){
     event.preventDefault();
     var postID = event.target.id.split("_")[1];
-    //if (filesToDelete.length !== 0) postEditSendFilesToDelete();
     postEditSendSaveInfo(postID);
 }
 function postEditSendSaveInfo(postID) {

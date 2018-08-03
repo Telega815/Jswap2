@@ -196,7 +196,7 @@ public class FileService {
     // Methods for file paths-------------------------------------------------------------------------------------------
 
     private String getUserFolder(User user){
-        return "E:" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + user.getUsername();
+        return "D:" + File.separator + "anal69" + File.separator + "tmpFiles" + File.separator + user.getUsername();
     }
 
     private String getFeedFolder(Feeds feed){
