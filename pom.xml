@@ -8,8 +8,6 @@
 	<packaging>war</packaging>
 	<properties>
 		<java-version>1.8</java-version>
-		<!--<spring-framework-version>4.0.6.RELEASE</spring-framework-version>-->
-		<!--<springsecurity-version>3.2.5.RELEASE</springsecurity-version>-->
 		<spring-framework-version>5.0.4.RELEASE</spring-framework-version>
 		<springsecurity-version>5.0.2.RELEASE</springsecurity-version>
 		<org.aspectj-version>1.8.13</org.aspectj-version>

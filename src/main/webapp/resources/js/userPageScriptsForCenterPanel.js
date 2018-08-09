@@ -161,7 +161,6 @@ function editPostDrop(event) {
     event.target.style.backgroundColor = "transparent";
     var files = event.dataTransfer.files;
     showFilesInPostEdit(postID, files);
-    sendFilesFromPostEdit(files);
     editPostDragleave(event);
     editPostDragWindowleave(event);
 }
