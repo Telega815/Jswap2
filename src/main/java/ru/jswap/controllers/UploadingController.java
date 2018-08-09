@@ -222,6 +222,9 @@ public class UploadingController {
         return fileService.deleteFileFromTempForExistingPost(postId, fileId);
     }
 
+
+    //TODO RequestBody contains info about files to delete, but it's not used
+
     @PostMapping(value = "restService/updateExistingPost", consumes = "application/json")
     @ResponseBody
     public String updateExistingPost(@SessionAttribute(name = "user") User user,

@@ -47,9 +47,12 @@
                                 <p class="userHeaderText">Ленты</p>
                             </div>
                         </div>
-                        <c:if test="${accessToPageContent}">
-                            <a href="#"><img onclick="showFeedEdits()" src="${pageContext.request.contextPath}/resources/media/feeds/gear.png" alt="" class="userLogoEdit"></a>
-                        </c:if>
+                        <%--<c:if test="${accessToPageContent}">--%>
+                            <%--<a href="#"><img onclick="showFeedEdits()" src="${pageContext.request.contextPath}/resources/media/feeds/gear.png" alt="" class="userLogoEdit"></a>--%>
+                        <%--</c:if>--%>
+                        <div id="switcher">
+                            <div id="pipiska" onclick="zxc()"></div>
+                        </div>
                     </div>
                     <table id="tableFeeds" class="userFolders">
                         ${feedsHtml}

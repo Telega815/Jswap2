@@ -1,7 +1,7 @@
-var filesToDelete = [];
 var enterCounter = 0;
 var selectedPost;
 var editingPost = false;
+var fileCouterForPostEdit = 0;
 
 //---------------------innerDZ-------------------
 $(document).ready(function(){
@@ -223,116 +223,97 @@ function postEditInputClick( event ){
     var postID = event.target.id.split("_")[1];
     var files = event.target.files;
     showFilesInPostEdit(postID, files);
-    sendFilesFromPostEdit(files);
-    //alert(event.target.id);
 }
 function showFilesInPostEdit(postID, files){
     var uploadTable = document.getElementById("PostFilesTable_"+postID);
     for (var i = 0; i < files.length; i++){
-        uploadTable.tBodies[0].appendChild(showFileInPostEdit(files[i]));
+        while(document.getElementById("postFileRaw_"+fileCouterForPostEdit) !== null){
+            fileCouterForPostEdit++;
+        }
+        uploadTable.tBodies[0].appendChild(showFileInPostEdit(postID, files[i], fileCouterForPostEdit));
+        sendFilesFromPostEdit(postID, files[i], fileCouterForPostEdit);
     }
-    //calculateLen();
+    //filesClickInitForOnePost(postID);
 }
 
-function showFileInPostEdit(file) {
+function showFileInPostEdit(postId, file, fileId) {
     var fileRow = document.createElement("tr");
-    fileRow.id = "postEditFileRow_" + fileCount;
-
+    //fileRow.id = "postEditFileRow_" + fileId;
+    fileRow.id = "postFileRaw_" + fileId;
     var td1 = document.createElement("td");
-    td1.className = "FeedTdLeft";
-    // var previewImg = document.createElement("img");
-    // previewImg.setAttribute("src", "/resources/media/feeds/photofile.png");
-    // td1.appendChild(previewImg);
+    td1.className = "FeedTdLeft tempEditRow";
 
     var td2 = document.createElement("td");
-    td2.className = "FeedTdCenter";
+    td2.className = "FeedTdCenter tempEditRow";
     td2.title = file.name;
     td2.innerText = file.name;
     sliceTextForPostEdit(td2);
 
     var td3 = document.createElement("td");
     td3.innerText = formatSize(file.size);
-    td3.className = "FeedTdRight";
+    td3.className = "FeedTdRight tempEditRow";
     //progressStatuses.push(th3);
 
     var td4 = document.createElement("td");
 
 
-    var img = document.createElement("img");
-    img.id = "deleteTmpFileEdit_"+ fileCount;
-    img.src = "/resources/media/feeds/donloadCancel.png";
-    img.style.width = "15px";
-    td4.appendChild(img);
+    // var img = document.createElement("img");
+    // img.id = "deleteTmpFileEdit_"+ fileId;
+    // img.src = "/resources/media/feeds/donloadCancel.png";
+    // img.style.width = "15px";
+
+    td4.className = "FeedTdDeleteEdit tempEditRow FeedTdDeleteEdit_"+ fileId;
+
+    var checkbox = document.createElement("input");
+    checkbox.id = "postEditFileDeleteCheckbox_"+ fileId;
+    checkbox.classList.add("postEditFileDeleteCheckboxes_"+ postId);
+    checkbox.classList.add("tempEditRow");
+    checkbox.setAttribute("type", "checkbox");
+    td4.appendChild(checkbox);
 
     fileRow.appendChild(td1);
     fileRow.appendChild(td2);
     fileRow.appendChild(td3);
     fileRow.appendChild(td4);
 
-    fileCount++;
     return fileRow;
 }
 
 //TODO some shit here i donno
-function sendFilesFromPostEdit(files){
-    for (var i = 0; i < files.length; i++) {
-        var formData = new FormData();
-        formData.append("file", files[i], files[i].name);
-        formData.append("fileId", sdfsdfsdffsf);
+function sendFilesFromPostEdit(postId, file, fileId){
+    var formData = new FormData();
+    formData.append("postId", postId);
+    formData.append("file", file, file.name);
+    formData.append("fileId", fileId);
 
-        $.ajax({
-            url: window.location.protocol + "//" + window.location.host + "/restService/uploadFile?"+csrfParameter+"="+csrfToken,
-            enctype: "multipart/form-data",
-            method: 'POST',
-            type: 'POST',
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            xhr: function () {
-                var req = $.ajaxSettings.xhr();
-                var reqUp = req.upload;
-                reqUp.id = "xhr_"+fileCounter;
-                reqUp.addEventListener('progress', uploadProgress, false);
-                return req;
-            },
-            success: function (data) {
-                //TODO some shit here i donno
-            },
-            error: function (e) {
-                alert(e.responseText);
-            }
-        });
-        // $.ajax({
-        //     url: document.URL + "/uploadFile?${_csrf.parameterName}=${_csrf.token}",
-        //     enctype: "multipart/form-data",
-        //     method: 'POST',
-        //     type: 'POST',
-        //     data: formData,
-        //     cache: false,
-        //     contentType: false,
-        //     processData: false,
-        //     xhr: function () {
-        //         var req = $.ajaxSettings.xhr();
-        //         var reqUp = req.upload;
-        //         reqUp.id = "postEditSendXHR_"+j;
-        //         reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
-        //         j++;
-        //         return req;
-        //     },
-        //     success: function (data) {
-        //
-        //     },
-        //     error: function (e) {
-        //         alert(e.responseText);
-        //     }
-        // });
-    }
+    $.ajax({
+        url: window.location.protocol + "//" + window.location.host + "/restService/uploadFileToExistingPost?"+csrfParameter+"="+csrfToken,
+        enctype: "multipart/form-data",
+        method: 'POST',
+        type: 'POST',
+        data: formData,
+        cache: false,
+        contentType: false,
+        processData: false,
+        xhr: function () {
+            var req = $.ajaxSettings.xhr();
+            var reqUp = req.upload;
+            reqUp.id = "xhr_"+fileId;
+            reqUp.addEventListener('progress', uploadProgressForPostEdit, false);
+            return req;
+        },
+        success: function (data) {
+            //TODO some shit here i donno
+        },
+        error: function (e) {
+            alert(e.responseText);
+        }
+    });
 }
 
 function uploadProgressForPostEdit(event) {
     var fileId = event.target.id.split("_")[1];
-    var progressStatus = document.getElementById("postEditFileRow_"+fileId);
+    var progressStatus = document.getElementById("postFileRaw_"+fileId);
     var percent = parseInt(event.loaded / event.total * 100);
     progressStatus.style.background = "linear-gradient(90deg, #18ff00 " + percent + "%, #FFF " + percent +"%)";
 
@@ -347,16 +328,31 @@ function updatePostAfterEdit(event){
     //if (filesToDelete.length !== 0) postEditSendFilesToDelete();
     postEditSendSaveInfo(postID);
 }
+
+//TODO this wasn't tested!!!
 function postEditSendSaveInfo(postID) {
     var comment = document.getElementById('postComment_'+postID);
+    var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
+    var fileID;
+    var filesToSave = [];
+    var filesToDelete = [];
+    for (var i = 0; i < deleteCheckboxes.length; i++){
+        fileID = deleteCheckboxes[i].id.split("_")[1];
+        if (deleteCheckboxes[i].checked === true){
+            filesToDelete.push(fileID);
+        }else{
+            filesToSave.push(fileID);
+        }
+    }
     var obj = {
         comment: comment.innerText,
-        feedName: "NULL",
         postID: postID,
-        filesToDelete: filesToDelete
+        filesToDelete: filesToDelete,
+        filesToSave: filesToSave
     };
+
     var data = JSON.stringify(obj);
-    var docURL = document.URL + "/save";
+    var docURL = window.location.protocol + "//" + window.location.host + "/updateExistingPost"+csrfParameter+"="+csrfToken;
     $.ajax({
         headers: {
             'Accept': 'application/json',
@@ -374,7 +370,6 @@ function postEditSendSaveInfo(postID) {
                 mainCenter.replaceChild(div.firstChild, document.getElementById("FeedContainer_"+postID));
                 hidePostEdit(data.postId);
             }
-            filesToDelete = [];
             //hideUploadBlock();
         },
         error: function (e) {
@@ -390,7 +385,6 @@ function postEditDeleteButtonClick( event ){
     for (var i = 0; i < deleteCheckboxes.length; i++){
         if (deleteCheckboxes[i].checked === true){
             fileID = deleteCheckboxes[i].id.split("_")[1];
-            filesToDelete.push(fileID);
             document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "red";
         }
     }
@@ -410,12 +404,20 @@ function postEditCancelClicked(event) {
     event.preventDefault();
     var postID = event.target.id.split("_")[1];
     var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
-    for (var i = 0; i < deleteCheckboxes.length; i++) {
-        fileID = deleteCheckboxes[i].id.split("_")[1];
+    var i = 0;
+    while (i < deleteCheckboxes.length) {
+        var fileID = deleteCheckboxes[i].id.split("_")[1];
         deleteCheckboxes[i].removeAttribute("checked");
-        document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "transparent";
+        if (deleteCheckboxes[i].classList.contains("tempEditRow")){
+            var tempRow = document.getElementById("postFileRaw_"+ fileID);
+            tempRow.parentNode.removeChild(tempRow);
+        }else{
+            document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "transparent";
+            i++;
+        }
     }
     hidePostEdit(postID);
+    //TODO inform back-end about canceling
 }
 
 // hide edit of all posts in current feed ---------------------------------------------------------------

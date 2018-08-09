@@ -22,7 +22,7 @@
         </div>
         <div class="feedCreatingName">
             <span>Feed name:</span>
-            <input id="feedName" onchange="checkFeedName(event)" type="text" placeholder="Feed name" />
+            <input id="feedName" oninput="checkFeedName(event)"  type="text" placeholder="Feed name" />
         </div>
         <div id="feedCreatingNameError">
             <span id="feedCreatingErrorSpan">Feed already exists</span>
@@ -59,8 +59,8 @@
             </div>
         </div>
         <div class="feedCreatingButtons">
-            <%--<button>Отмена</button>--%>
-            <button onclick="sendFormCreateFeed()">Сохранить</button>
+            <%--<button class="feedCreatingButtonsDelete">Удалить ленту</button>--%>
+            <button class="feedCreatingButtonsSave disableButton"  onclick="sendFormCreateFeed()">Сохранить</button>
         </div>
     </div>
     </div>

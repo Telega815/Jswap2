@@ -51,8 +51,10 @@ function checkFeedName(event) {
     }
     if (!nameValid){
         error.style.visibility = "visible";
+        disableButton();
     }else{
         error.style.visibility = "hidden";
+        enableButton();
     }
 }
 
@@ -81,6 +83,8 @@ function checkLength() {
 function hideCreateFeedWindow() {
     var createFeedWindow = document.getElementById("createFeedWindow");
     createFeedWindow.style.display = "none";
+    var error = document.getElementById("feedCreatingErrorSpan");
+    error.style.visibility = "hidden";
     document.getElementById("feedName").value="";
     document.getElementById("modeRead").selectedIndex=0;
     document.getElementById("modeWrite").selectedIndex=0;
@@ -88,13 +92,26 @@ function hideCreateFeedWindow() {
     document.getElementById("sizeType").selectedindex=0;
     closeAdvancedOptions();
 
-
 }
 
 function showCreateFeedWindow() {
     var createFeedWindow = document.getElementById("createFeedWindow");
     createFeedWindow.style.display = "flex";
+    disableButton();
 }
+
+function disableButton() {
+    var disableButton = document.getElementsByClassName("disableButton")[0];
+    disableButton.disabled = true;
+    disableButton.classList.add("disableButtonClass");
+}
+
+function enableButton() {
+    var disableButton = document.getElementsByClassName("disableButton")[0];
+    disableButton.disabled = false;
+    disableButton.classList.remove("disableButtonClass");
+}
+
 function sendFormCreateFeed() {
 
     var feedName = document.getElementById("feedName");

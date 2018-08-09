@@ -155,8 +155,12 @@ public class FileService {
             return null;
         }
     }
+
     //----------------------------------post edit-----------------------------------------------------
     public boolean uploadFileToExistingPost(Long postId, MultipartFile file, int fileId, String sessionId){
+        if (tempForExistingPosts == null){
+            tempForExistingPosts = new HashMap<>();
+        }
         TempPost tempPost;
         if (tempForExistingPosts.containsKey(postId)){
             tempPost = tempForExistingPosts.get(postId);
@@ -180,6 +184,7 @@ public class FileService {
     public Post updateExistingPost(RequestPostInfo info, Post post){
         TempPost tempPost = tempForExistingPosts.get(info.getPostID());
         File newLocation = new File(this.getFeedFolder(post.getFeed()));
+        post.setCommentary(info.getComment());
         boolean res = true;
         for (int key : info.getFilesToSave()) {
             res &= tempPost.saveFileToDb(key, newLocation, post);

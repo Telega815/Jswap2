@@ -36,7 +36,7 @@
 .FeedHeaderCreate img {
 	height: 20px;
 	width: 20px;
-	margin-left: 255px;
+	margin: 0 10px 0 auto;
 	cursor: pointer;
 }
 
@@ -172,7 +172,7 @@
 	justify-content: flex-end;
 	margin: 0 20px 0 0;
 }
-.feedCreatingButtons button {
+.feedCreatingButtonsSave {
 	height: 40px;
 	font-size: 20px;
 	color: white;
@@ -181,4 +181,21 @@
 	cursor: pointer;
 	background-color: #3e4b56;
 	margin-bottom: 20px;
+}
+
+.feedCreatingButtonsDelete {
+	height: 40px;
+	font-size: 20px;
+	color: white;
+	border-radius: 10px;
+	padding: 5px 15px;
+	cursor: pointer;
+	background-color: red;
+	/*margin-bottom: 20px;*/
+	margin: 0 auto 0 20px;
+}
+
+.disableButtonClass{
+	opacity: 0.5;
+	cursor: default;
 }

@@ -87,3 +87,22 @@ function showFeedEdits() {
             edits[i].style.display = "none";
     }
 }
+
+
+function zxc() {
+    var switcher=document.getElementById('switcher');
+    var pipiska=document.getElementById('pipiska');
+
+    switcher.addEventListener('click',function() {
+        if (pipiska.style.left=='27px') {
+            pipiska.style.left='3px';
+            pipiska.style.animationName='cog2';
+            switcher.style.backgroundColor='#c6c6c6';
+        }
+        else {
+            pipiska.style.left='27px';
+            pipiska.style.animationName='cog1';
+            switcher.style.backgroundColor='#02a9f4';
+        }
+    });
+}
