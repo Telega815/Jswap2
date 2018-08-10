@@ -2,6 +2,8 @@ var enterCounter = 0;
 var selectedPost;
 var editingPost = false;
 var fileCouterForPostEdit = 0;
+var editPostUploadedFiles = [];
+var editPostDeletingFiles = [];
 
 //---------------------innerDZ-------------------
 $(document).ready(function(){
@@ -231,13 +233,12 @@ function showFilesInPostEdit(postID, files){
         }
         uploadTable.tBodies[0].appendChild(showFileInPostEdit(postID, files[i], fileCouterForPostEdit));
         sendFilesFromPostEdit(postID, files[i], fileCouterForPostEdit);
+        editPostUploadedFiles.push(fileCouterForPostEdit);
     }
-    //filesClickInitForOnePost(postID);
 }
 
 function showFileInPostEdit(postId, file, fileId) {
     var fileRow = document.createElement("tr");
-    //fileRow.id = "postEditFileRow_" + fileId;
     fileRow.id = "postFileRaw_" + fileId;
     var td1 = document.createElement("td");
     td1.className = "FeedTdLeft tempEditRow";
@@ -254,12 +255,6 @@ function showFileInPostEdit(postId, file, fileId) {
     //progressStatuses.push(th3);
 
     var td4 = document.createElement("td");
-
-
-    // var img = document.createElement("img");
-    // img.id = "deleteTmpFileEdit_"+ fileId;
-    // img.src = "/resources/media/feeds/donloadCancel.png";
-    // img.style.width = "15px";
 
     td4.className = "FeedTdDeleteEdit tempEditRow FeedTdDeleteEdit_"+ fileId;
 
@@ -315,10 +310,6 @@ function uploadProgressForPostEdit(event) {
     var progressStatus = document.getElementById("postFileRaw_"+fileId);
     var percent = parseInt(event.loaded / event.total * 100);
     progressStatus.style.background = "linear-gradient(90deg, #18ff00 " + percent + "%, #FFF " + percent +"%)";
-
-    //progressStatuses[event.target.id].innerText = parseInt(event.loaded / event.total * 100) + "%";
-    //if (progressStatuses[event.target.id].innerText === "100%")
-    //    progressStatuses[event.target.id].style.color = "green";
 }
 
 function updatePostAfterEdit(event){
@@ -338,6 +329,7 @@ function postEditSendSaveInfo(postID) {
     for (var i = 0; i < deleteCheckboxes.length; i++){
         fileID = deleteCheckboxes[i].id.split("_")[1];
         if (deleteCheckboxes[i].checked === true){
+            if(editPostUploadedFiles.contains(fileID)) editPostUploadedFiles
             filesToDelete.push(fileID);
         }else{
             filesToSave.push(fileID);
@@ -351,40 +343,37 @@ function postEditSendSaveInfo(postID) {
     };
 
     var data = JSON.stringify(obj);
-    var docURL = window.location.protocol + "//" + window.location.host + "/updateExistingPost"+csrfParameter+"="+csrfToken;
+    var docURL = window.location.protocol + "//" + window.location.host + "/restService/updateExistingPost?"+csrfParameter+"="+csrfToken;
     $.ajax({
         headers: {
-            'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
         url: docURL,
         method: 'POST',
         data: data,
         success: function(data){
-            if (data.nullPost === false){
-                var div = document.createElement('div');
-                div.innerHTML = data.htmlPost;
 
-                var mainCenter = document.getElementById("mainCenter");
-                mainCenter.replaceChild(div.firstChild, document.getElementById("FeedContainer_"+postID));
-                hidePostEdit(data.postId);
-            }
-            //hideUploadBlock();
         },
         error: function (e) {
             alert("Error!!!\n" + e.responseText);
         }
     });
 }
+
+
 function postEditDeleteButtonClick( event ){
     event.preventDefault();
+    editPostDeletingFiles = [];
     var postID = event.target.id.split("_")[1];
     var deleteCheckboxes = document.getElementsByClassName("postEditFileDeleteCheckboxes_" + postID);
     var fileID;
     for (var i = 0; i < deleteCheckboxes.length; i++){
         if (deleteCheckboxes[i].checked === true){
             fileID = deleteCheckboxes[i].id.split("_")[1];
-            document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "red";
+            if (!editPostDeletingFiles.contains(fileID)) {
+                editPostDeletingFiles.push(fileID);
+                document.getElementById("postFileRaw_"+ fileID).style.backgroundColor = "red";
+            }
         }
     }
 }
